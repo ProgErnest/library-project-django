@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-j15q1dq9_5u&@18$xddckr8fh&!jfrp#gd002w^=j(!6u9%xpz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'author',
+    'book',
+    'loan',
     'tailwind',
     'theme',
+    'django_apscheduler'
 ]
 
 MIDDLEWARE = [
@@ -72,8 +75,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# DEFAULT_FROM_EMAIL = "bibliotheque@example.com"
+# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+# EMAIL_HOST_USER = '53d0a7a2efae5e'
+# EMAIL_HOST_PASSWORD = '19af61f046ad70'
+# EMAIL_PORT = '2525'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
@@ -130,3 +139,6 @@ LOCALE_PATHS = [
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+CELERY_BROKER_URL = "rediss://default:gQAAAAAAAoCSAAIgcDEzNTFiZWUwYjc5MWY0MTVmYjRkMmMzMzY3MWJhOWI1MA@pumped-macaque-163986.upstash.io:6379"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
