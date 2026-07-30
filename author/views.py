@@ -1,6 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponseNotAllowed
 from django.utils.translation import gettext as _
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.urls import reverse_lazy
+from django.db.models import Q
 
 from .models import Author
 from .forms import AuthorForm
@@ -8,47 +11,47 @@ from .forms import AuthorForm
 
 
 # Sections for Autors
+class AuthorCreateView(CreateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = "author/author_form.html"
+    success_url = reverse_lazy("authors_list")
 
-def list_authors(request):
-    if request.GET.get('q') != None:
-        search = request.GET.get('q')
-        authors = Author.objects.filter(name__icontains = search)
-    else:
-        authors = Author.objects.all()
-    return render(request, "author/authors.html", {"authors" : authors})
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['page_title'] = _("Ajouter un auteur")
+        return context
 
-def detail_author(request,pk):
-    author = get_object_or_404(Author, id = pk)
-    books = author.book_set.all()
-    return render(request,"author/detail_author.html",{"author": author, "books": books})
+class AuthorListView(ListView):
+    model = Author
+    template_name = "author/authors.html"
+    context_object_name = "authors"
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(name__icontains = query) | Q(surname__icontains = query) | Q(bibliography__icontains = query))
+        return queryset
 
-def create_author(request):
-    if (request.method == "POST"):
-        author_form = AuthorForm(request.POST)
-        if(author_form.is_valid()):
-            author_form.save()
-            return redirect("authors_list")
-    else:
-        author_form = AuthorForm()
-    return render(request,"author/author_form.html",{"author_form": author_form})
-def update_author(request, pk):
-    author = get_object_or_404(Author, id=pk)
-    if (request.method == "POST"):
-        author_form = AuthorForm(request.POST, instance=author)
-        if(author_form.is_valid()):
-            author_form.save()
-            return redirect("authors_list")
-    else:
-        author_form = AuthorForm(instance=author)
-    return render(request,"author/author_form.html",{"author_form": author_form})
-    
-def delete_author(request,pk):
-    if(request.method == "POST"):
-        author = get_object_or_404(Author, id=pk)
-        author.delete()
-        return redirect("authors_list")
-    return HttpResponseNotAllowed(['POST'])
-    
+class AuthorDetailView(DetailView):
+    model = Author
+
+class AuthorUpdateView(UpdateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = "author/author_form.html"
+    success_url = reverse_lazy("authors_list")
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = _("Modifier un auteur")
+        return context
+
+class AuthorDeleteView(DeleteView):
+    model = Author
+    success_url = reverse_lazy("authors_list")
 
 
 def page_non_trouvee(request, exception):

@@ -22,5 +22,3 @@ jobs:
         run: python manage.py makemigrations
       - name: Migrer la BD
         run: python manage.py migrate
-      - name : demarrer le serveur Django
-        run: python manage.py runserver
