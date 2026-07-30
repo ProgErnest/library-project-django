@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-23 10:41+0100\n"
+"POT-Creation-Date: 2026-07-23 10:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,10 +150,6 @@ msgstr "precedent"
 msgid "Next"
 msgstr "suivant"
 
-#: core/templates/core/create_form.html:23
-msgid "Ajouter un livre"
-msgstr "Ajouter un livre"
-
 #: core/templates/core/create_form.html:25
 msgid "Remplissez les informations pour enregistrer un nouveau livre."
 msgstr "Remplissez les informations pour enregistrer un nouveau livre."
@@ -169,6 +165,16 @@ msgstr "Enregistrer"
 #: core/templates/core/create_form.html:72
 msgid "Retour à la liste"
 msgstr "Retour à la liste"
+
+#: core/views.py:23
+msgid "Ajouter un livre"
+msgstr "Ajouter un livre"
+
+#: core/views.py:41
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Modifier un livre"
+msgstr "Modifier un livre"
 
 #: venv/lib/python3.14/site-packages/click/_termui_impl.py:192
 msgid "d"
