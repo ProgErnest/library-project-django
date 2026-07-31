@@ -3,6 +3,11 @@
 {% block title %}Nouveau livre — Bibliothèque{% endblock title %}
 
 {% block content %}
+      {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
       <section class="page-header">
         <div>
           <h1>Nouveau livre</h1>
@@ -19,23 +24,39 @@
           <div class="form-grid">
             <div class="form-field md:col-span-2">
               <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
-              {% render_field form.title class="form-input" required="required" placeholder="Ex : Les Misérables" %}
-              {% if form.title.errors %}<p class="text-sm text-red-600 mt-2">{{ form.title.errors|join:", " }}</p>{% endif %}
+              {% if form.title.errors %}
+                {% render_field form.title class="form-input border-red-400 bg-red-50" required="required" placeholder="Ex : Les Misérables" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.title.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.title class="form-input" required="required" placeholder="Ex : Les Misérables" %}
+              {% endif %}
             </div>
             <div class="form-field md:col-span-2">
               <label for="{{ form.subtitle.id_for_label }}" class="form-label">{{ form.subtitle.label }}</label>
-              {% render_field form.subtitle class="form-input" placeholder="Facultatif" %}
-              {% if form.subtitle.errors %}<p class="text-sm text-red-600 mt-2">{{ form.subtitle.errors|join:", " }}</p>{% endif %}
+              {% if form.subtitle.errors %}
+                {% render_field form.subtitle class="form-input border-red-400 bg-red-50" placeholder="Facultatif" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.subtitle.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.subtitle class="form-input" placeholder="Facultatif" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.author.id_for_label }}" class="form-label">{{ form.author.label }}</label>
-              {% render_field form.author class="form-select" required="required" %}
-              {% if form.author.errors %}<p class="text-sm text-red-600 mt-2">{{ form.author.errors|join:", " }}</p>{% endif %}
+              {% if form.author.errors %}
+                {% render_field form.author class="form-select border-red-400 bg-red-50" required="required" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.author.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.author class="form-select" required="required" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.isbn.id_for_label }}" class="form-label">{{ form.isbn.label }}</label>
-              {% render_field form.isbn class="form-input" style="font-family:var(--font-mono)" required="required" placeholder="978-2-07-040570-9" %}
-              {% if form.isbn.errors %}<p class="text-sm text-red-600 mt-2">{{ form.isbn.errors|join:", " }}</p>{% endif %}
+              {% if form.isbn.errors %}
+                {% render_field form.isbn class="form-input border-red-400 bg-red-50" style="font-family:var(--font-mono)" required="required" placeholder="978-2-07-040570-9" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.isbn.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.isbn class="form-input" style="font-family:var(--font-mono)" required="required" placeholder="978-2-07-040570-9" %}
+              {% endif %}
             </div>
           </div>
         </fieldset>
@@ -45,23 +66,39 @@
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.language.id_for_label }}" class="form-label">{{ form.language.label }}</label>
-              {% render_field form.language class="form-input" required="required" placeholder="Ex : Français" %}
-              {% if form.language.errors %}<p class="text-sm text-red-600 mt-2">{{ form.language.errors|join:", " }}</p>{% endif %}
+              {% if form.language.errors %}
+                {% render_field form.language class="form-input border-red-400 bg-red-50" required="required" placeholder="Ex : Français" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.language.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.language class="form-input" required="required" placeholder="Ex : Français" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.genre.id_for_label }}" class="form-label">{{ form.genre.label }}</label>
-              {% render_field form.genre class="form-input" required="required" placeholder="Ex : Roman" %}
-              {% if form.genre.errors %}<p class="text-sm text-red-600 mt-2">{{ form.genre.errors|join:", " }}</p>{% endif %}
+              {% if form.genre.errors %}
+                {% render_field form.genre class="form-input border-red-400 bg-red-50" required="required" placeholder="Ex : Roman" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.genre.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.genre class="form-input" required="required" placeholder="Ex : Roman" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.num_pages.id_for_label }}" class="form-label">{{ form.num_pages.label }}</label>
-              {% render_field form.num_pages class="form-input" min="1" required="required" placeholder="Ex : 1488" %}
-              {% if form.num_pages.errors %}<p class="text-sm text-red-600 mt-2">{{ form.num_pages.errors|join:", " }}</p>{% endif %}
+              {% if form.num_pages.errors %}
+                {% render_field form.num_pages class="form-input border-red-400 bg-red-50" min="1" required="required" placeholder="Ex : 1488" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.num_pages.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.num_pages class="form-input" min="1" required="required" placeholder="Ex : 1488" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.publication_date.id_for_label }}" class="form-label">{{ form.publication_date.label }}</label>
-              {% render_field form.publication_date class="form-input" required="required" %}
-              {% if form.publication_date.errors %}<p class="text-sm text-red-600 mt-2">{{ form.publication_date.errors|join:", " }}</p>{% endif %}
+              {% if form.publication_date.errors %}
+                {% render_field form.publication_date class="form-input border-red-400 bg-red-50" required="required" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.publication_date.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.publication_date class="form-input" required="required" %}
+              {% endif %}
             </div>
           </div>
         </fieldset>
@@ -71,20 +108,28 @@
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.total_copies.id_for_label }}" class="form-label">Nombre total d'exemplaires</label>
-              {% render_field form.total_copies class="form-input" style="font-family:var(--font-mono)" min="0" required="required" placeholder="Ex : 5" %}
-              {% if form.total_copies.errors %}<p class="text-sm text-red-600 mt-2">{{ form.total_copies.errors|join:", " }}</p>{% endif %}
+              {% if form.total_copies.errors %}
+                {% render_field form.total_copies class="form-input border-red-400 bg-red-50" style="font-family:var(--font-mono)" min="0" required="required" placeholder="Ex : 5" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.total_copies.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.total_copies class="form-input" style="font-family:var(--font-mono)" min="0" required="required" placeholder="Ex : 5" %}
+              {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.available_copies.id_for_label }}" class="form-label">Exemplaires disponibles</label>
-              {% render_field form.available_copies class="form-input" style="font-family:var(--font-mono)" min="0" placeholder="Ex : 4" %}
-              {% if form.available_copies.errors %}<p class="text-sm text-red-600 mt-2">{{ form.available_copies.errors|join:", " }}</p>{% endif %}
+              {% if form.available_copies.errors %}
+                {% render_field form.available_copies class="form-input border-red-400 bg-red-50" style="font-family:var(--font-mono)" min="0" placeholder="Ex : 4" %}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.available_copies.errors|join:", " }}</p>
+              {% else %}
+                {% render_field form.available_copies class="form-input" style="font-family:var(--font-mono)" min="0" placeholder="Ex : 4" %}
+              {% endif %}
             </div>
             <div class="form-field md:col-span-2">
               <div class="checkbox-row">
                 {% render_field form.available class="form-checkbox" %}
                 <label for="{{ form.available.id_for_label }}" class="form-label" style="margin-bottom:0">Ouvrage disponible à l'emprunt</label>
               </div>
-              {% if form.available.errors %}<p class="text-sm text-red-600 mt-2">{{ form.available.errors|join:", " }}</p>{% endif %}
+              {% if form.available.errors %}<p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.available.errors|join:", " }}</p>{% endif %}
             </div>
           </div>
         </fieldset>
@@ -93,8 +138,12 @@
           <legend class="form-legend">Résumé</legend>
           <div class="form-field">
             <label for="{{ form.summary.id_for_label }}" class="form-label">{{ form.summary.label }}</label>
-            {% render_field form.summary class="form-textarea" rows="8" placeholder="Résume du livre" %}
-            {% if form.summary.errors %}<p class="text-sm text-red-600 mt-2">{{ form.summary.errors|join:", " }}</p>{% endif %}
+            {% if form.summary.errors %}
+              {% render_field form.summary class="form-textarea border-red-400 bg-red-50" rows="8" placeholder="Résume du livre" %}
+              <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.summary.errors|join:", " }}</p>
+            {% else %}
+              {% render_field form.summary class="form-textarea" rows="8" placeholder="Résume du livre" %}
+            {% endif %}
           </div>
         </fieldset>
 
