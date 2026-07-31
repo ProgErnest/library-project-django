@@ -37,6 +37,10 @@ class AuthorListView(ListView):
 class AuthorDetailView(DetailView):
     model = Author
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.prefetch_related("books").all() 
+
 class AuthorUpdateView(UpdateView):
     model = Author
     form_class = AuthorForm

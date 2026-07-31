@@ -1,0 +1,40 @@
+    <aside class="sidebar" id="sidebar" aria-label="Navigation principale">
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()">
+                {% get_current_language as CURRENT_LANGUAGE %}
+                {% get_available_languages as LANGUAGES %}
+                {% for lang_code, lang_name in LANGUAGES %}
+                <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+                    {{ lang_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+        <div class="sidebar-brand">
+            <span class="sidebar-brand-icon" aria-hidden="true"><i class="ph-fill ph-books"></i></span>
+            <div>
+            <p class="sidebar-brand-name">Bibliothèque</p>
+            <p class="sidebar-brand-sub">Espace de gestion</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Sections principales">
+            <p class="sidebar-section-title">Catalogue</p>
+            <a href="{% url 'authors_list' %}" class="sidebar-link {% if active_section == 'authors' %}active{% endif %}">
+            <i class="ph ph-users"></i><span>Auteurs</span>
+            </a>
+            <a href="{% url 'get_all_books' %}" class="sidebar-link {% if active_section == 'books' %}active{% endif %}">
+            <i class="ph ph-books"></i><span>Livres</span>
+            </a>
+            <a href="{% url 'loan_list' %}" class="sidebar-link {% if active_section == 'loans' %}active{% endif %}">
+            <i class="ph ph-arrows-left-right"></i><span>Emprunts</span>
+            </a>
+            <p class="sidebar-section-title">Système</p>
+            <a href="#" class="sidebar-link"><i class="ph ph-gear-six"></i><span>Administration</span></a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Connecté en tant que <strong style="color:#fff">Bibliothécaire</strong></p>
+        </div>
+    </aside>

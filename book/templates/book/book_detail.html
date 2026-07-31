@@ -1,171 +1,88 @@
-{% load tailwind_tags %}
-{% tailwind_css %}
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Carte principale -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            
-            <!-- En-tête -->
-            <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
-                <div class="flex items-center justify-between">
-                    <a href={% url "get_all_books" %} class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                        <span class="text-sm font-medium">Retour</span>
-                    </a>
-                    <div class="flex items-center gap-3">
-                        <a href={% url "update_book" book.pk %}>
-                            <button class="flex items-center cursor-pointer gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                                Modifier
-                            </button>
-                        </a>
-                        <button class="flex items-center cursor-pointer gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                            Supprimer
-                        </button>
-                    </div>
-                </div>
+{% extends "base.html" %}
+{% block title %}{{ book.title }}— Livres — Bibliothèque{% endblock title %}
+
+{% block content %}
+      <section class="detail-hero">
+        <div class="flex flex-wrap items-start gap-6 justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-3xl">{{ book.title }}</h1>
+              <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{{ book.available }}</span>
             </div>
-
-            <!-- Contenu principal -->
-            <div class="p-8">
-                
-                <!-- Titre du livre -->
-                <div class="text-center mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ book.title }}</h1>
-                    <p class="text-gray-500 text-sm">A Handbook of Agile Software Craftsmanship</p>
-                </div>
-
-                <!-- Section Informations -->
-                <div class="border-t border-gray-200 pt-6 mb-8">
-                    <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Titre</p>
-                            <p class="text-gray-900 font-medium">{{ book.title }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">ISBN</p>
-                            <p class="text-gray-900 font-medium">{{ book.isbn }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Date de publication</p>
-                            <p class="text-gray-900 font-medium">{{ book.publication_date }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Disponibilité</p>
-                            <div class="flex items-center gap-2">
-                                {% if book.available %}
-                                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                                    <span class="text-gray-900 font-medium">Disponible</span>  
-                                {% else %}
-                                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                                    <span class="text-gray-900 font-medium">Indisponible</span>                                                              
-                                {% endif %}
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Résumé -->
-                <div class="border-t border-gray-200 pt-6 mb-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-3">Résumé</h2>
-                    <p class="text-gray-700 leading-relaxed">
-                        {{ book.summary }}
-                    </p>
-                </div>
-
-                <!-- Section Auteur -->
-                <div class="border-t border-gray-200 pt-6 mb-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Auteur</h2>
-                    <div class="bg-gray-50 rounded-xl p-6">
-                        <div class="grid grid-cols-2 gap-6 mb-4">
-                            <div>
-                                <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Nom</p>
-                                <p class="text-gray-900 font-medium">{{ book.author.surname }} {{ book.author.name}} </p>
-                            </div>
-                            <div>
-                                <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Nationalité</p>
-                                <p class="text-gray-900 font-medium">Américain</p>
-                            </div>
-                            <div>
-                                <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Date de naissance</p>
-                                <p class="text-gray-900 font-medium">{{ book.author.birthday}}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">Biographie</p>
-                            <p class="text-gray-700 leading-relaxed text-sm">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                                Robert C. Martin est un ingénieur logiciel américain, auteur et 
-                                consultant international dans le domaine du développement logiciel. 
-                                Il est l'un des auteurs du Manifeste Agile.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Historique des emprunts -->
-                <div class="border-t border-gray-200 pt-6 mb-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Historique des emprunts</h2>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <span class="text-blue-600 font-semibold text-sm">JD</span>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-900">Jean Dupont</p>
-                                    <p class="text-xs text-gray-500">Emprunté le 12/03/2026</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-700">12/03/2026 → 26/03/2026</p>
-                                <span class="text-xs text-green-600 font-medium">Retourné</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <span class="text-purple-600 font-semibold text-sm">AM</span>
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-900">Alice Martin</p>
-                                    <p class="text-xs text-gray-500">Emprunté le 02/05/2026</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-700">02/05/2026 → 16/05/2026</p>
-                                <span class="text-xs text-green-600 font-medium">Retourné</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Boutons d'action -->
-                <div class="border-t border-gray-200 pt-8">
-                    <div class="flex items-center justify-center gap-4">
-                        <button class="flex items-center gap-2 px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Emprunter
-                        </button>
-                        <button class="flex items-center gap-2 px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                            Retour
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+            <p class="text-slate mt-1">{{ book.subtitle }}</p>
+            <p class="mt-3 text-sm">Écrit par <a href={% url "detail_author" book.author.pk %} class="font-medium hover:underline" style="color:var(--color-brass)">{{ book.author.surname }} {{ book.author.name }}</a></p>
+          </div>
+          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>Retour à la liste</a>
         </div>
+      </section>
 
-    </div>
+      <div class="detail-grid lg:grid-cols-3">
+        <section class="space-y-6 lg:col-span-2">
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">Résumé</h2>
+            <p class="leading-relaxed">{{ book.summary }}</p>
+          </article>
+
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">Informations bibliographiques</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+              <div class="meta-row">
+                <span class="meta-label"><i class="ph ph-hash" aria-hidden="true"></i>ISBN</span>
+                <span class="meta-value">{{ book.isbn }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label"><i class="ph ph-translate" aria-hidden="true"></i>Langue</span>
+                <span class="meta-value" style="font-family:var(--font-sans)">{{ book.language }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label"><i class="ph ph-tag" aria-hidden="true"></i>Genre</span>
+                <span class="meta-value" style="font-family:var(--font-sans)">{{ book.genre }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label"><i class="ph ph-stack" aria-hidden="true"></i>Pages</span>
+                <span class="meta-value">{{ book.num_pages }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label"><i class="ph ph-calendar" aria-hidden="true"></i>Publication</span>
+                <span class="meta-value">{{ book.publication_date }}</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <aside class="space-y-6">
+          <div class="form-panel">
+            <h2 class="text-lg mb-3">Exemplaires</h2>
+            <p class="flex items-baseline justify-between">
+              <span class="text-sm text-slate">Disponibles</span>
+              <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ book.available_copies}}&nbsp;/&nbsp;{{ book.total_copies }}</span>
+            </p>
+            <div class="progress-track mt-3" role="img" aria-label="4 exemplaires disponibles sur 5">
+              <div class="progress-fill" style="width:{{percent}}%"></div>
+            </div>
+            <p class="text-xs text-slate mt-2">{{ percent }}&nbsp;% des exemplaires sont actuellement disponibles au prêt.</p>
+          </div>
+
+          <div class="form-panel">
+            <h2 class="text-lg mb-3">Auteur</h2>
+            <a href={% url "detail_author" book.author.pk %} class="flex items-center gap-3 hover:underline">
+              <span class="avatar-tile w-11 h-11" aria-hidden="true">{{ book.author.surname|slice:":1" }}{{ book.author.name|slice:":1" }} </span>
+              <span>
+                <span class="block font-medium" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }} </span>
+                <span class="block text-xs text-slate">Voir la fiche auteur</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="form-panel">
+            <h2 class="text-lg mb-3">Actions rapides</h2>
+            <div class="space-y-3">
+              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier la fiche</a>
+              <a href={% url "initiate_loan" %} class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>Créer un emprunt</a>
+              <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer le livre</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+{% endblock content %}
+
