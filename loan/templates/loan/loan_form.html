@@ -1,6 +1,6 @@
 <h1>Initiate a loan</h1>
 <form method="POST">
     {% csrf_token %}
-    {{loan_form.as_p}}
+    {{form.as_p}}
     <button type="submit">Save</button>
 </form>
