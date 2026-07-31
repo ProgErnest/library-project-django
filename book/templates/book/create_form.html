@@ -1,81 +1,106 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Nouveau livre — Bibliothèque{% endblock title %}
 
-{% load tailwind_tags %}
-{% tailwind_css %}
-{% load i18n %}
-  <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-emerald-50 px-4 py-10 font-[Inter,ui-sans-serif,system-ui,sans-serif]">
-
-    <div class="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-
-      <!-- Barre colorée top -->
-      <div class="h-1 w-full bg-gradient-to-r from-indigo-500 via-violet-400 to-purple-400"></div>
-
-      <div class="px-8 py-8">
-
-        <!-- En-tête -->
-        <div class="mb-7">
-          <div class="flex items-center gap-3 mb-1">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 shrink-0">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-800">{% trans page_title %}</h1>
-          </div>
-          <p class="text-sm text-slate-400 ml-13">{% trans "Remplissez les informations pour enregistrer un nouveau livre." %}</p>
+{% block content %}
+      <section class="page-header">
+        <div>
+          <h1>Nouveau livre</h1>
+          <p>Renseignez les informations de l'ouvrage à ajouter au catalogue.</p>
         </div>
+      </section>
 
-        <!-- Formulaire -->
-        <form method="post" class="space-y-5">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="flex flex-col gap-1.5">
-                  <label for="title" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500">
-                    {% trans field.label %}
-                    <span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 rounded-full px-2 py-0.5 tracking-wide">Requis</span>
-                  </label>
-                  <div class="relative">
-                    {% if field == form.available %}
-                      <label for="available" class="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer transition hover:border-indigo-300 hover:bg-indigo-50 select-none">
-                      {{field}}<span class="text-sm text-slate-700">{% trans "Livre disponible à l'emprunt" %}</span>
-                      </label>
-                    {% else %}
-                      {{ field }}
-                    {% endif %}
-                  </div>
-                  {% if field.errors %}
-                    <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
-                  {% endif %}
-                </div>
-            {% endfor %}
-            <!-- Actions -->
-            <div class="flex items-center justify-between gap-4">
-              <button
-                type="submit"
-                class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-br from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white text-sm font-semibold rounded-lg shadow-md shadow-indigo-200 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 active:translate-y-0 active:shadow-sm cursor-pointer"
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                {% trans "Enregistrer" %}
-              </button>
+      <form class="form-panel" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-              <a
-                href="#"
-                class="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-500 hover:text-indigo-700 transition-all hover:gap-2.5"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                {% trans "Retour à la liste" %}
-              </a>
-            </div> 
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Informations générales</legend>
+          <div class="form-grid">
+            <div class="form-field md:col-span-2">
+              <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+              {% render_field form.title class="form-input" required="required" placeholder="Ex : Les Misérables" %}
+              {% if form.title.errors %}<p class="text-sm text-red-600 mt-2">{{ form.title.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field md:col-span-2">
+              <label for="{{ form.subtitle.id_for_label }}" class="form-label">{{ form.subtitle.label }}</label>
+              {% render_field form.subtitle class="form-input" placeholder="Facultatif" %}
+              {% if form.subtitle.errors %}<p class="text-sm text-red-600 mt-2">{{ form.subtitle.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.author.id_for_label }}" class="form-label">{{ form.author.label }}</label>
+              {% render_field form.author class="form-select" required="required" %}
+              {% if form.author.errors %}<p class="text-sm text-red-600 mt-2">{{ form.author.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.isbn.id_for_label }}" class="form-label">{{ form.isbn.label }}</label>
+              {% render_field form.isbn class="form-input" style="font-family:var(--font-mono)" required="required" placeholder="978-2-07-040570-9" %}
+              {% if form.isbn.errors %}<p class="text-sm text-red-600 mt-2">{{ form.isbn.errors|join:", " }}</p>{% endif %}
+            </div>
+          </div>
+        </fieldset>
 
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Classification</legend>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="{{ form.language.id_for_label }}" class="form-label">{{ form.language.label }}</label>
+              {% render_field form.language class="form-input" required="required" placeholder="Ex : Français" %}
+              {% if form.language.errors %}<p class="text-sm text-red-600 mt-2">{{ form.language.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.genre.id_for_label }}" class="form-label">{{ form.genre.label }}</label>
+              {% render_field form.genre class="form-input" required="required" placeholder="Ex : Roman" %}
+              {% if form.genre.errors %}<p class="text-sm text-red-600 mt-2">{{ form.genre.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.num_pages.id_for_label }}" class="form-label">{{ form.num_pages.label }}</label>
+              {% render_field form.num_pages class="form-input" min="1" required="required" placeholder="Ex : 1488" %}
+              {% if form.num_pages.errors %}<p class="text-sm text-red-600 mt-2">{{ form.num_pages.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.publication_date.id_for_label }}" class="form-label">{{ form.publication_date.label }}</label>
+              {% render_field form.publication_date class="form-input" required="required" %}
+              {% if form.publication_date.errors %}<p class="text-sm text-red-600 mt-2">{{ form.publication_date.errors|join:", " }}</p>{% endif %}
+            </div>
+          </div>
+        </fieldset>
 
-        </form>
-      </div>
-    </div>
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Disponibilité</legend>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="{{ form.total_copies.id_for_label }}" class="form-label">Nombre total d'exemplaires</label>
+              {% render_field form.total_copies class="form-input" style="font-family:var(--font-mono)" min="0" required="required" placeholder="Ex : 5" %}
+              {% if form.total_copies.errors %}<p class="text-sm text-red-600 mt-2">{{ form.total_copies.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.available_copies.id_for_label }}" class="form-label">Exemplaires disponibles</label>
+              {% render_field form.available_copies class="form-input" style="font-family:var(--font-mono)" min="0" placeholder="Ex : 4" %}
+              {% if form.available_copies.errors %}<p class="text-sm text-red-600 mt-2">{{ form.available_copies.errors|join:", " }}</p>{% endif %}
+            </div>
+            <div class="form-field md:col-span-2">
+              <div class="checkbox-row">
+                {% render_field form.available class="form-checkbox" %}
+                <label for="{{ form.available.id_for_label }}" class="form-label" style="margin-bottom:0">Ouvrage disponible à l'emprunt</label>
+              </div>
+              {% if form.available.errors %}<p class="text-sm text-red-600 mt-2">{{ form.available.errors|join:", " }}</p>{% endif %}
+            </div>
+          </div>
+        </fieldset>
 
-  </body>
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Résumé</legend>
+          <div class="form-field">
+            <label for="{{ form.summary.id_for_label }}" class="form-label">{{ form.summary.label }}</label>
+            {% render_field form.summary class="form-textarea" rows="8" placeholder="Résume du livre" %}
+            {% if form.summary.errors %}<p class="text-sm text-red-600 mt-2">{{ form.summary.errors|join:", " }}</p>{% endif %}
+          </div>
+        </fieldset>
+
+        <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer le livre</button>
+        </div>
+      </form>
+{% endblock content %}
