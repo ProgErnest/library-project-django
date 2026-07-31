@@ -1,0 +1,7 @@
+<h3>{{ author.name }} {{ author.surname }} </h3>
+<p>Born on : {{ author.birthday }}<p>
+<ul>
+    {% for book in books %}
+        <li>{{book}}</li>
+    {% endfor %}
+</ul>

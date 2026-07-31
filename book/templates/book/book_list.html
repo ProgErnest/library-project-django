@@ -1,242 +1,301 @@
-{% extends "base.html" %}
-{% block title %}Bibliothèque - Livres{% endblock %}
+{% load i18n %}
+<form action="{% url 'set_language' %}" method="post">
+  {% csrf_token %}
+  <select name="language" onchange="this.form.submit()">
+    {% get_current_language as CURRENT_LANGUAGE %}
+    {% get_available_languages as LANGUAGES %}
+    {% for lang_code, lang_name in LANGUAGES %}
+      <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+        {{ lang_name }}
+      </option>
+    {% endfor %}
+  </select>
+</form>
+{% load tailwind_tags %}
+{% tailwind_css %}
 
-    {% block content %}
-      <section class="page-header">
-        <div>
-          <h1>Livres</h1>
-          <p>L'ensemble des ouvrages référencés dans le catalogue.</p>
-        </div>
-      </section>
-
-      <section class="stat-bar" aria-label="Statistiques des livres">
-        <div class="stat-item">
-          <span class="stat-value">30</span>
-          <span class="stat-label">Livres au catalogue</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">18 / 30</span>
-          <span class="stat-label">Exemplaires disponibles</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">11</span>
-          <span class="stat-label">Genres représentés</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">4</span>
-          <span class="stat-label">Indisponibles</span>
-        </div>
-      </section>
-
-      <section aria-label="Filtrer les livres">
-        <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
-          <div class="form-field" style="flex:1 1 16rem">
-            <label for="filter-title" class="sr-only">Rechercher par titre</label>
-            <input class="form-input" type="search" id="filter-title" name="title" placeholder="Filtrer par titre, ISBN, auteur…">
+<div class="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
+  <div class="relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white rounded-none bg-clip-border">
+    <div class="flex items-center justify-between gap-8 mb-8">
+      <div>
+        <h5
+          class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-gray-900">
+          {% trans "Book List" %}
+        </h5>
+        <p class="block mt-1 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
+          {% trans "See information about all books" %} 
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 shrink-0 sm:flex-row">
+        <button
+          class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button">
+          {% trans "view all" %}
+        </button>
+        <a href={% url "create_book" %}>
+            <button
+            class="flex select-none items-center gap-3 cursor-pointer rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                stroke-width="2" class="w-4 h-4">
+                <path
+                d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z">
+                </path>
+            </svg>
+            {% trans "Add book" %}
+            </button>
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+      <div class="block w-full overflow-hidden md:w-max">
+        {% comment %} <nav>
+          <ul role="tablist" class="relative flex flex-row p-1 rounded-lg bg-gray-50 bg-opacity-60">
+            <li role="tab"
+              class="relative flex items-center justify-center w-full h-full px-2 py-1 font-sans text-base antialiased font-normal leading-relaxed text-center bg-transparent cursor-pointer select-none text-gray-900"
+              data-value="all">
+              <div class="z-20 text-inherit">
+                &nbsp;&nbsp;All&nbsp;&nbsp;
+              </div>
+              <div class="absolute inset-0 z-10 h-full bg-white rounded-md shadow"></div>
+            </li>
+            <li role="tab"
+              class="relative flex items-center justify-center w-full h-full px-2 py-1 font-sans text-base antialiased font-normal leading-relaxed text-center bg-transparent cursor-pointer select-none text-gray-900"
+              data-value="monitored">
+              <div class="z-20 text-inherit">
+                &nbsp;&nbsp;Monitored&nbsp;&nbsp;
+              </div>
+            </li>
+            <li role="tab"
+              class="relative flex items-center justify-center w-full h-full px-2 py-1 font-sans text-base antialiased font-normal leading-relaxed text-center bg-transparent cursor-pointer select-none text-gray-900"
+              data-value="unmonitored">
+              <div class="z-20 text-inherit">
+                &nbsp;&nbsp;Unmonitored&nbsp;&nbsp;
+              </div>
+            </li>
+          </ul>
+        </nav> {% endcomment %}
+      </div>
+      <div class="w-full md:w-72">
+        <div class="relative h-10 w-full min-w-50">
+          <div class="absolute grid w-5 h-5 top-2/4 right-3 -translate-y-2/4 place-items-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" aria-hidden="true" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+            </svg>
           </div>
-          <div class="form-field" style="width:11rem">
-            <label for="filter-genre" class="sr-only">Filtrer par genre</label>
-            <select class="form-select" id="filter-genre" name="genre">
-              <option value="">Tous les genres</option>
-              <option>Roman</option>
-              <option>Poésie</option>
-              <option>Théâtre</option>
-              <option>Essai</option>
-            </select>
-          </div>
-          <div class="form-field" style="width:11rem">
-            <label for="filter-available" class="sr-only">Disponibilité</label>
-            <select class="form-select" id="filter-available" name="available">
-              <option value="">Disponibilité</option>
-              <option>Disponible</option>
-              <option>Indisponible</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
-        </form>
-      </section>
-
-      <section aria-label="Liste des livres">
-        <div class="table-wrap overflow-x-auto">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Titre</th>
-                <th scope="col">Auteur</th>
-                <th scope="col">ISBN</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Langue</th>
-                <th scope="col">Pages</th>
-                <th scope="col">Publication</th>
-                <th scope="col">Copies</th>
-                <th scope="col">Statut</th>
-                <th scope="col"><span class="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for book in books %}
-              <tr>
-                <td>
-                  <p class="font-black truncate" style="max-width:14rem" title="Les Misérables">{{ book.title }}</p>
-                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="Fantine, Cosette, Marius, l'idylle rue Plumet, Jean Valjean">{{ book.subtitle }}</p>
-                </td>
-                <td class="cell-secondary"><a href={% url "detail_author" book.author.pk %} class="hover:underline text-sm font-bold" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }}</a></td>
-                <td class="cell-mono text-sm">{{ book.isbn }}</td>
-                <td class="cell-secondary text-sm">{{ book.genre }}</td>
-                <td class="cell-secondary text-sm">{{ book.language }}</td>
-                <td class="cell-mono text-sm">{{ book.num_pages }}</td>
-                <td class="cell-mono text-sm">{{ book.publication_date }}</td>
-                <td class="cell-mono text-sm">{{ book.available_copies}}/{{ book.total_copies }}</td>
-                {% if book.available %}
-                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>               
-                {% else %}
-                  <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
-                {% endif %}
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Les Misérables"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href={% url "book_detail" book.pk %}><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href={% url "update_book" book.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href={% url "delete_book" book.pk %} class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>            
-            {% endfor %}
-
-              <tr>
-                <td>
-                  <p class="font-medium truncate" style="max-width:14rem" title="Cent ans de solitude">Cent ans de solitude</p>
-                  <p class="text-xs cell-secondary truncate" style="max-width:14rem" title="La saga des Buendía à Macondo">La saga des Buendía à Macondo</p>
-                </td>
-                <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">G. García Márquez</a></td>
-                <td class="cell-mono">978-2-02-030509-9</td>
-                <td class="cell-secondary">Réalisme magique</td>
-                <td class="cell-secondary">Espagnol</td>
-                <td class="cell-mono">432</td>
-                <td class="cell-mono">1967</td>
-                <td class="cell-mono">0 / 3</td>
-                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Cent ans de solitude"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p class="font-medium truncate" style="max-width:14rem" title="Orgueil et Préjugés">Orgueil et Préjugés</p>
-                  <p class="text-xs cell-secondary truncate" style="max-width:14rem" title="Les sœurs Bennet à la recherche du bon parti">Les sœurs Bennet…</p>
-                </td>
-                <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Jane Austen</a></td>
-                <td class="cell-mono">978-2-253-00476-6</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Anglais</td>
-                <td class="cell-mono">368</td>
-                <td class="cell-mono">1813</td>
-                <td class="cell-mono">2 / 2</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Orgueil et Préjugés"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p class="font-medium truncate" style="max-width:14rem" title="Kafka sur le rivage">Kafka sur le rivage</p>
-                  <p class="text-xs cell-secondary truncate" style="max-width:14rem" title="Un adolescent en fugue et un vieil homme au don singulier">Un adolescent en fugue…</p>
-                </td>
-                <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Haruki Murakami</a></td>
-                <td class="cell-mono">978-2-7096-2467-8</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Japonais</td>
-                <td class="cell-mono">505</td>
-                <td class="cell-mono">2002</td>
-                <td class="cell-mono">1 / 4</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Kafka sur le rivage"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p class="font-medium truncate" style="max-width:14rem" title="Mrs Dalloway">Mrs Dalloway</p>
-                  <p class="text-xs cell-secondary truncate" style="max-width:14rem" title="Une journée dans la vie de Clarissa Dalloway">Une journée dans la vie…</p>
-                </td>
-                <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Virginia Woolf</a></td>
-                <td class="cell-mono">978-2-07-036622-3</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Anglais</td>
-                <td class="cell-mono">216</td>
-                <td class="cell-mono">1925</td>
-                <td class="cell-mono">3 / 3</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Mrs Dalloway"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p class="font-medium truncate" style="max-width:14rem" title="L'Étranger">L'Étranger</p>
-                  <p class="text-xs cell-secondary truncate" style="max-width:14rem" title="Meursault face à l'absurdité du monde">Meursault face à l'absurdité…</p>
-                </td>
-                <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Albert Camus</a></td>
-                <td class="cell-mono">978-2-07-036002-3</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Français</td>
-                <td class="cell-mono">186</td>
-                <td class="cell-mono">1942</td>
-                <td class="cell-mono">0 / 2</td>
-                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
-                <td>
-                  <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur L'Étranger"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
-                    <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
-                      <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <form method="GET">
+                <input
+                    class="peer h-full w-full rounded-[7px] border border-gray-400 bg-transparent px-3 py-2.5 !pr-9 font-sans text-sm font-normal text-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-gray-200 placeholder-shown:border-t-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-gray-50"
+                    placeholder=" " name="q" />
+                <label
+                    class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-gray-900 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-gray-900 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-gray-500">
+                    {% trans "Search" %}
+                </label>
+            </form>
         </div>
-      </section>    
-    {% endblock %}
+      </div>
+    </div>
+  </div>
+  <div class="p-6 px-0 overflow-scroll">
+    <table class="w-full mt-4 text-left table-auto min-w-max">
+      <thead>
+        <tr>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+              {% trans "isbn" %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path>
+              </svg>
+            </p>
+          </th>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+              {% trans "Title" %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path>
+              </svg>
+            </p>
+          </th>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+              {% trans "Author" %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path>
+              </svg>
+            </p>
+          </th>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+              {% trans "Status" %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path>
+              </svg>
+            </p>
+          </th>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+              {% trans "Publication date" %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"></path>
+              </svg>
+            </p>
+          </th>
+          <th
+            class="p-4 transition-colors cursor-pointer border-y border-gray-300 bg-gray-100/50 hover:bg-gray-200">
+            <p
+              class="flex items-center justify-between gap-2 font-sans text-sm antialiased font-normal leading-none text-gray-900 opacity-70">
+            {% trans "Actions" %}
+            </p>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %} 
+            <tr>
+                <td class="p-4 border-b border-gray-400">
+                    <div class="flex items-center gap-3">
+                    <div class="flex flex-col">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900">
+                        {% trans book.isbn %}
+                        </p>
+                        <p
+                        class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900 opacity-70">
+                        {{ book.num_pages }} {% trans "pages" %}
+                        </p>
+                    </div>
+                    </div>
+                </td>
+                <td class="p-4 border-b border-gray-400">
+                    <div class="flex items-center gap-3">
+                    <div class="flex flex-col">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900">
+                        {% trans book.title %}
+                        </p>
+                        <p
+                        class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900 opacity-70">
+                        {% trans book.subtitle %}
+                        </p>
+                    </div>
+                    </div>
+                </td>
+                <td class="p-4 border-b border-gray-400">
+                    <div class="flex flex-col">
+                    <p class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900">
+                        {{ book.author.surname }} {{ book.author.name }}
+                      
+                    </p>
+                    <p
+                        class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900 opacity-70">
+                        {% trans book.genre %}
+                    </p>
+                    </div>
+                </td>
+                <td class="p-4 border-b border-gray-400">
+                    <div class="w-max">
+                        {% if book.available %}
+                            <div
+                                class="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/30">
+                                <span class="">{% trans "Available" %}</span>
+                            </div>
+                        {% else %}
+                            <div
+                                class="relative grid items-center px-2 py-1 font-sans text-xs font-bold uppercase rounded-md select-none whitespace-nowrap bg-red-500/40 text-black/70">
+                                <span class="">{% trans "On loan" %}</span>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </td>
+                <td class="p-4 border-b border-gray-400">
+                    <p class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900">
+                    {{book.publication_date|date:"DATE_FORMAT"}}
+                    </p>
+                </td>
+                <td class="p-4 border-b border-gray-400">
+                    <a href={% url "book_detail" book.pk %}>
+                        <button
+                        class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button">
+                        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                            <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                            <circle cx="10.5" cy="10.5" r="1" fill="#ffffff"></circle>
+                            </svg>
+
+                        </span>
+                        </button>
+                    </a>
+                    <a href={% url "update_book" book.pk %}>
+                        <button
+                        class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button">
+                        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                            class="w-4 h-4">
+                            <path
+                                d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z">
+                            </path>
+                            </svg>
+                        </span>
+                        </button>
+                    </a>
+                    <form method="post" class="inline"action="{% url 'delete_book' book.pk %}">{% csrf_token %}
+                        <button type="submit" class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase transition-all text-slate-600 hover:text-slate-800 hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" >
+                            <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                                <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087ZM12 10.5a.75.75 0 0 1 .75.75v4.94l1.72-1.72a.75.75 0 1 1 1.06 1.06l-3 3a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 1 1 1.06-1.06l1.72 1.72v-4.94a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                            </svg>
+                            </span>
+                        </button>
+
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
 
 
-</body>
-</html>
+      </tbody>
+    </table>
+  </div>
+  <div class="flex items-center justify-between p-4 border-t border-gray-50">
+    <p class="block font-sans text-sm antialiased font-normal leading-normal text-gray-900">
+      {% trans "Page 1 of 10" %}
+    </p>
+    <div class="flex gap-2">
+      <button
+        class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        type="button">
+        {% trans "Previous" %}
+      </button>
+      <button
+        class="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        type="button">
+        {% trans "Next" %}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,81 +1,10 @@
-{% extends "base.html" %}
-{% block title %}Emprunt - {{ loan.book.title }} - Bibliotheque {% endblock title %}
-
-{% block content %}
-      <section class="detail-hero">
-        <div class="flex flex-wrap items-start gap-6 justify-between">
-          <div>
-            <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-3xl">Emprunt de « {{ loan.book.title }} »</h1>
-              <span class="badge-danger"><i class="ph ph-warning-circle" aria-hidden="true"></i>En retard</span>
-            </div>
-            <p class="text-slate mt-1">Ce prêt dépasse la date de retour prévue de 6 jours.</p>
-          </div>
-          <a href={% url "loan_list" %} class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>Retour à la liste</a>
-        </div>
-      </section>
-
-      <div class="detail-grid lg:grid-cols-3">
-        <section class="space-y-6 lg:col-span-2">
-          <article class="form-panel">
-            <h2 class="text-xl mb-4">Livre emprunté</h2>
-            <a href={% url "book_detail" loan.book.pk %} class="flex items-center gap-4 hover:underline">
-              <span class="avatar-tile w-14 h-14" aria-hidden="true"><i class="ph ph-book" aria-hidden="true"></i></span>
-              <span>
-                <span class="block font-medium text-lg" style="color:var(--color-ink);font-family:var(--font-display)">{{ loan.book.title }}</span>
-                <span class="block text-sm text-slate">{{ loan.book.author }}· Voir la fiche du livre</span>
-              </span>
-            </a>
-          </article>
-
-          <article class="form-panel">
-            <h2 class="text-xl mb-4">Chronologie du prêt</h2>
-            <div class="meta-row">
-              <span class="meta-label"><i class="ph ph-calendar-plus" aria-hidden="true"></i>Date d'emprunt</span>
-              <span class="meta-value">{{ loan.loan_date}}</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label"><i class="ph ph-calendar-check" aria-hidden="true"></i>Retour prévu</span>
-              <span class="meta-value">{{ loan.return_date }} </span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label"><i class="ph ph-calendar-x" aria-hidden="true"></i>Retour effectif</span>
-              {% if loan.effective_return_date %}
-              <span class="meta-value" style="color:var(--color-rust)">{{ loan.effective_return_date }}</span>
-                {% else %}
-              <span class="meta-value" style="color:var(--color-rust)">Non renseigné</span>
-              {% endif %}
-            </div>
-          </article>
-        </section>
-
-        <aside class="space-y-6">
-          <div class="form-panel">
-            <h2 class="text-lg mb-3">Emprunteur</h2>
-            <div class="flex items-center gap-3">
-              <span class="avatar-tile w-11 h-11" aria-hidden="true"><i class="ph ph-user" aria-hidden="true"></i></span>
-              <div>
-                <p class="font-medium" style="color:var(--color-ink)">{{ loan.borrower }}</p>
-                <p class="text-xs text-slate">Emprunteur</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-panel">
-            <h2 class="text-lg mb-3">Statut</h2>
-            <p class="badge-danger" style="width:100%;justify-content:center;padding:.75rem"><i class="ph ph-warning-circle" aria-hidden="true"></i>En retard depuis 6 jours</p>
-            <p class="text-xs text-slate mt-3">Statut calculé à partir de la date de retour prévue et de l'absence de retour effectif.</p>
-          </div>
-
-          <div class="form-panel">
-            <h2 class="text-lg mb-3">Actions rapides</h2>
-            <div class="space-y-3">
-              <a href={% url "update_loan" loan.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier l'emprunt</a>
-              <button type="button" class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-check" aria-hidden="true"></i>Enregistrer le retour</button>
-              <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer l'emprunt</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-{% endblock content %}
-
+<h2>Loan on {{ loan.loan_date }} By {{ loan.borrower }} </h2>
+<div><h3>Book informations</h3>
+<h4>{{loan.book.title}}({{ loan.book.publication_date }}) By {{ loan.book.author.name}} {{loan.book.author.surname}} Born on {{loan.book.author.birthday}}</h4>
+<p>{{loan.book.isbn}}<p>
+</div> 
+{% if loan.effective_return_date %}
+    <p>Returned a book the : {{ loan.effective_return_date }}
+{% else %}
+    <p>Not returned yet</p>
+{% endif %}
