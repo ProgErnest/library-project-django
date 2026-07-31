@@ -20,7 +20,7 @@ class LoanCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
-        context['page_title'] = _("Ajouter un auteur")
+        context['page_title'] = _("Ajouter un emprunt")
         return context
 
 class LoanListView(ListView):
@@ -47,7 +47,7 @@ class LoanUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = _("Modifier un auteur")
+        context['page_title'] = _("Modifier un emprunt")
         return context
 
 class LoanDeleteView(DeleteView):

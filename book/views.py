@@ -30,10 +30,19 @@ class BookListView(ListView):
         if query:
             queryset = queryset.filter(
                 Q(title__icontains = query) | Q(subtitle__icontains = query) | Q(summary__icontains = query))
-        return queryset
-
+        return queryset.select_related('author')
+ 
 class BookDetailView(DetailView):
     model = Book
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.select_related('author')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = self.get_object()
+        context['percent'] = (book.available_copies/book.total_copies)*100
+        return context
 
 class BookUpdateView(UpdateView):
     model = Book

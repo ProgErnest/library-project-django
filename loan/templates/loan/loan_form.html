@@ -1,6 +1,56 @@
-<h1>Initiate a loan</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Save</button>
-</form>
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}{{ page_title|default:"Nouvel emprunt" }} — Bibliothèque{% endblock title %}
+{% block content %}
+      <section class="page-header">
+        <div>
+          <h1>{{ page_title|default:"Nouvel emprunt" }}</h1>
+          <p>Enregistrez le prêt d'un livre du catalogue à un emprunteur.</p>
+        </div>
+      </section>
+
+      <form class="form-panel" action="" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Livre et emprunteur</legend>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="{{ form.book.id_for_label }}" class="form-label">{{ form.book.label }}</label>
+              {{ form.book|add_class:"form-select"|attr:"placeholder=Sélectionner un livre…" }}
+              {{ form.book.errors }}
+              <p class="form-hint">Seuls les livres avec au moins un exemplaire disponible sont recommandés.</p>
+            </div>
+            <div class="form-field">
+              <label for="{{ form.borrower.id_for_label }}" class="form-label">{{ form.borrower.label }}</label>
+              {{ form.borrower|add_class:"form-input"|attr:"placeholder=Nom de l'emprunteur" }}
+              {{ form.borrower.errors }}
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Dates</legend>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="{{ form.return_date.id_for_label }}" class="form-label">{{ form.return_date.label }}</label>
+              {{ form.return_date|add_class:"form-input" }}
+              {{ form.return_date.errors }}
+            </div>
+            <div class="form-field md:col-span-2">
+              <label for="{{ form.effective_return_date.id_for_label }}" class="form-label">{{ form.effective_return_date.label }}</label>
+              {{ form.effective_return_date|add_class:"form-input" }}
+              {{ form.effective_return_date.errors }}
+              <p class="form-hint">À laisser vide tant que le livre n'a pas été rendu. Le statut est calculé automatiquement à l'affichage.</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+          <a href="{% url 'loan_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer l'emprunt</button>
+        </div>
+      </form>
+    {% endblock content %}

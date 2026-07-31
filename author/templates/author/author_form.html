@@ -1,8 +1,60 @@
-<h1>Add an author</h1>
+{% extends "base.html" %}
+{% load widget_tweaks %}
 
-<form method="POST">
-{% csrf_token %}
-{{form.as_p}}
-<button type="submit">Save</button>
+{% block title %}{{ page_title|default:"Nouvel auteur" }} — Bibliothèque{% endblock title %}
 
-</form>
+{% block content %}
+      <section class="page-header">
+        <div>
+          <h1>{{ page_title|default:"Nouvel auteur" }}</h1>
+          <p>Renseignez les informations de l'auteur à ajouter ou modifier.</p>
+        </div>
+      </section>
+
+      <form class="form-panel" action="" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Identité</legend>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+              {{ form.name|add_class:"form-input"|attr:"autocomplete=given-name,placeholder=Ex : Victor" }}
+              {{ form.name.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.surname.id_for_label }}" class="form-label">{{ form.surname.label }}</label>
+              {{ form.surname|add_class:"form-input"|attr:"autocomplete=family-name,placeholder=Ex : Hugo" }}
+              {{ form.surname.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.birthday.id_for_label }}" class="form-label">{{ form.birthday.label }}</label>
+              {{ form.birthday|add_class:"form-input" }}
+              {{ form.birthday.errors }}
+            </div>
+            <div class="form-field">
+              <label for="{{ form.nationality.id_for_label }}" class="form-label">{{ form.nationality.label }}</label>
+              {{ form.nationality|add_class:"form-input"|attr:"placeholder=Ex : Française" }}
+              {{ form.nationality.errors }}
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-fieldset">
+          <legend class="form-legend">Biographie</legend>
+          <div class="form-field">
+            <label for="{{ form.biography.id_for_label }}" class="form-label">{{ form.biography.label }}</label>
+            {{ form.biography|add_class:"form-textarea"|attr:"rows=8,placeholder=Résumez le parcours et l'œuvre de l'auteur…" }}
+            {{ form.biography.errors }}
+            <p class="form-hint">Ce texte sera affiché dans son intégralité sur la fiche détaillée de l'auteur.</p>
+          </div>
+        </fieldset>
+
+        <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+          <a href="{% url 'authors_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer l'auteur</button>
+        </div>
+      </form>
+{% endblock content %}
+ 

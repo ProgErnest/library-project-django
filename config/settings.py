@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'author',
     'book',
     'loan',
-    'tailwind',
-    'theme',
+    'templates',
     'django_apscheduler'
 ]
 
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,7 +138,11 @@ LOCALE_PATHS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 CELERY_BROKER_URL = "rediss://default:gQAAAAAAAoCSAAIgcDEzNTFiZWUwYjc5MWY0MTVmYjRkMmMzMzY3MWJhOWI1MA@pumped-macaque-163986.upstash.io:6379"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
