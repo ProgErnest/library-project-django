@@ -27,10 +27,36 @@ class BookListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         query = self.request.GET.get('q')
+        genre = self.request.GET.get('genre')
+        availability = self.request.GET.get('available')
         if query:
             queryset = queryset.filter(
                 Q(title__icontains = query) | Q(subtitle__icontains = query) | Q(summary__icontains = query))
+
+        if genre:
+            queryset = queryset.filter(
+                Q(genre = genre)
+            )
+
+        if availability:
+            if availability == '0':
+                queryset = queryset.filter(
+                    Q(available_copies__lte = 0)
+                )
+            else:
+                queryset = queryset.filter(
+                    Q(available_copies__gte = 1)
+                )
+
         return queryset.select_related('author')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_books'] = context['books'].count()
+        context['available_books'] = context['books'].filter(available_copies__gt=0).count()
+        context['unavailable_books'] = context['books'].filter(available_copies=0).count()
+        context['availability_rate'] = round((context['available_books']/context['total_books'])*100,1) if context['total_books'] else 0
+        context['genres'] = context['books'].values_list('genre', flat=True).distinct()
+        return context
  
 class BookDetailView(DetailView):
     model = Book

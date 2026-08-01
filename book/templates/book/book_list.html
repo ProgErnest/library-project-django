@@ -14,45 +14,49 @@
 
       <section class="stat-bar" aria-label="Statistiques des livres">
         <div class="stat-item">
-          <span class="stat-value">30</span>
+          <span class="stat-value">{{ total_books }}</span>
           <span class="stat-label">Livres au catalogue</span>
         </div>
+
+
         <div class="stat-item">
-          <span class="stat-value">18 / 30</span>
-          <span class="stat-label">Exemplaires disponibles</span>
+          <span class="stat-value">{{ available_books }}</span>
+          <span class="stat-label">Disponibles</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">11</span>
-          <span class="stat-label">Genres représentés</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">4</span>
+          <span class="stat-value">{{ unavailable_books }}</span>
           <span class="stat-label">Indisponibles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ availability_rate }}%</span>
+          <span class="stat-label">Taux de disponibilite</span>
         </div>
       </section>
 
       <section aria-label="Filtrer les livres">
         <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
           <div class="form-field" style="flex:1 1 16rem">
-            <label for="filter-title" class="sr-only">Rechercher par titre</label>
-            <input class="form-input" type="search" id="filter-title" name="title" placeholder="Filtrer par titre, ISBN, auteur…">
+            <div class="form-input text-xl grid grid-cols-20 items-center">            
+              <label for="" class="text-xl"><i class="ph ph-magnifying-glass text-3xl"></i></label>
+              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" placeholder="Rechercher des livres">
+            </div>
           </div>
           <div class="form-field" style="width:11rem">
             <label for="filter-genre" class="sr-only">Filtrer par genre</label>
             <select class="form-select" id="filter-genre" name="genre">
               <option value="">Tous les genres</option>
-              <option>Roman</option>
-              <option>Poésie</option>
-              <option>Théâtre</option>
-              <option>Essai</option>
+              {% for genre in genres %}
+                <option value ={{ genre }}>{{ genre }}</genre>
+              {% endfor %}
+  
             </select>
           </div>
           <div class="form-field" style="width:11rem">
             <label for="filter-available" class="sr-only">Disponibilité</label>
             <select class="form-select" id="filter-available" name="available">
               <option value="">Disponibilité</option>
-              <option>Disponible</option>
-              <option>Indisponible</option>
+              <option value="1">Disponible</option>
+              <option value="0">Indisponible</option>
             </select>
           </div>
           <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
@@ -80,7 +84,7 @@
             {% for book in books %}
               <tr>
                 <td>
-                  <p class="font-black truncate" style="max-width:14rem" title="Les Misérables">{{ book.title }}</p>
+                  <p class="font-black" style="max-width:14rem" title="Les Misérables"><a href={% url "book_detail" book.pk %} class="hover:underline" style="color:var(--color-ink)">{{ book.title }}</a></p>
                   <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="Fantine, Cosette, Marius, l'idylle rue Plumet, Jean Valjean">{{ book.subtitle }}</p>
                 </td>
                 <td class="cell-secondary"><a href={% url "detail_author" book.author.pk %} class="hover:underline text-sm font-bold" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }}</a></td>

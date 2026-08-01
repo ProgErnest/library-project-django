@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from book.models import Book
 # Create your models here.
@@ -20,6 +22,14 @@ class Loan(models.Model):
     class Meta:
         verbose_name = "loan"
         verbose_name_plural = "loans"
+
+    @property
+    def status(self):
+        if self.effective_return_date:
+            return "Rendu"
+        if date.today() > self.return_date:
+            return "En retard"
+        return "En cours"
 
     def __str__(self):
         return f"{self.book.title} borrowed by {self.borrower}"

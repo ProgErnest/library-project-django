@@ -16,36 +16,28 @@
 
       <section class="stat-bar" aria-label="Statistiques des emprunts">
         <div class="stat-item">
-          <span class="stat-value">42</span>
+          <span class="stat-value">{{ total_loans }}</span>
           <span class="stat-label">Emprunts au total</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">12</span>
-          <span class="stat-label">En cours</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">5</span>
-          <span class="stat-label">En retard</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">25</span>
-          <span class="stat-label">Rendus</span>
+          <span class="stat-value">{{ results_count }}</span>
+          <span class="stat-label">Résultats</span>
         </div>
       </section>
 
       <section aria-label="Filtrer les emprunts">
-        <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
+        <form class="flex flex-wrap gap-3 items-center" action="" method="get">
           <div class="form-field" style="flex:1 1 16rem">
             <label for="filter-borrower" class="sr-only">Rechercher par emprunteur</label>
-            <input class="form-input" type="search" id="filter-borrower" name="borrower" placeholder="Filtrer par emprunteur ou livre…">
+            <input class="form-input" type="search" id="filter-borrower" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Filtrer par emprunteur ou livre…">
           </div>
           <div class="form-field" style="width:11rem">
             <label for="filter-status" class="sr-only">Statut de l'emprunt</label>
             <select class="form-select" id="filter-status" name="status">
               <option value="">Tous les statuts</option>
-              <option>En cours</option>
-              <option>En retard</option>
-              <option>Rendu</option>
+              <option value="En cours" {% if request.GET.status == 'En cours' %}selected{% endif %}>En cours</option>
+              <option value="En retard" {% if request.GET.status == 'En retard' %}selected{% endif %}>En retard</option>
+              <option value="Rendu" {% if request.GET.status == 'Rendu' %}selected{% endif %}>Rendu</option>
             </select>
           </div>
           <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
@@ -79,7 +71,15 @@
                     <td class="cell-mono">—</td>                   
                     {% endif %}
 
-                    <td><span class="badge-danger"><i class="ph ph-warning-circle" aria-hidden="true"></i>En retard</span></td>
+                    <td>
+                      {% if loan.status == 'Rendu' %}
+                        <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{{ loan.status }}</span>
+                      {% elif loan.status == 'En retard' %}
+                        <span class="badge-danger"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ loan.status }}</span>
+                      {% else %}
+                        <span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>{{ loan.status }}</span>
+                      {% endif %}
+                    </td>
                     <td>
                         <details class="row-menu">
                             <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>

@@ -14,37 +14,33 @@
 
       <section class="stat-bar" aria-label="Statistiques des auteurs">
         <div class="stat-item">
-          <span class="stat-value">24</span>
+          <span class="stat-value">{{ total_authors }}</span>
           <span class="stat-label">Auteurs</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">8</span>
+          <span class="stat-value">{{ nationality_count }}</span>
           <span class="stat-label">Nationalités</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value">312</span>
-          <span class="stat-label">Livres liés</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">3</span>
-          <span class="stat-label">Sans biographie</span>
+          <span class="stat-value">{{ results_count }}</span>
+          <span class="stat-label">Résultats affichés</span>
         </div>
       </section>
 
       <section aria-label="Filtrer les auteurs">
-        <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
+        <form class="flex flex-wrap gap-3 items-center" action="" method="get">
           <div class="form-field" style="flex:1 1 16rem">
             <label for="filter-name" class="sr-only">Rechercher par nom</label>
-            <input class="form-input" type="search" id="filter-name" name="name" placeholder="Filtrer par nom ou prénom…">
+            <input class="form-input" type="search" id="filter-name" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Filtrer par nom, prénom ou biographie…">
           </div>
           <div class="form-field" style="width:12rem">
             <label for="filter-nationality" class="sr-only">Filtrer par nationalité</label>
             <select class="form-select" id="filter-nationality" name="nationality">
               <option value="">Toutes les nationalités</option>
-              <option>Française</option>
-              <option>Britannique</option>
-              <option>Colombienne</option>
-              <option>Japonaise</option>
+              <option value="Française" {% if request.GET.nationality == 'Française' %}selected{% endif %}>Française</option>
+              <option value="Britannique" {% if request.GET.nationality == 'Britannique' %}selected{% endif %}>Britannique</option>
+              <option value="Colombienne" {% if request.GET.nationality == 'Colombienne' %}selected{% endif %}>Colombienne</option>
+              <option value="Japonaise" {% if request.GET.nationality == 'Japonaise' %}selected{% endif %}>Japonaise</option>
             </select>
           </div>
           <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
@@ -66,7 +62,7 @@
             </div>
             <div class="flex flex-wrap gap-2 mt-4">
               <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>{{ author.birthday }}</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>6 livres</span>
+              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>{{ author.books.count }} livres</span>
             </div>
             <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{{ author.biography|slice:":100"}}...</p>
             <div class="flex items-center gap-2 mt-6 pt-4 border-t">

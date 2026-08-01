@@ -26,13 +26,32 @@ class AuthorListView(ListView):
     model = Author
     template_name = "author/authors.html"
     context_object_name = "authors"
+
     def get_queryset(self):
         queryset = super().get_queryset()
-        query = self.request.GET.get('q')
+
+        query = self.request.GET.get('q') or self.request.GET.get('name')
+        nationality = self.request.GET.get('nationality')
+
         if query:
             queryset = queryset.filter(
-                Q(name__icontains = query) | Q(surname__icontains = query) | Q(bibliography__icontains = query))
+                Q(name__icontains=query) |
+                Q(surname__icontains=query) |
+                Q(biography__icontains=query)
+            )
+
+        if nationality:
+            queryset = queryset.filter(nationality__icontains=nationality)
+
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        authors = context['authors']
+        context['total_authors'] = authors.count()
+        context['nationality_count'] = authors.values_list('nationality', flat=True).distinct().count()
+        context['results_count'] = authors.count()
+        return context
 
 class AuthorDetailView(DetailView):
     model = Author

@@ -32,7 +32,7 @@
               {% for book in author.books.all %}
                 <li class="flex items-center justify-between border-b pb-3">
                   <div>
-                    <a href="book-detail.html" class="font-medium hover:underline" style="color:var(--color-ink)">{{ book.title }}</a>
+                    <a href={% url "book_detail" book.pk %} class="font-medium hover:underline" style="color:var(--color-ink)">{{ book.title }}</a>
                     <p class="text-sm text-slate">{{ book.genre }} · {{ book.publication_date }}</p>
                   </div>
                   {% if book.available %}
