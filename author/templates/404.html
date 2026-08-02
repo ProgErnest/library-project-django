@@ -1,25 +1,19 @@
+{% extends "base.html" %}
 {% load i18n %}
-{% load tailwind_tags %}
-{% tailwind_css %}
+{% block title %}404 — {% trans "Page introuvable" %}{% endblock title %}
 
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
-    <main class="min-h-screen flex items-center justify-center px-6">
-        <div class="text-center max-w-md mx-auto">
-            <span class="text-indigo-600 font-bold text-sm tracking-widest uppercase bg-indigo-50 px-3 py-1 rounded-full">{% trans "Erreur 404" %}</span>
-            
-            <h1 class="mt-4 text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900">
-                {% trans "Page introuvable" %}
-            </h1>
-            
-            <p class="mt-4 text-base text-slate-600 leading-relaxed">
-                {% trans "Désolé, la page que vous cherchez n'existe pas ou a été déplacée vers une autre adresse." %}
-            </p>
-            
-            <div class="mt-8 flex items-center justify-center">
-                <a href="/" class="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-white bg-indigo-600 rounded-xl shadow-sm hover:bg-indigo-700 transition-colors duration-200">
-                    {% trans "Retour à l'accueil" %}
-                </a>
-            </div>
-        </div>
-    </main>
-</body>
+{% block content %}
+<section class="form-panel flex flex-col items-center justify-center px-6 py-16 text-center sm:py-20">
+    <span class="text-8xl font-black leading-none tracking-tight text-brass">404</span>
+    <span class="badge-brass mt-8"><i class="ph ph-compass" aria-hidden="true"></i>{% trans "Erreur 404" %}</span>
+    <h1 class="mt-6 text-3xl font-bold text-ink sm:text-4xl">{% trans "Oups ! Page introuvable" %}</h1>
+    <p class="mt-4 max-w-md text-slate">
+        {% trans "Désolé, la page que vous recherchez n'existe pas ou a été déplacée." %}
+    </p>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <a href="/" class="btn btn-primary"><i class="ph ph-house" aria-hidden="true"></i>{% trans "Retour à l'accueil" %}</a>
+        <button type="button" onclick="history.back()" class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Page précédente" %}</button>
+    </div>
+</section>
+{% endblock content %}
+

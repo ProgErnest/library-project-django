@@ -1,11 +1,8 @@
 import os
 from django.apps import AppConfig
 
-class CoreConfig(AppConfig):
+class AuthorConfig(AppConfig):
     name = 'author'
 
-    # def ready(self):
-    #     import author.signals
-    #     if os.environ.get("RUN_MAIN") == "true":
-    #         from .scheduler import start_plannificator
-    #         start_plannificator()
+    def ready(self):
+        import author.signals

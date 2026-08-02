@@ -13,7 +13,7 @@ class AuthorCreateView(CreateView):
     form_class = AuthorForm
     template_name = "author/author_form.html"
     success_url = reverse_lazy("authors_list")
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = _("Add an author")

@@ -1,5 +1,3 @@
-from datetime import date
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -43,12 +41,6 @@ class AuthorForm(forms.ModelForm):
         if any(char.isdigit() for char in surname):
             raise ValidationError(_("The surname must not contain digits."))
         return surname.title()
-
-    def clean_birthday(self):
-        birthday = self.cleaned_data.get("birthday")
-        if birthday and birthday > date.today():
-            raise ValidationError(_("The birth date cannot be in the future."))
-        return birthday
 
     def clean_nationality(self):
         nationality = self.cleaned_data.get("nationality", "").strip()

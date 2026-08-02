@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,6 +146,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 CELERY_BROKER_URL = "rediss://default:gQAAAAAAAoCSAAIgcDEzNTFiZWUwYjc5MWY0MTVmYjRkMmMzMzY3MWJhOWI1MA@pumped-macaque-163986.upstash.io:6379"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"

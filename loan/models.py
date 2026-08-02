@@ -1,5 +1,4 @@
-from datetime import date
-
+from django.utils import timezone
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -9,7 +8,7 @@ from book.models import Book
 class Loan(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="loans", verbose_name=_("Book"))
     borrower = models.CharField(_("Borrower"), max_length=50)
-    loan_date = models.DateField(_("Loan date"), auto_now=False, auto_now_add=False, default=date.today)
+    loan_date = models.DateField(_("Loan date"), auto_now=False, auto_now_add=False, default=timezone.now)
     return_date = models.DateField(_("Return date"), auto_now=False, auto_now_add=False)
     effective_return_date = models.DateField(_("Effective return date"), null=True, blank=True, auto_now=False, auto_now_add=False)
 
@@ -29,7 +28,7 @@ class Loan(models.Model):
     def status(self):
         if self.effective_return_date:
             return _("Returned")
-        if date.today() > self.return_date:
+        if timezone.now().date() > self.return_date:
             return _("Late")
         return _("In progress")
 
