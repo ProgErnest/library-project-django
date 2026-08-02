@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% block title %}{{ book.title }} — {% trans "Livres" %} — {% trans "Bibliothèque" %}{% endblock title %}
 
 {% block content %}
@@ -45,7 +46,7 @@
               </div>
               <div class="meta-row">
                 <span class="meta-label"><i class="ph ph-calendar" aria-hidden="true"></i>{% trans "Publication" %}</span>
-                <span class="meta-value">{{ book.publication_date }}</span>
+                <span class="meta-value">{{ book.publication_date|localize }}</span>
               </div>
             </div>
           </article>
@@ -78,7 +79,7 @@
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
-              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier la fiche" %}</a>
+              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{ % trans "Modifier la fiche" %}</a>
               <a href={% url "create_loan" %} class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Créer un emprunt" %}</a>
               <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</button>
             </div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-01 22:29+0100\n"
+"POT-Creation-Date: 2026-08-02 08:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,7 +133,7 @@ msgid "livres au catalogue"
 msgstr "books in the catalog"
 
 #: author/templates/author/author_detail.html:19
-#: book/templates/book/book_detail.html:16
+#: book/templates/book/book_detail.html:17
 #: loan/templates/loan/loan_detail.html:15
 msgid "Retour à la liste"
 msgstr "Back to list"
@@ -198,15 +198,15 @@ msgid "Livres liés"
 msgstr "Associated books"
 
 #: author/templates/author/author_detail.html:82
-#: book/templates/book/book_detail.html:79
+#: book/templates/book/book_detail.html:80
 #: loan/templates/loan/loan_detail.html:72
 #, fuzzy
 #| msgid "Actions"
 msgid "Actions rapides"
-msgstr "Actions"
+msgstr "Rapid actions"
 
 #: author/templates/author/author_detail.html:84
-#: book/templates/book/book_detail.html:81
+#: book/templates/book/book_detail.html:82
 #, fuzzy
 #| msgid "Modifier un livre"
 msgid "Modifier la fiche"
@@ -224,7 +224,7 @@ msgstr "Delete the author"
 
 #: author/templates/author/author_form.html:5
 #: author/templates/author/authors.html:3
-#: book/templates/book/book_detail.html:3 book/templates/book/book_list.html:3
+#: book/templates/book/book_detail.html:4 book/templates/book/book_list.html:3
 #: book/templates/book/create_form.html:6 loan/templates/loan/loans_list.html:4
 #: templates/base.html:12 templates/base.html:41 templates/base.html:75
 #: templates/components/sidebar.html:19
@@ -473,7 +473,8 @@ msgid ""
 "Écrivain et philosophe, figure de l'absurde et de la révolte, lauréat du "
 "prix Nobel de littérature en 1957…"
 msgstr ""
-"Writer and philosopher, figure of the absurd and revolt, Nobel Prize winner in literature in 1957…"
+"Writer and philosopher, figure of the absurd and revolt, Nobel Prize winner "
+"in literature in 1957…"
 
 #: author/templates/author/authors.html:189
 msgid "Voir la fiche de Albert Camus"
@@ -515,7 +516,7 @@ msgstr "Subtitle"
 msgid "Language"
 msgstr "Language"
 
-#: book/forms.py:32 book/models.py:17 book/templates/book/book_detail.html:39
+#: book/forms.py:32 book/models.py:17 book/templates/book/book_detail.html:40
 #: book/templates/book/book_list.html:75
 msgid "Genre"
 msgstr "Genre"
@@ -676,79 +677,79 @@ msgstr "Book"
 msgid "Books"
 msgstr "Books"
 
-#: book/templates/book/book_detail.html:3 book/templates/book/book_list.html:3
+#: book/templates/book/book_detail.html:4 book/templates/book/book_list.html:3
 #: book/templates/book/book_list.html:8 templates/base.html:52
 #: templates/components/sidebar.html:30
 msgid "Livres"
 msgstr "Books"
 
-#: book/templates/book/book_detail.html:14
+#: book/templates/book/book_detail.html:15
 msgid "Écrit par"
 msgstr "Written by"
 
-#: book/templates/book/book_detail.html:23
+#: book/templates/book/book_detail.html:24
 #: book/templates/book/create_form.html:141
 msgid "Résumé"
 msgstr "Summary"
 
-#: book/templates/book/book_detail.html:28
+#: book/templates/book/book_detail.html:29
 msgid "Informations bibliographiques"
 msgstr "bibliographics informations"
 
-#: book/templates/book/book_detail.html:35
+#: book/templates/book/book_detail.html:36
 #: book/templates/book/book_list.html:76
 #, fuzzy
 #| msgid "language"
 msgid "Langue"
 msgstr "language"
 
-#: book/templates/book/book_detail.html:43
+#: book/templates/book/book_detail.html:44
 #: book/templates/book/book_list.html:77
 #, fuzzy
 #| msgid "pages"
 msgid "Pages"
 msgstr "Pages"
 
-#: book/templates/book/book_detail.html:47
+#: book/templates/book/book_detail.html:48
 #: book/templates/book/book_list.html:78
 #, fuzzy
 #| msgid "Publication date"
 msgid "Publication"
 msgstr "Publication"
 
-#: book/templates/book/book_detail.html:56
+#: book/templates/book/book_detail.html:57
 msgid "Exemplaires"
 msgstr "Copies"
 
-#: book/templates/book/book_detail.html:58
+#: book/templates/book/book_detail.html:59
 #: book/templates/book/book_list.html:25
 msgid "Disponibles"
 msgstr "Availables"
 
-#: book/templates/book/book_detail.html:61
+#: book/templates/book/book_detail.html:62
 #: book/templates/book/create_form.html:122
 msgid "Exemplaires disponibles"
 msgstr "Available copies"
 
-#: book/templates/book/book_detail.html:64
+#: book/templates/book/book_detail.html:65
 #, python-format
 msgid "%% des exemplaires sont actuellement disponibles au prêt."
 msgstr "%% of copies that are currently available for loan."
 
-#: book/templates/book/book_detail.html:68
+#: book/templates/book/book_detail.html:69
 #: book/templates/book/book_list.html:73
 msgid "Auteur"
 msgstr "Author"
 
-#: book/templates/book/book_detail.html:73
+#: book/templates/book/book_detail.html:74
 msgid "Voir la fiche auteur"
 msgstr "View the author's profile"
 
-#: book/templates/book/book_detail.html:82
+#: book/templates/book/book_detail.html:83
 msgid "Créer un emprunt"
 msgstr "Create a loan"
 
-#: book/templates/book/book_detail.html:83
+#: book/templates/book/book_detail.html:84
 msgid "Supprimer le livre"
 msgstr "Delete book"
 
@@ -933,11 +934,11 @@ msgstr "Add a book"
 msgid "Edit a book"
 msgstr "Edit a book"
 
-#: config/settings.py:129
+#: config/settings.py:131
 msgid "English"
 msgstr "English"
 
-#: config/settings.py:130
+#: config/settings.py:132
 msgid "Francais"
 msgstr "French"
 
@@ -988,7 +989,8 @@ msgstr "This book no longer has copies available for a loan."
 #: loan/forms.py:66
 msgid ""
 "The effective return date cannot be earlier than the planned return date."
-msgstr "The effective return date connot be earlier than the planned return date/"
+msgstr ""
+"The effective return date connot be earlier than the planned return date/"
 
 #: loan/models.py:25
 #, fuzzy
@@ -1082,7 +1084,9 @@ msgstr "Late since 6 days"
 msgid ""
 "Statut calculé à partir de la date de retour prévue et de l'absence de "
 "retour effectif."
-msgstr "Status is based on the planned return date and the absence of an actual return date"
+msgstr ""
+"Status is based on the planned return date and the absence of an actual "
+"return date"
 
 #: loan/templates/loan/loan_detail.html:74
 #, fuzzy
@@ -1123,7 +1127,9 @@ msgstr "Dates"
 msgid ""
 "À laisser vide tant que le livre n'a pas été rendu. Le statut est calculé "
 "automatiquement à l'affichage."
-msgstr "To keep empty while the book has not been returned. The status is calculated authomaticaly on display"
+msgstr ""
+"To keep empty while the book has not been returned. The status is calculated "
+"authomaticaly on display"
 
 #: loan/templates/loan/loan_form.html:86
 #, fuzzy
