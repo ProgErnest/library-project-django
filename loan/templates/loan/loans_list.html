@@ -1,67 +1,68 @@
 {% extends "base.html" %}
-{% block title %}Emprunts{% endblock title %}
-<title>Emprunts — Bibliothèque</title>
+{% load i18n %}
+{% block title %}{% trans "Emprunts" %}{% endblock title %}
+<title>{% trans "Emprunts" %} — {% trans "Bibliothèque" %}</title>
 
 
 {% block content %}
       <section class="page-header">
         <div>
-          <h1>Emprunts</h1>
-          <p>Suivi des prêts en cours et de l'historique des retours.</p>
+          <h1>{% trans "Emprunts" %}</h1>
+          <p>{% trans "Suivi des prêts en cours et de l'historique des retours." %}</p>
         </div>
         <a href="{% url 'create_loan' %}" class="btn btn-primary">
-          <i class="ph ph-plus" aria-hidden="true"></i>Ajouter un emprunt
+          <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un emprunt" %}
         </a>
       </section>
 
-      <section class="stat-bar" aria-label="Statistiques des emprunts">
+      <section class="stat-bar" aria-label="{% trans 'Statistiques des emprunts' %}">
         <div class="stat-item">
           <span class="stat-value">{{ total_loans }}</span>
-          <span class="stat-label">Emprunts au total</span>
+          <span class="stat-label">{% trans "Emprunts au total" %}</span>
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ results_count }}</span>
-          <span class="stat-label">Résultats</span>
+          <span class="stat-label">{% trans "Résultats" %}</span>
         </div>
       </section>
 
-      <section aria-label="Filtrer les emprunts">
+      <section aria-label="{% trans 'Filtrer les emprunts' %}">
         <form class="flex flex-wrap gap-3 items-center" action="" method="get">
           <div class="form-field" style="flex:1 1 16rem">
-            <label for="filter-borrower" class="sr-only">Rechercher par emprunteur</label>
-            <input class="form-input" type="search" id="filter-borrower" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Filtrer par emprunteur ou livre…">
+            <label for="filter-borrower" class="sr-only">{% trans "Rechercher par emprunteur" %}</label>
+            <input class="form-input" type="search" id="filter-borrower" name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% trans 'Filtrer par emprunteur ou livre…' %}">
           </div>
           <div class="form-field" style="width:11rem">
-            <label for="filter-status" class="sr-only">Statut de l'emprunt</label>
+            <label for="filter-status" class="sr-only">{% trans "Statut de l'emprunt" %}</label>
             <select class="form-select" id="filter-status" name="status">
-              <option value="">Tous les statuts</option>
-              <option value="En cours" {% if request.GET.status == 'En cours' %}selected{% endif %}>En cours</option>
-              <option value="En retard" {% if request.GET.status == 'En retard' %}selected{% endif %}>En retard</option>
-              <option value="Rendu" {% if request.GET.status == 'Rendu' %}selected{% endif %}>Rendu</option>
+              <option value="">{% trans "Tous les statuts" %}</option>
+              <option value="En cours" {% if request.GET.status == 'En cours' %}selected{% endif %}>{% trans "En cours" %}</option>
+              <option value="En retard" {% if request.GET.status == 'En retard' %}selected{% endif %}>{% trans "En retard" %}</option>
+              <option value="Rendu" {% if request.GET.status == 'Rendu' %}selected{% endif %}>{% trans "Rendu" %}</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
+          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>{% trans "Filtrer" %}</button>
         </form>
       </section>
 
-      <section aria-label="Liste des emprunts">
+      <section aria-label="{% trans 'Liste des emprunts' %}">
         <div class="table-wrap overflow-x-auto">
           <table class="data-table">
             <thead>
               <tr>
-                <th scope="col">Livre</th>
-                <th scope="col">Emprunteur</th>
-                <th scope="col">Date d'emprunt</th>
-                <th scope="col">Retour prévu</th>
-                <th scope="col">Retour effectif</th>
-                <th scope="col">Statut</th>
-                <th scope="col"><span class="sr-only">Actions</span></th>
+                <th scope="col">{% trans "Livre" %}</th>
+                <th scope="col">{% trans "Emprunteur" %}</th>
+                <th scope="col">{% trans "Date d'emprunt" %}</th>
+                <th scope="col">{% trans "Retour prévu" %}</th>
+                <th scope="col">{% trans "Retour effectif" %}</th>
+                <th scope="col">{% trans "Statut" %}</th>
+                <th scope="col"><span class="sr-only">{% trans "Actions" %}</span></th>
               </tr>
             </thead>
             <tbody>
                 {% for loan in loans %}
                 <tr>
-                    <td><a href="book-detail.html" class="font-medium hover:underline" style="color:var(--color-ink)">{{ loan.book.title}}</a></td>
+                    <td><a href={% url "book_detail" loan.book.pk %} class="font-medium hover:underline" style="color:var(--color-ink)">{{ loan.book.title}}</a></td>
                     <td class="cell-secondary">{{ loan.borrower }}</td>
                     <td class="cell-mono">{{ loan.loan_date}}</td>
                     <td class="cell-mono">{{ loan.return_date}}</td>
@@ -82,12 +83,12 @@
                     </td>
                     <td>
                         <details class="row-menu">
-                            <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                            <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cet emprunt' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                             <div class="row-menu-list">
-                            <a href={% url "detail_loan" loan.pk %}><i class="ph ph-eye" aria-hidden="true"></i>Voir le détail</a>
-                            <a href={% url "update_loan" loan.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                            <a href={% url "detail_loan" loan.pk %}><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir le détail" %}</a>
+                            <a href={% url "update_loan" loan.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                             <hr>
-                            <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                            <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                             </div>
                         </details>
                     </td>
@@ -100,15 +101,15 @@
                 <td class="cell-mono">28/01/2026</td>
                 <td class="cell-mono">11/02/2026</td>
                 <td class="cell-mono">—</td>
-                <td><span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>En cours</span></td>
+                <td><span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>{% trans "En cours" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cet emprunt' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir le détail</a>
-                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir le détail" %}</a>
+                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -119,15 +120,15 @@
                 <td class="cell-mono">10/12/2025</td>
                 <td class="cell-mono">24/12/2025</td>
                 <td class="cell-mono">22/12/2025</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Rendu</span></td>
+                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Rendu" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cet emprunt' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir le détail</a>
-                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir le détail" %}</a>
+                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -138,15 +139,15 @@
                 <td class="cell-mono">02/02/2026</td>
                 <td class="cell-mono">16/02/2026</td>
                 <td class="cell-mono">—</td>
-                <td><span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>En cours</span></td>
+                <td><span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>{% trans "En cours" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cet emprunt' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir le détail</a>
-                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir le détail" %}</a>
+                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -157,15 +158,15 @@
                 <td class="cell-mono">15/11/2025</td>
                 <td class="cell-mono">29/11/2025</td>
                 <td class="cell-mono">28/11/2025</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Rendu</span></td>
+                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Rendu" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur cet emprunt"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cet emprunt' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir le détail</a>
-                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="loan-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir le détail" %}</a>
+                      <a href="loan-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>

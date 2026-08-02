@@ -1,15 +1,17 @@
 from datetime import date
 
 from django.db import models
-from book.models import Book
-# Create your models here.
-class Loan(models.Model):
+from django.utils.translation import gettext_lazy as _
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="loans")
-    borrower = models.CharField(max_length=50)
-    loan_date = models.DateField(auto_now=False, auto_now_add=True)
-    return_date = models.DateField(auto_now=False, auto_now_add=False)
-    effective_return_date = models.DateField(null=True, blank=True,auto_now=False, auto_now_add=False)
+from book.models import Book
+
+
+class Loan(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="loans", verbose_name=_("Book"))
+    borrower = models.CharField(_("Borrower"), max_length=50)
+    loan_date = models.DateField(_("Loan date"), auto_now=False, auto_now_add=False, default=date.today)
+    return_date = models.DateField(_("Return date"), auto_now=False, auto_now_add=False)
+    effective_return_date = models.DateField(_("Effective return date"), null=True, blank=True, auto_now=False, auto_now_add=False)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -20,19 +22,16 @@ class Loan(models.Model):
             self.book.save()
 
     class Meta:
-        verbose_name = "loan"
-        verbose_name_plural = "loans"
+        verbose_name = _("loan")
+        verbose_name_plural = _("loans")
 
     @property
     def status(self):
         if self.effective_return_date:
-            return "Rendu"
+            return _("Returned")
         if date.today() > self.return_date:
-            return "En retard"
-        return "En cours"
+            return _("Late")
+        return _("In progress")
 
     def __str__(self):
-        return f"{self.book.title} borrowed by {self.borrower}"
-
-
-
+        return f"{self.book.title} {_('borrowed by')} {self.borrower}"

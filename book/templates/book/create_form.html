@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
-{% block title %}Nouveau livre — Bibliothèque{% endblock title %}
+{% load i18n %}
+{% trans "Facultatif" as subtitle_placeholder %}
+{% trans "Résumer le livre" as summary_placeholder %}
+{% block title %}{% trans "Nouveau livre" %} — {% trans "Bibliothèque" %}{% endblock title %}
 
 {% block content %}
       {% if form.non_field_errors %}
@@ -10,8 +13,8 @@
       {% endif %}
       <section class="page-header">
         <div>
-          <h1>Nouveau livre</h1>
-          <p>Renseignez les informations de l'ouvrage à ajouter au catalogue.</p>
+          <h1>{% trans "Nouveau livre" %}</h1>
+          <p>{% trans "Renseignez les informations de l'ouvrage à ajouter au catalogue." %}</p>
         </div>
       </section>
 
@@ -20,7 +23,7 @@
         {{ form.non_field_errors }}
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Informations générales</legend>
+          <legend class="form-legend">{% trans "Informations générales" %}</legend>
           <div class="form-grid">
             <div class="form-field md:col-span-2">
               <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
@@ -34,10 +37,10 @@
             <div class="form-field md:col-span-2">
               <label for="{{ form.subtitle.id_for_label }}" class="form-label">{{ form.subtitle.label }}</label>
               {% if form.subtitle.errors %}
-                {% render_field form.subtitle class="form-input border-red-400 bg-red-50" placeholder="Facultatif" %}
+                {% render_field form.subtitle class="form-input border-red-400 bg-red-50" placeholder=subtitle_placeholder %}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.subtitle.errors|join:", " }}</p>
               {% else %}
-                {% render_field form.subtitle class="form-input" placeholder="Facultatif" %}
+                {% render_field form.subtitle class="form-input" placeholder=subtitle_placeholder %}
               {% endif %}
             </div>
             <div class="form-field">
@@ -62,7 +65,7 @@
         </fieldset>
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Classification</legend>
+          <legend class="form-legend">{% trans "Classification" %}</legend>
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.language.id_for_label }}" class="form-label">{{ form.language.label }}</label>
@@ -104,10 +107,10 @@
         </fieldset>
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Disponibilité</legend>
+          <legend class="form-legend">{% trans "Disponibilité" %}</legend>
           <div class="form-grid">
             <div class="form-field">
-              <label for="{{ form.total_copies.id_for_label }}" class="form-label">Nombre total d'exemplaires</label>
+              <label for="{{ form.total_copies.id_for_label }}" class="form-label">{% trans "Nombre total d'exemplaires" %}</label>
               {% if form.total_copies.errors %}
                 {% render_field form.total_copies class="form-input border-red-400 bg-red-50" style="font-family:var(--font-mono)" min="0" required="required" placeholder="Ex : 5" %}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.total_copies.errors|join:", " }}</p>
@@ -116,7 +119,7 @@
               {% endif %}
             </div>
             <div class="form-field">
-              <label for="{{ form.available_copies.id_for_label }}" class="form-label">Exemplaires disponibles</label>
+              <label for="{{ form.available_copies.id_for_label }}" class="form-label">{% trans "Exemplaires disponibles" %}</label>
               {% if form.available_copies.errors %}
                 {% render_field form.available_copies class="form-input border-red-400 bg-red-50" style="font-family:var(--font-mono)" min="0" placeholder="Ex : 4" %}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.available_copies.errors|join:", " }}</p>
@@ -127,7 +130,7 @@
             <div class="form-field md:col-span-2">
               <div class="checkbox-row">
                 {% render_field form.available class="form-checkbox" %}
-                <label for="{{ form.available.id_for_label }}" class="form-label" style="margin-bottom:0">Ouvrage disponible à l'emprunt</label>
+                <label for="{{ form.available.id_for_label }}" class="form-label" style="margin-bottom:0">{% trans "Ouvrage disponible à l'emprunt" %}</label>
               </div>
               {% if form.available.errors %}<p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.available.errors|join:", " }}</p>{% endif %}
             </div>
@@ -135,21 +138,21 @@
         </fieldset>
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Résumé</legend>
+          <legend class="form-legend">{% trans "Résumé" %}</legend>
           <div class="form-field">
             <label for="{{ form.summary.id_for_label }}" class="form-label">{{ form.summary.label }}</label>
             {% if form.summary.errors %}
-              {% render_field form.summary class="form-textarea border-red-400 bg-red-50" rows="8" placeholder="Résume du livre" %}
+              {% render_field form.summary class="form-textarea border-red-400 bg-red-50" rows="8" placeholder=summary_placeholder %}
               <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.summary.errors|join:", " }}</p>
             {% else %}
-              {% render_field form.summary class="form-textarea" rows="8" placeholder="Résume du livre" %}
+              {% render_field form.summary class="form-textarea" rows="8" placeholder=summary_placeholder %}
             {% endif %}
           </div>
         </fieldset>
 
         <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
-          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
-          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer le livre</button>
+          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>{% trans "Enregistrer le livre" %}</button>
         </div>
       </form>
 {% endblock content %}

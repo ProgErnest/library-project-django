@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}{{ book.title }}— Livres — Bibliothèque{% endblock title %}
+{% load i18n %}
+{% block title %}{{ book.title }} — {% trans "Livres" %} — {% trans "Bibliothèque" %}{% endblock title %}
 
 {% block content %}
       <section class="detail-hero">
@@ -10,40 +11,40 @@
               <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{{ book.available }}</span>
             </div>
             <p class="text-slate mt-1">{{ book.subtitle }}</p>
-            <p class="mt-3 text-sm">Écrit par <a href={% url "detail_author" book.author.pk %} class="font-medium hover:underline" style="color:var(--color-brass)">{{ book.author.surname }} {{ book.author.name }}</a></p>
+            <p class="mt-3 text-sm">{% trans "Écrit par" %} <a href={% url "detail_author" book.author.pk %} class="font-medium hover:underline" style="color:var(--color-brass)">{{ book.author.surname }} {{ book.author.name }}</a></p>
           </div>
-          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>Retour à la liste</a>
+          <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour à la liste" %}</a>
         </div>
       </section>
 
       <div class="detail-grid lg:grid-cols-3">
         <section class="space-y-6 lg:col-span-2">
           <article class="form-panel">
-            <h2 class="text-xl mb-4">Résumé</h2>
+            <h2 class="text-xl mb-4">{% trans "Résumé" %}</h2>
             <p class="leading-relaxed">{{ book.summary }}</p>
           </article>
 
           <article class="form-panel">
-            <h2 class="text-xl mb-4">Informations bibliographiques</h2>
+            <h2 class="text-xl mb-4">{% trans "Informations bibliographiques" %}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
               <div class="meta-row">
                 <span class="meta-label"><i class="ph ph-hash" aria-hidden="true"></i>ISBN</span>
                 <span class="meta-value">{{ book.isbn }}</span>
               </div>
               <div class="meta-row">
-                <span class="meta-label"><i class="ph ph-translate" aria-hidden="true"></i>Langue</span>
+                <span class="meta-label"><i class="ph ph-translate" aria-hidden="true"></i>{% trans "Langue" %}</span>
                 <span class="meta-value" style="font-family:var(--font-sans)">{{ book.language }}</span>
               </div>
               <div class="meta-row">
-                <span class="meta-label"><i class="ph ph-tag" aria-hidden="true"></i>Genre</span>
+                <span class="meta-label"><i class="ph ph-tag" aria-hidden="true"></i>{% trans "Genre" %}</span>
                 <span class="meta-value" style="font-family:var(--font-sans)">{{ book.genre }}</span>
               </div>
               <div class="meta-row">
-                <span class="meta-label"><i class="ph ph-stack" aria-hidden="true"></i>Pages</span>
+                <span class="meta-label"><i class="ph ph-stack" aria-hidden="true"></i>{% trans "Pages" %}</span>
                 <span class="meta-value">{{ book.num_pages }}</span>
               </div>
               <div class="meta-row">
-                <span class="meta-label"><i class="ph ph-calendar" aria-hidden="true"></i>Publication</span>
+                <span class="meta-label"><i class="ph ph-calendar" aria-hidden="true"></i>{% trans "Publication" %}</span>
                 <span class="meta-value">{{ book.publication_date }}</span>
               </div>
             </div>
@@ -52,34 +53,34 @@
 
         <aside class="space-y-6">
           <div class="form-panel">
-            <h2 class="text-lg mb-3">Exemplaires</h2>
+            <h2 class="text-lg mb-3">{% trans "Exemplaires" %}</h2>
             <p class="flex items-baseline justify-between">
-              <span class="text-sm text-slate">Disponibles</span>
+              <span class="text-sm text-slate">{% trans "Disponibles" %}</span>
               <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ book.available_copies}}&nbsp;/&nbsp;{{ book.total_copies }}</span>
             </p>
-            <div class="progress-track mt-3" role="img" aria-label="4 exemplaires disponibles sur 5">
+            <div class="progress-track mt-3" role="img" aria-label="{% trans 'Exemplaires disponibles' %}">
               <div class="progress-fill" style="width:{{percent}}%"></div>
             </div>
-            <p class="text-xs text-slate mt-2">{{ percent }}&nbsp;% des exemplaires sont actuellement disponibles au prêt.</p>
+            <p class="text-xs text-slate mt-2">{{ percent }}&nbsp;{% trans "% des exemplaires sont actuellement disponibles au prêt." %}</p>
           </div>
 
           <div class="form-panel">
-            <h2 class="text-lg mb-3">Auteur</h2>
+            <h2 class="text-lg mb-3">{% trans "Auteur" %}</h2>
             <a href={% url "detail_author" book.author.pk %} class="flex items-center gap-3 hover:underline">
               <span class="avatar-tile w-11 h-11" aria-hidden="true">{{ book.author.surname|slice:":1" }}{{ book.author.name|slice:":1" }} </span>
               <span>
                 <span class="block font-medium" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }} </span>
-                <span class="block text-xs text-slate">Voir la fiche auteur</span>
+                <span class="block text-xs text-slate">{% trans "Voir la fiche auteur" %}</span>
               </span>
             </a>
           </div>
 
           <div class="form-panel">
-            <h2 class="text-lg mb-3">Actions rapides</h2>
+            <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
-              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier la fiche</a>
-              <a href={% url "create_loan" %} class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>Créer un emprunt</a>
-              <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer le livre</button>
+              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier la fiche" %}</a>
+              <a href={% url "create_loan" %} class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Créer un emprunt" %}</a>
+              <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</button>
             </div>
           </div>
         </aside>

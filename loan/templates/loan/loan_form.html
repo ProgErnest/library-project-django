@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+{% load i18n %}
 
-{% block title %}{{ page_title|default:"Nouvel emprunt" }}{% endblock title %}
+{% block title %}{{ page_title}}{% endblock title %}
 {% block content %}
       {% if form.non_field_errors %}
         <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
@@ -10,8 +11,8 @@
       {% endif %}
       <section class="page-header">
         <div>
-          <h1>{{ page_title|default:"Nouvel emprunt" }}</h1>
-          <p>Enregistrez le prêt d'un livre du catalogue à un emprunteur.</p>
+          <h1>{{ page_title }}</h1>
+          <p>{% trans "Enregistrez le prêt d'un livre du catalogue à un emprunteur." %}</p>
         </div>
       </section>
 
@@ -20,7 +21,7 @@
         {{ form.non_field_errors }}
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Livre et emprunteur</legend>
+          <legend class="form-legend">{% trans "Livre et emprunteur" %}</legend>
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.book.id_for_label }}" class="form-label">{{ form.book.label }}</label>
@@ -30,7 +31,7 @@
               {% else %}
                 {{ form.book|add_class:"form-select"|attr:"placeholder=Sélectionner un livre…" }}
               {% endif %}
-              <p class="form-hint">Seuls les livres avec au moins un exemplaire disponible sont recommandés.</p>
+              <p class="form-hint">{% trans "Seuls les livres avec au moins un exemplaire disponible sont recommandés." %}</p>
             </div>
             <div class="form-field">
               <label for="{{ form.borrower.id_for_label }}" class="form-label">{{ form.borrower.label }}</label>
@@ -45,7 +46,7 @@
         </fieldset>
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Dates</legend>
+          <legend class="form-legend">{% trans "Dates" %}</legend>
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.return_date.id_for_label }}" class="form-label">{{ form.return_date.label }}</label>
@@ -56,6 +57,17 @@
                 {{ form.return_date|add_class:"form-input" }}
               {% endif %}
             </div>
+            <div class="form-field">
+              <label for="{{ form.loan_date.id_for_label }}" class="form-label">{{ form.loan_date.label }}</label>
+              {% if form.loan_date.errors %}
+                {{ form.loan_date|add_class:"form-input border-red-400 bg-red-50" }}
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.loan_date.errors|join:", " }}</p>
+              {% else %}
+                {{ form.return_date|add_class:"form-input" }}
+              {% endif %}
+            </div>
+          </div>
+          <div>
             <div class="form-field md:col-span-2">
               <label for="{{ form.effective_return_date.id_for_label }}" class="form-label">{{ form.effective_return_date.label }}</label>
               {% if form.effective_return_date.errors %}
@@ -64,14 +76,14 @@
               {% else %}
                 {{ form.effective_return_date|add_class:"form-input" }}
               {% endif %}
-              <p class="form-hint">À laisser vide tant que le livre n'a pas été rendu. Le statut est calculé automatiquement à l'affichage.</p>
+              <p class="form-hint">{% trans "À laisser vide tant que le livre n'a pas été rendu. Le statut est calculé automatiquement à l'affichage." %}</p>
             </div>
           </div>
         </fieldset>
 
         <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
-          <a href="{% url 'loan_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
-          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer l'emprunt</button>
+          <a href="{% url 'loan_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>{% trans "Enregistrer l'emprunt" %}</button>
         </div>
       </form>
     {% endblock content %}

@@ -1,50 +1,51 @@
 {% extends "base.html" %}
-{% block title %}Bibliothèque - Livres{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Bibliothèque" %} - {% trans "Livres" %}{% endblock %}
 
     {% block content %}
       <section class="page-header">
         <div>
-          <h1>Livres</h1>
-          <p>L'ensemble des ouvrages référencés dans le catalogue.</p>
+          <h1>{% trans "Livres" %}</h1>
+          <p>{% trans "L'ensemble des ouvrages référencés dans le catalogue." %}</p>
         </div>
         <a href="{% url 'create_book' %}" class="btn btn-primary">
-          <i class="ph ph-plus" aria-hidden="true"></i>Ajouter un livre
+          <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un livre" %}
         </a>
       </section>
 
-      <section class="stat-bar" aria-label="Statistiques des livres">
+      <section class="stat-bar" aria-label="{% trans 'Statistiques des livres' %}">
         <div class="stat-item">
           <span class="stat-value">{{ total_books }}</span>
-          <span class="stat-label">Livres au catalogue</span>
+          <span class="stat-label">{% trans "Livres au catalogue" %}</span>
         </div>
 
 
         <div class="stat-item">
           <span class="stat-value">{{ available_books }}</span>
-          <span class="stat-label">Disponibles</span>
+          <span class="stat-label">{% trans "Disponibles" %}</span>
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ unavailable_books }}</span>
-          <span class="stat-label">Indisponibles</span>
+          <span class="stat-label">{% trans "Indisponibles" %}</span>
         </div>
         <div class="stat-item">
           <span class="stat-value">{{ availability_rate }}%</span>
-          <span class="stat-label">Taux de disponibilite</span>
+          <span class="stat-label">{% trans "Taux de disponibilité" %}</span>
         </div>
       </section>
 
-      <section aria-label="Filtrer les livres">
+      <section aria-label="{% trans 'Filtrer les livres' %}">
         <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
           <div class="form-field" style="flex:1 1 16rem">
             <div class="form-input text-xl grid grid-cols-20 items-center">            
               <label for="" class="text-xl"><i class="ph ph-magnifying-glass text-3xl"></i></label>
-              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" placeholder="Rechercher des livres">
+              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" placeholder="{% trans 'Rechercher des livres' %}">
             </div>
           </div>
           <div class="form-field" style="width:11rem">
-            <label for="filter-genre" class="sr-only">Filtrer par genre</label>
+            <label for="filter-genre" class="sr-only">{% trans "Filtrer par genre" %}</label>
             <select class="form-select" id="filter-genre" name="genre">
-              <option value="">Tous les genres</option>
+              <option value="">{% trans "Tous les genres" %}</option>
               {% for genre in genres %}
                 <option value ={{ genre }}>{{ genre }}</genre>
               {% endfor %}
@@ -52,32 +53,32 @@
             </select>
           </div>
           <div class="form-field" style="width:11rem">
-            <label for="filter-available" class="sr-only">Disponibilité</label>
+            <label for="filter-available" class="sr-only">{% trans "Disponibilité" %}</label>
             <select class="form-select" id="filter-available" name="available">
-              <option value="">Disponibilité</option>
-              <option value="1">Disponible</option>
-              <option value="0">Indisponible</option>
+              <option value="">{% trans "Disponibilité" %}</option>
+              <option value="1">{% trans "Disponible" %}</option>
+              <option value="0">{% trans "Indisponible" %}</option>
             </select>
           </div>
-          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>Filtrer</button>
+          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>{% trans "Filtrer" %}</button>
         </form>
       </section>
 
-      <section aria-label="Liste des livres">
+      <section aria-label="{% trans 'Liste des livres' %}">
         <div class="table-wrap overflow-x-auto">
           <table class="data-table">
             <thead>
               <tr>
-                <th scope="col">Titre</th>
-                <th scope="col">Auteur</th>
+                <th scope="col">{% trans "Titre" %}</th>
+                <th scope="col">{% trans "Auteur" %}</th>
                 <th scope="col">ISBN</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Langue</th>
-                <th scope="col">Pages</th>
-                <th scope="col">Publication</th>
-                <th scope="col">Copies</th>
-                <th scope="col">Statut</th>
-                <th scope="col"><span class="sr-only">Actions</span></th>
+                <th scope="col">{% trans "Genre" %}</th>
+                <th scope="col">{% trans "Langue" %}</th>
+                <th scope="col">{% trans "Pages" %}</th>
+                <th scope="col">{% trans "Publication" %}</th>
+                <th scope="col">{% trans "Copies" %}</th>
+                <th scope="col">{% trans "Statut" %}</th>
+                <th scope="col"><span class="sr-only">{% trans "Actions" %}</span></th>
               </tr>
             </thead>
             <tbody>
@@ -95,18 +96,18 @@
                 <td class="cell-mono text-sm">{{ book.publication_date }}</td>
                 <td class="cell-mono text-sm">{{ book.available_copies}}/{{ book.total_copies }}</td>
                 {% if book.available %}
-                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>               
+                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>               
                 {% else %}
-                  <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
+                  <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>
                 {% endif %}
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Les Misérables"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href={% url "book_detail" book.pk %}><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href={% url "update_book" book.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href={% url "book_detail" book.pk %}><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href={% url "update_book" book.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href={% url "delete_book" book.pk %} class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href={% url "delete_book" book.pk %} class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -120,20 +121,20 @@
                 </td>
                 <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">G. García Márquez</a></td>
                 <td class="cell-mono">978-2-02-030509-9</td>
-                <td class="cell-secondary">Réalisme magique</td>
-                <td class="cell-secondary">Espagnol</td>
+                <td class="cell-secondary">{% trans "Réalisme magique" %}</td>
+                <td class="cell-secondary">{% trans "Espagnol" %}</td>
                 <td class="cell-mono">432</td>
                 <td class="cell-mono">1967</td>
                 <td class="cell-mono">0 / 3</td>
-                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
+                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Cent ans de solitude"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -145,20 +146,20 @@
                 </td>
                 <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Jane Austen</a></td>
                 <td class="cell-mono">978-2-253-00476-6</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Anglais</td>
+                <td class="cell-secondary">{% trans "Roman" %}</td>
+                <td class="cell-secondary">{% trans "Anglais" %}</td>
                 <td class="cell-mono">368</td>
                 <td class="cell-mono">1813</td>
                 <td class="cell-mono">2 / 2</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
+                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Orgueil et Préjugés"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -170,20 +171,20 @@
                 </td>
                 <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Haruki Murakami</a></td>
                 <td class="cell-mono">978-2-7096-2467-8</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Japonais</td>
+                <td class="cell-secondary">{% trans "Roman" %}</td>
+                <td class="cell-secondary">{% trans "Japonais" %}</td>
                 <td class="cell-mono">505</td>
                 <td class="cell-mono">2002</td>
                 <td class="cell-mono">1 / 4</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
+                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Kafka sur le rivage"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -195,20 +196,20 @@
                 </td>
                 <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Virginia Woolf</a></td>
                 <td class="cell-mono">978-2-07-036622-3</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Anglais</td>
+                <td class="cell-secondary">{% trans "Roman" %}</td>
+                <td class="cell-secondary">{% trans "Anglais" %}</td>
                 <td class="cell-mono">216</td>
                 <td class="cell-mono">1925</td>
                 <td class="cell-mono">3 / 3</td>
-                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>Disponible</span></td>
+                <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur Mrs Dalloway"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>
@@ -220,20 +221,20 @@
                 </td>
                 <td class="cell-secondary"><a href="author-detail.html" class="hover:underline" style="color:var(--color-ink)">Albert Camus</a></td>
                 <td class="cell-mono">978-2-07-036002-3</td>
-                <td class="cell-secondary">Roman</td>
-                <td class="cell-secondary">Français</td>
+                <td class="cell-secondary">{% trans "Roman" %}</td>
+                <td class="cell-secondary">{% trans "Français" %}</td>
                 <td class="cell-mono">186</td>
                 <td class="cell-mono">1942</td>
                 <td class="cell-mono">0 / 2</td>
-                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>Indisponible</span></td>
+                <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>
                 <td>
                   <details class="row-menu">
-                    <summary class="row-menu-btn" aria-label="Actions sur L'Étranger"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
                     <div class="row-menu-list">
-                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>Voir la fiche</a>
-                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>Modifier</a>
+                      <a href="book-detail.html"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href="book-form.html"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
                       <hr>
-                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>Supprimer</a>
+                      <a href="#" class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
                     </div>
                   </details>
                 </td>

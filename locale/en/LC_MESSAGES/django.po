@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-23 10:56+0100\n"
+"POT-Creation-Date: 2026-08-01 22:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,161 +18,1284 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: config/settings.py:120
-msgid "English"
-msgstr "English"
+#: author/forms.py:12 author/forms.py:22 author/models.py:8
+#, fuzzy
+#| msgid "birthday"
+msgid "Birthday"
+msgstr "Date of birth"
 
-#: config/settings.py:121
-msgid "Francais"
-msgstr "French"
+#: author/forms.py:20 author/models.py:6
+msgid "Name"
+msgstr "Name"
 
-#: core/models.py:7
-msgid "title"
-msgstr "title"
+#: author/forms.py:21 author/models.py:7
+#, fuzzy
+#| msgid "surname"
+msgid "Surname"
+msgstr "Surname"
 
-#: core/models.py:8
-msgid "subtitle"
-msgstr "subtitle"
+#: author/forms.py:23 author/models.py:9
+msgid "Nationality"
+msgstr "Nationality"
 
-#: core/models.py:9 core/templates/core/book_list.html:110
-msgid "isbn"
-msgstr "isbn"
+#: author/forms.py:24 author/models.py:10
+msgid "Biography"
+msgstr "Biography"
 
-#: core/models.py:10
-msgid "language"
-msgstr "language"
+#: author/forms.py:30
+msgid "The name is required."
+msgstr "The name is required."
 
-#: core/models.py:11
-msgid "genre"
-msgstr ""
+#: author/forms.py:32
+msgid "The name must contain at least 2 characters."
+msgstr "The name must contain at least 2 characters."
 
-#: core/models.py:12
-msgid "number of pages"
-msgstr "number of pages"
+#: author/forms.py:34
+msgid "The name must not contain digits."
+msgstr "The name must not contain digits."
 
-#: core/models.py:13
-msgid "publication date"
-msgstr "publication date"
+#: author/forms.py:40
+msgid "The surname is required."
+msgstr "The surname is required."
 
-#: core/models.py:15
+#: author/forms.py:42
+msgid "The surname must contain at least 2 characters."
+msgstr "The surname must contain at least 2 characters."
+
+#: author/forms.py:44
+msgid "The surname must not contain digits."
+msgstr "The surname must not contain digits."
+
+#: author/forms.py:50
+msgid "The birth date cannot be in the future."
+msgstr "The birth date cannot be in the future."
+
+#: author/forms.py:56
+msgid "The nationality is required."
+msgstr "The nationality is required."
+
+#: author/forms.py:58
+msgid "The nationality is too short."
+msgstr "The nationality is too short."
+
+#: author/forms.py:64
+msgid "The biography must contain at least 20 characters."
+msgstr "The biography must contain at least 20 characters."
+
+#: author/forms.py:73
+msgid "The name and the surname cannot be identical."
+msgstr "The name and the surname cannot be identical."
+
+#: author/models.py:13
 msgid "author"
 msgstr "author"
 
-#: core/models.py:17
-msgid "summary"
-msgstr "summary"
+#: author/models.py:14
+#, fuzzy
+#| msgid "author"
+msgid "authors"
+msgstr "authors"
 
-#: core/models.py:20
-msgid "Book"
-msgstr "Book"
+#: author/templates/404.html:8
+msgid "Erreur 404"
+msgstr "404 Error"
 
-#: core/models.py:21
-msgid "Books"
-msgstr "Books"
+#: author/templates/404.html:11
+msgid "Page introuvable"
+msgstr ""
 
-#: core/models.py:29
-msgid "name"
-msgstr "name"
+#: author/templates/404.html:15
+msgid ""
+"Désolé, la page que vous cherchez n'existe pas ou a été déplacée vers une "
+"autre adresse."
+msgstr ""
 
-#: core/models.py:30
-msgid "surname"
-msgstr "surname"
-
-#: core/models.py:31
-msgid "birthday"
-msgstr "date of birth"
-
-#: core/models.py:34 core/templates/core/book_list.html:134
-msgid "Author"
-msgstr "Author"
-
-#: core/models.py:35
-msgid "Authors"
-msgstr "Authors"
-
-#: core/templates/core/book_list.html:23
-msgid "Book List"
-msgstr "Book List"
-
-#: core/templates/core/book_list.html:26
-msgid "See information about all books"
-msgstr "See information about all books"
-
-#: core/templates/core/book_list.html:33
-msgid "view all"
-msgstr "view all"
-
-#: core/templates/core/book_list.html:45
-msgid "Add book"
-msgstr "Add book"
-
-#: core/templates/core/book_list.html:95
-msgid "Search"
-msgstr "Search"
-
-#: core/templates/core/book_list.html:122
-msgid "Title"
-msgstr "Title"
-
-#: core/templates/core/book_list.html:146
-msgid "Status"
-msgstr "Status"
-
-#: core/templates/core/book_list.html:158
-msgid "Publication date"
-msgstr "Publication date"
-
-#: core/templates/core/book_list.html:170
-msgid "Actions"
-msgstr "Actions"
-
-#: core/templates/core/book_list.html:186
-msgid "pages"
-msgstr "pages"
-
-#: core/templates/core/book_list.html:221
-msgid "Available"
-msgstr "Available"
-
-#: core/templates/core/book_list.html:226
-msgid "On loan"
-msgstr "On loan"
-
-#: core/templates/core/book_list.html:287
-msgid "Page 1 of 10"
-msgstr "Page 1 of 10"
-
-#: core/templates/core/book_list.html:293
-msgid "Previous"
-msgstr "Previous"
-
-#: core/templates/core/book_list.html:298
-msgid "Next"
-msgstr "Next"
-
-#: core/templates/core/create_form.html:25
-msgid "Remplissez les informations pour enregistrer un nouveau livre."
-msgstr "Put informations to register new book"
-
-#: core/templates/core/create_form.html:40
-msgid "Livre disponible à l'emprunt"
-msgstr "Book available for loan"
-
-#: core/templates/core/create_form.html:62
-msgid "Enregistrer"
-msgstr "Save"
-
-#: core/templates/core/create_form.html:72
-msgid "Retour à la liste"
+#: author/templates/404.html:20
+#, fuzzy
+#| msgid "Retour à la liste"
+msgid "Retour à l'accueil"
 msgstr "Back"
 
-#: core/views.py:23
+#: author/templates/author/author_detail.html:3
+#: author/templates/author/authors.html:3
+#: author/templates/author/authors.html:8
+#: author/templates/author/authors.html:19 templates/base.html:49
+#: templates/components/sidebar.html:27
+msgid "Auteurs"
+msgstr "Authors"
+
+#: author/templates/author/author_detail.html:12
+msgid "Auteur référencé au catalogue"
+msgstr "Referenced author in the catalog"
+
+#: author/templates/author/author_detail.html:15
+msgid "livres au catalogue"
+msgstr "books in the catalog"
+
+#: author/templates/author/author_detail.html:19
+#: book/templates/book/book_detail.html:16
+#: loan/templates/loan/loan_detail.html:15
+msgid "Retour à la liste"
+msgstr "Back to list"
+
+#: author/templates/author/author_detail.html:26
+#: author/templates/author/author_form.html:67
+msgid "Biographie"
+msgstr "Biography"
+
+#: author/templates/author/author_detail.html:31
+msgid "Livres associés"
+msgstr "Associated books"
+
+#: author/templates/author/author_detail.html:40
+#: author/templates/author/author_detail.html:58
+#: book/templates/book/book_list.html:59 book/templates/book/book_list.html:99
+#: book/templates/book/book_list.html:154
+#: book/templates/book/book_list.html:179
+#: book/templates/book/book_list.html:204
+msgid "Disponible"
+msgstr "Available"
+
+#: author/templates/author/author_detail.html:42
+#: author/templates/author/author_detail.html:51
+#: book/templates/book/book_list.html:60 book/templates/book/book_list.html:101
+#: book/templates/book/book_list.html:129
+#: book/templates/book/book_list.html:229
+msgid "Indisponible"
+msgstr "Not availale"
+
+#: author/templates/author/author_detail.html:48
+msgid "Notre-Dame de Paris"
+msgstr ""
+
+#: author/templates/author/author_detail.html:49
+#: author/templates/author/author_detail.html:56
+#: book/templates/book/book_list.html:149
+#: book/templates/book/book_list.html:174
+#: book/templates/book/book_list.html:199
+#: book/templates/book/book_list.html:224
+msgid "Roman"
+msgstr ""
+
+#: author/templates/author/author_detail.html:55
+msgid "Le Dernier Jour d'un condamné"
+msgstr ""
+
+#: author/templates/author/author_detail.html:66
+msgid "Métadonnées"
+msgstr "Metadatas"
+
+#: author/templates/author/author_detail.html:68
+msgid "Date de naissance"
+msgstr "Date of birth"
+
+#: author/templates/author/author_detail.html:72
+msgid "Nationalité"
+msgstr "Nationality"
+
+#: author/templates/author/author_detail.html:76
+msgid "Livres liés"
+msgstr "Associated books"
+
+#: author/templates/author/author_detail.html:82
+#: book/templates/book/book_detail.html:79
+#: loan/templates/loan/loan_detail.html:72
+#, fuzzy
+#| msgid "Actions"
+msgid "Actions rapides"
+msgstr "Actions"
+
+#: author/templates/author/author_detail.html:84
+#: book/templates/book/book_detail.html:81
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier la fiche"
+msgstr "Update the book"
+
+#: author/templates/author/author_detail.html:85
+#: book/templates/book/book_list.html:12
 msgid "Ajouter un livre"
 msgstr "Add a book"
 
-#: core/views.py:41
-msgid "Modifier un livre"
+#: author/templates/author/author_detail.html:86
+#: author/templates/author/authors.html:72
+msgid "Supprimer l'auteur"
+msgstr "Delete the author"
+
+#: author/templates/author/author_form.html:5
+#: author/templates/author/authors.html:3
+#: book/templates/book/book_detail.html:3 book/templates/book/book_list.html:3
+#: book/templates/book/create_form.html:6 loan/templates/loan/loans_list.html:4
+#: templates/base.html:12 templates/base.html:41 templates/base.html:75
+#: templates/components/sidebar.html:19
+msgid "Bibliothèque"
+msgstr "Library"
+
+#: author/templates/author/author_form.html:16
+msgid "Renseignez les informations de l'auteur à ajouter ou modifier."
+msgstr "Record the informations of the author to add or update."
+
+#: author/templates/author/author_form.html:25
+msgid "Identité"
+msgstr "Identity"
+
+#: author/templates/author/author_form.html:76
+msgid ""
+"Ce texte sera affiché dans son intégralité sur la fiche détaillée de "
+"l'auteur."
+msgstr "This text will be full displayed int he authors detailled page"
+
+#: author/templates/author/author_form.html:81
+#: book/templates/book/create_form.html:154
+#: loan/templates/loan/loan_form.html:85
+msgid "Annuler"
+msgstr "Cancel"
+
+#: author/templates/author/author_form.html:82
+#, fuzzy
+#| msgid "Enregistrer"
+msgid "Enregistrer l'auteur"
+msgstr "Save author"
+
+#: author/templates/author/authors.html:9
+msgid "Les fiches d'auteurs référencées dans le catalogue de la bibliothèque."
+msgstr "Referenced authors in the library catalog"
+
+#: author/templates/author/authors.html:12
+#: author/templates/author/authors.html:81
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Ajouter un auteur"
+msgstr "Add an author"
+
+#: author/templates/author/authors.html:16
+msgid "Statistiques des auteurs"
+msgstr "Authors stats"
+
+#: author/templates/author/authors.html:23
+msgid "Nationalités"
+msgstr "Nationalities"
+
+#: author/templates/author/authors.html:27
+msgid "Résultats affichés"
+msgstr "Displayed results"
+
+#: author/templates/author/authors.html:31
+msgid "Filtrer les auteurs"
+msgstr "Filter authors"
+
+#: author/templates/author/authors.html:34
+msgid "Rechercher par nom"
+msgstr "Search by name"
+
+#: author/templates/author/authors.html:35
+msgid "Filtrer par nom, prénom ou biographie…"
+msgstr "Filter by name, surname or biography..."
+
+#: author/templates/author/authors.html:38
+msgid "Filtrer par nationalité"
+msgstr "Filter by nationality"
+
+#: author/templates/author/authors.html:40
+msgid "Toutes les nationalités"
+msgstr "All nationalitities"
+
+#: author/templates/author/authors.html:41
+#: author/templates/author/authors.html:179
+#, fuzzy
+#| msgid "Francais"
+msgid "Française"
+msgstr "French"
+
+#: author/templates/author/authors.html:42
+#: author/templates/author/authors.html:91
+#: author/templates/author/authors.html:157
+msgid "Britannique"
+msgstr "British"
+
+#: author/templates/author/authors.html:43
+#: author/templates/author/authors.html:113
+msgid "Colombienne"
+msgstr "Colombian"
+
+#: author/templates/author/authors.html:44
+#: author/templates/author/authors.html:135
+msgid "Japonaise"
+msgstr "Japanese"
+
+#: author/templates/author/authors.html:47
+#: book/templates/book/book_list.html:63 loan/templates/loan/loans_list.html:44
+msgid "Filtrer"
+msgstr "Filter"
+
+#: author/templates/author/authors.html:51
+msgid "Liste des auteurs"
+msgstr "List of authors"
+
+#: author/templates/author/authors.html:66
+#: author/templates/author/authors.html:97
+#: author/templates/author/authors.html:119
+#: author/templates/author/authors.html:141
+#: author/templates/author/authors.html:163
+#: author/templates/author/authors.html:185
+msgid "livres"
+msgstr "Books"
+
+#: author/templates/author/authors.html:70
+msgid "Voir la fiche de l'auteur"
+msgstr "view the authors' profile"
+
+#: author/templates/author/authors.html:70
+#: author/templates/author/authors.html:101
+#: author/templates/author/authors.html:123
+#: author/templates/author/authors.html:145
+#: author/templates/author/authors.html:167
+#: author/templates/author/authors.html:189
+msgid "Voir"
+msgstr "Watch"
+
+#: author/templates/author/authors.html:71
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier l'auteur"
+msgstr "Update the author"
+
+#: author/templates/author/authors.html:71
+#: author/templates/author/authors.html:102
+#: author/templates/author/authors.html:124
+#: author/templates/author/authors.html:146
+#: author/templates/author/authors.html:168
+#: author/templates/author/authors.html:190
+#: book/templates/book/book_list.html:108
+#: book/templates/book/book_list.html:135
+#: book/templates/book/book_list.html:160
+#: book/templates/book/book_list.html:185
+#: book/templates/book/book_list.html:210
+#: book/templates/book/book_list.html:235
+#: loan/templates/loan/loans_list.html:89
+#: loan/templates/loan/loans_list.html:110
+#: loan/templates/loan/loans_list.html:129
+#: loan/templates/loan/loans_list.html:148
+#: loan/templates/loan/loans_list.html:167
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier"
+msgstr "Update the author"
+
+#: author/templates/author/authors.html:79
+msgid "Aucun auteur enregistré"
+msgstr "No author saved"
+
+#: author/templates/author/authors.html:80
+msgid ""
+"Commencez par ajouter un auteur pour l'associer ensuite à des livres du "
+"catalogue."
+msgstr "Start by adding an author to associate him with books in the catalog."
+
+#: author/templates/author/authors.html:99
+msgid ""
+"Romancière anglaise reconnue pour ses observations subtiles de la société "
+"géorgienne et ses portraits de femmes indépendantes d'esprit…"
+msgstr ""
+
+#: author/templates/author/authors.html:101
+msgid "Voir la fiche de Jane Austen"
+msgstr ""
+
+#: author/templates/author/authors.html:102
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier Jane Austen"
 msgstr "Update the book"
+
+#: author/templates/author/authors.html:103
+msgid "Supprimer Jane Austen"
+msgstr ""
+
+#: author/templates/author/authors.html:121
+msgid ""
+"Écrivain et journaliste, chef de file du réalisme magique, lauréat du prix "
+"Nobel de littérature en 1982…"
+msgstr ""
+
+#: author/templates/author/authors.html:123
+msgid "Voir la fiche de Gabriel García Márquez"
+msgstr ""
+
+#: author/templates/author/authors.html:124
+msgid "Modifier Gabriel García Márquez"
+msgstr ""
+
+#: author/templates/author/authors.html:125
+msgid "Supprimer Gabriel García Márquez"
+msgstr ""
+
+#: author/templates/author/authors.html:143
+msgid ""
+"Romancier contemporain connu pour son univers onirique mêlant réalisme et "
+"fantastique, traduit dans plus de cinquante langues…"
+msgstr ""
+
+#: author/templates/author/authors.html:145
+msgid "Voir la fiche de Haruki Murakami"
+msgstr ""
+
+#: author/templates/author/authors.html:146
+msgid "Modifier Haruki Murakami"
+msgstr ""
+
+#: author/templates/author/authors.html:147
+msgid "Supprimer Haruki Murakami"
+msgstr ""
+
+#: author/templates/author/authors.html:165
+msgid ""
+"Figure du modernisme littéraire britannique, pionnière du monologue "
+"intérieur et de l'écriture du flux de conscience…"
+msgstr ""
+
+#: author/templates/author/authors.html:167
+msgid "Voir la fiche de Virginia Woolf"
+msgstr ""
+
+#: author/templates/author/authors.html:168
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier Virginia Woolf"
+msgstr "Update"
+
+#: author/templates/author/authors.html:169
+msgid "Supprimer Virginia Woolf"
+msgstr ""
+
+#: author/templates/author/authors.html:187
+msgid ""
+"Écrivain et philosophe, figure de l'absurde et de la révolte, lauréat du "
+"prix Nobel de littérature en 1957…"
+msgstr ""
+"Writer and philosopher, figure of the absurd and revolt, Nobel Prize winner in literature in 1957…"
+
+#: author/templates/author/authors.html:189
+msgid "Voir la fiche de Albert Camus"
+msgstr "View Albert Camus profile"
+
+#: author/templates/author/authors.html:190
+msgid "Modifier Albert Camus"
+msgstr "Edit Albert Camus"
+
+#: author/templates/author/authors.html:191
+msgid "Supprimer Albert Camus"
+msgstr "Delete Albert Camus"
+
+#: author/views.py:19
+#, fuzzy
+#| msgid "author"
+msgid "Add an author"
+msgstr "Add an author"
+
+#: author/views.py:71
+#, fuzzy
+#| msgid "author"
+msgid "Edit an author"
+msgstr "Edit an author"
+
+#: book/forms.py:29 book/models.py:13
+msgid "Title"
+msgstr "Title"
+
+#: book/forms.py:30 book/models.py:14
+#, fuzzy
+#| msgid "subtitle"
+msgid "Subtitle"
+msgstr "Subtitle"
+
+#: book/forms.py:31 book/models.py:16
+#, fuzzy
+#| msgid "language"
+msgid "Language"
+msgstr "Language"
+
+#: book/forms.py:32 book/models.py:17 book/templates/book/book_detail.html:39
+#: book/templates/book/book_list.html:75
+msgid "Genre"
+msgstr "Genre"
+
+#: book/forms.py:33 book/models.py:15
+msgid "ISBN"
+msgstr "ISBN"
+
+#: book/forms.py:34 book/models.py:25
+msgid "Author"
+msgstr "Author"
+
+#: book/forms.py:35 book/models.py:18
+#, fuzzy
+#| msgid "number of pages"
+msgid "Number of pages"
+msgstr "Number of pages"
+
+#: book/forms.py:36 book/models.py:20
+msgid "Available"
+msgstr "Available"
+
+#: book/forms.py:37 book/models.py:19
+#, fuzzy
+#| msgid "publication date"
+msgid "Publication date"
+msgstr "Publication date"
+
+#: book/forms.py:38 book/models.py:29
+msgid "Total copies"
+msgstr "Total copies"
+
+#: book/forms.py:39 book/models.py:30
+#, fuzzy
+#| msgid "Available"
+msgid "Available copies"
+msgstr "Available copies"
+
+#: book/forms.py:40 book/models.py:28
+#, fuzzy
+#| msgid "summary"
+msgid "Summary"
+msgstr "Summary"
+
+#: book/forms.py:43
+msgid "Example: Le Petit Prince"
+msgstr "Example: Le Petit Prince"
+
+#: book/forms.py:44
+msgid "Example: The royal book"
+msgstr "Example: The royal book"
+
+#: book/forms.py:45
+msgid "Example: French"
+msgstr "Example: French"
+
+#: book/forms.py:46
+msgid "Example: Novel"
+msgstr "Example: Novel"
+
+#: book/forms.py:47
+msgid "Example: 978-3-16-148410-0"
+msgstr "Example: 978-3-16-148410-0"
+
+#: book/forms.py:48
+msgid "Example: 1488"
+msgstr "Example: 1488"
+
+#: book/forms.py:49
+msgid "Example: 5"
+msgstr "Example: 5"
+
+#: book/forms.py:50
+msgid "Example: 4"
+msgstr "Example: 4"
+
+#: book/forms.py:59
+msgid "The title is required."
+msgstr "The title is required."
+
+#: book/forms.py:61
+msgid "The title must contain at least 2 characters."
+msgstr "The title must contain at least 2 characters."
+
+#: book/forms.py:63
+msgid "The title cannot exceed 100 characters."
+msgstr "The title cannot exceed 100 characters."
+
+#: book/forms.py:69
+msgid "The subtitle cannot exceed 100 characters."
+msgstr "The subtitle cannot exceed 100 characters."
+
+#: book/forms.py:75
+msgid "The language is required."
+msgstr "The language is required."
+
+#: book/forms.py:77
+msgid "The language is too short."
+msgstr "The language is too short."
+
+#: book/forms.py:83
+msgid "The genre is required."
+msgstr "The genre is required."
+
+#: book/forms.py:85
+msgid "The genre is too short."
+msgstr "The genre is too short."
+
+#: book/forms.py:91
+msgid "The ISBN is required."
+msgstr "The ISBN is required."
+
+#: book/forms.py:93
+msgid "The ISBN must contain between 10 and 17 characters."
+msgstr "The ISBN must contain between 10 and 17 characters."
+
+#: book/forms.py:95
+msgid "The ISBN must contain at least one digit."
+msgstr "The ISBN must contain at least one digit."
+
+#: book/forms.py:101
+msgid "The number of pages must be greater than 0."
+msgstr "The number of pages must be greater than 0."
+
+#: book/forms.py:103
+msgid "The number of pages cannot exceed 5000."
+msgstr "The number of pages cannot exceed 5000."
+
+#: book/forms.py:109
+msgid "The publication date cannot be in the future."
+msgstr "The publication date cannot be in the future."
+
+#: book/forms.py:115
+msgid "The total number of copies cannot be negative."
+msgstr "The total number of copies cannot be negative."
+
+#: book/forms.py:117
+msgid "The total number of copies cannot exceed 1000."
+msgstr "The total number of copies cannot exceed 1000."
+
+#: book/forms.py:124
+msgid "The number of available copies cannot be negative."
+msgstr "The number of available copies cannot be negative."
+
+#: book/forms.py:126
+msgid "Available copies cannot exceed the total."
+msgstr "Available copies cannot exceed the total."
+
+#: book/forms.py:132
+msgid "The summary must contain at least 20 characters."
+msgstr "The summary must contain at least 20 characters."
+
+#: book/models.py:35 loan/forms.py:25 loan/models.py:10
+msgid "Book"
+msgstr "Book"
+
+#: book/models.py:36
+msgid "Books"
+msgstr "Books"
+
+#: book/templates/book/book_detail.html:3 book/templates/book/book_list.html:3
+#: book/templates/book/book_list.html:8 templates/base.html:52
+#: templates/components/sidebar.html:30
+msgid "Livres"
+msgstr "Books"
+
+#: book/templates/book/book_detail.html:14
+msgid "Écrit par"
+msgstr "Written by"
+
+#: book/templates/book/book_detail.html:23
+#: book/templates/book/create_form.html:141
+msgid "Résumé"
+msgstr "Summary"
+
+#: book/templates/book/book_detail.html:28
+msgid "Informations bibliographiques"
+msgstr "bibliographics informations"
+
+#: book/templates/book/book_detail.html:35
+#: book/templates/book/book_list.html:76
+#, fuzzy
+#| msgid "language"
+msgid "Langue"
+msgstr "language"
+
+#: book/templates/book/book_detail.html:43
+#: book/templates/book/book_list.html:77
+#, fuzzy
+#| msgid "pages"
+msgid "Pages"
+msgstr "Pages"
+
+#: book/templates/book/book_detail.html:47
+#: book/templates/book/book_list.html:78
+#, fuzzy
+#| msgid "Publication date"
+msgid "Publication"
+msgstr "Publication"
+
+#: book/templates/book/book_detail.html:56
+msgid "Exemplaires"
+msgstr "Copies"
+
+#: book/templates/book/book_detail.html:58
+#: book/templates/book/book_list.html:25
+msgid "Disponibles"
+msgstr "Availables"
+
+#: book/templates/book/book_detail.html:61
+#: book/templates/book/create_form.html:122
+msgid "Exemplaires disponibles"
+msgstr "Available copies"
+
+#: book/templates/book/book_detail.html:64
+#, python-format
+msgid "%% des exemplaires sont actuellement disponibles au prêt."
+msgstr "%% of copies that are currently available for loan."
+
+#: book/templates/book/book_detail.html:68
+#: book/templates/book/book_list.html:73
+msgid "Auteur"
+msgstr "Author"
+
+#: book/templates/book/book_detail.html:73
+msgid "Voir la fiche auteur"
+msgstr "View the author's profile"
+
+#: book/templates/book/book_detail.html:82
+msgid "Créer un emprunt"
+msgstr "Create a loan"
+
+#: book/templates/book/book_detail.html:83
+msgid "Supprimer le livre"
+msgstr "Delete book"
+
+#: book/templates/book/book_list.html:9
+msgid "L'ensemble des ouvrages référencés dans le catalogue."
+msgstr "All books referenced in the catalog"
+
+#: book/templates/book/book_list.html:16
+msgid "Statistiques des livres"
+msgstr "Books stats"
+
+#: book/templates/book/book_list.html:19
+msgid "Livres au catalogue"
+msgstr "Books in the catalog"
+
+#: book/templates/book/book_list.html:29
+msgid "Indisponibles"
+msgstr "Unavailables"
+
+#: book/templates/book/book_list.html:33
+msgid "Taux de disponibilité"
+msgstr "Availability ratio"
+
+#: book/templates/book/book_list.html:37
+msgid "Filtrer les livres"
+msgstr "Filter books"
+
+#: book/templates/book/book_list.html:42
+msgid "Rechercher des livres"
+msgstr "Search for books"
+
+#: book/templates/book/book_list.html:46
+msgid "Filtrer par genre"
+msgstr ""
+
+#: book/templates/book/book_list.html:48
+msgid "Tous les genres"
+msgstr "All genres"
+
+#: book/templates/book/book_list.html:56 book/templates/book/book_list.html:58
+#: book/templates/book/create_form.html:110
+msgid "Disponibilité"
+msgstr "Availability"
+
+#: book/templates/book/book_list.html:67
+msgid "Liste des livres"
+msgstr "Books List"
+
+#: book/templates/book/book_list.html:72
+msgid "Titre"
+msgstr "Title"
+
+#: book/templates/book/book_list.html:79
+msgid "Copies"
+msgstr "Copies"
+
+#: book/templates/book/book_list.html:80
+#: loan/templates/loan/loan_detail.html:66
+#: loan/templates/loan/loans_list.html:58
+#, fuzzy
+#| msgid "Status"
+msgid "Statut"
+msgstr "Status"
+
+#: book/templates/book/book_list.html:81 loan/templates/loan/loans_list.html:59
+msgid "Actions"
+msgstr "Actions"
+
+#: book/templates/book/book_list.html:105
+#: book/templates/book/book_list.html:132
+#: book/templates/book/book_list.html:157
+#: book/templates/book/book_list.html:182
+#: book/templates/book/book_list.html:207
+#: book/templates/book/book_list.html:232
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Actions sur ce livre"
+msgstr "Actions on this book"
+
+#: book/templates/book/book_list.html:107
+#: book/templates/book/book_list.html:134
+#: book/templates/book/book_list.html:159
+#: book/templates/book/book_list.html:184
+#: book/templates/book/book_list.html:209
+#: book/templates/book/book_list.html:234
+msgid "Voir la fiche"
+msgstr "View the book details"
+
+#: book/templates/book/book_list.html:110
+#: book/templates/book/book_list.html:137
+#: book/templates/book/book_list.html:162
+#: book/templates/book/book_list.html:187
+#: book/templates/book/book_list.html:212
+#: book/templates/book/book_list.html:237
+#: loan/templates/loan/loans_list.html:91
+#: loan/templates/loan/loans_list.html:112
+#: loan/templates/loan/loans_list.html:131
+#: loan/templates/loan/loans_list.html:150
+#: loan/templates/loan/loans_list.html:169
+msgid "Supprimer"
+msgstr "Delete"
+
+#: book/templates/book/book_list.html:124
+msgid "Réalisme magique"
+msgstr ""
+
+#: book/templates/book/book_list.html:125
+msgid "Espagnol"
+msgstr "Spanish"
+
+#: book/templates/book/book_list.html:150
+#: book/templates/book/book_list.html:200
+msgid "Anglais"
+msgstr "English"
+
+#: book/templates/book/book_list.html:175
+msgid "Japonais"
+msgstr "Japanese"
+
+#: book/templates/book/book_list.html:225
+#, fuzzy
+#| msgid "Francais"
+msgid "Français"
+msgstr "French"
+
+#: book/templates/book/create_form.html:4
+msgid "Facultatif"
+msgstr ""
+
+#: book/templates/book/create_form.html:5
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Résumer le livre"
+msgstr "Add a book"
+
+#: book/templates/book/create_form.html:6
+#: book/templates/book/create_form.html:16
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Nouveau livre"
+msgstr "Add a book"
+
+#: book/templates/book/create_form.html:17
+#, fuzzy
+#| msgid "Remplissez les informations pour enregistrer un nouveau livre."
+msgid "Renseignez les informations de l'ouvrage à ajouter au catalogue."
+msgstr "Put informations to register new book"
+
+#: book/templates/book/create_form.html:26
+msgid "Informations générales"
+msgstr "General information"
+
+#: book/templates/book/create_form.html:68
+msgid "Classification"
+msgstr "Classification"
+
+#: book/templates/book/create_form.html:113
+msgid "Nombre total d'exemplaires"
+msgstr "Total number of copies"
+
+#: book/templates/book/create_form.html:133
+#, fuzzy
+#| msgid "Livre disponible à l'emprunt"
+msgid "Ouvrage disponible à l'emprunt"
+msgstr "Book available for loan"
+
+#: book/templates/book/create_form.html:155
+#, fuzzy
+#| msgid "Enregistrer"
+msgid "Enregistrer le livre"
+msgstr "Save"
+
+#: book/views.py:18
+#, fuzzy
+#| msgid "Add book"
+msgid "Add a book"
+msgstr "Add a book"
+
+#: book/views.py:80
+#, fuzzy
+#| msgid "Add book"
+msgid "Edit a book"
+msgstr "Edit a book"
+
+#: config/settings.py:129
+msgid "English"
+msgstr "English"
+
+#: config/settings.py:130
+msgid "Francais"
+msgstr "French"
+
+#: loan/forms.py:17 loan/forms.py:28 loan/models.py:13
+msgid "Return date"
+msgstr "Return date"
+
+#: loan/forms.py:26 loan/models.py:11
+msgid "Borrower"
+msgstr "Borrower"
+
+#: loan/forms.py:27 loan/models.py:12
+msgid "Loan date"
+msgstr "Loan date"
+
+#: loan/forms.py:29 loan/models.py:14
+msgid "Effective return date"
+msgstr "Effective return date"
+
+#: loan/forms.py:35
+msgid "The borrower name is required."
+msgstr "The borrower name is required."
+
+#: loan/forms.py:37
+msgid "The borrower name is too short."
+msgstr "The borrower name is too short."
+
+#: loan/forms.py:39
+msgid "The borrower name cannot exceed 100 characters."
+msgstr "The borrower name cannot exceed 100 characters."
+
+#: loan/forms.py:41
+msgid "The borrower name must not contain digits."
+msgstr "The borrower name must not contain digits."
+
+#: loan/forms.py:47
+msgid "The return date cannot be in the past."
+msgstr "The return date cannot be in the past."
+
+#: loan/forms.py:53
+msgid "The effective return date cannot be in the past."
+msgstr "The effective return date cannot be in the past."
+
+#: loan/forms.py:63
+msgid "This book no longer has copies available for a loan."
+msgstr "This book no longer has copies available for a loan."
+
+#: loan/forms.py:66
+msgid ""
+"The effective return date cannot be earlier than the planned return date."
+msgstr "The effective return date connot be earlier than the planned return date/"
+
+#: loan/models.py:25
+#, fuzzy
+#| msgid "On loan"
+msgid "loan"
+msgstr "loan"
+
+#: loan/models.py:26
+#, fuzzy
+#| msgid "On loan"
+msgid "loans"
+msgstr "loan"
+
+#: loan/models.py:31 loan/views.py:43
+msgid "Returned"
+msgstr "Returned"
+
+#: loan/models.py:33 loan/views.py:41
+msgid "Late"
+msgstr "Late"
+
+#: loan/models.py:34 loan/views.py:39
+msgid "In progress"
+msgstr "In progress"
+
+#: loan/models.py:37
+msgid "borrowed by"
+msgstr "borrowed by"
+
+#: loan/templates/loan/loan_detail.html:3
+msgid "Emprunt"
+msgstr "Loan"
+
+#: loan/templates/loan/loan_detail.html:10
+msgid "Emprunt de"
+msgstr "Loan of"
+
+#: loan/templates/loan/loan_detail.html:11
+#: loan/templates/loan/loans_list.html:40
+msgid "En retard"
+msgstr "Late"
+
+#: loan/templates/loan/loan_detail.html:13
+msgid "Ce prêt dépasse la date de retour prévue de 6 jours."
+msgstr "This loan exceeds the planned return date by 6 days."
+
+#: loan/templates/loan/loan_detail.html:22
+msgid "Livre emprunté"
+msgstr "Borrowed book"
+
+#: loan/templates/loan/loan_detail.html:27
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Voir la fiche du livre"
+msgstr "Update the book"
+
+#: loan/templates/loan/loan_detail.html:33
+msgid "Chronologie du prêt"
+msgstr "Chronology of loan"
+
+#: loan/templates/loan/loan_detail.html:35
+#: loan/templates/loan/loans_list.html:55
+msgid "Date d'emprunt"
+msgstr "Loan date"
+
+#: loan/templates/loan/loan_detail.html:39
+#: loan/templates/loan/loans_list.html:56
+msgid "Retour prévu"
+msgstr "Planned return date"
+
+#: loan/templates/loan/loan_detail.html:43
+#: loan/templates/loan/loans_list.html:57
+msgid "Retour effectif"
+msgstr "Actual return date"
+
+#: loan/templates/loan/loan_detail.html:47
+msgid "Non renseigné"
+msgstr "Not specified"
+
+#: loan/templates/loan/loan_detail.html:55
+#: loan/templates/loan/loan_detail.html:60
+#: loan/templates/loan/loans_list.html:54
+msgid "Emprunteur"
+msgstr "Borrower"
+
+#: loan/templates/loan/loan_detail.html:67
+msgid "En retard depuis 6 jours"
+msgstr "Late since 6 days"
+
+#: loan/templates/loan/loan_detail.html:68
+msgid ""
+"Statut calculé à partir de la date de retour prévue et de l'absence de "
+"retour effectif."
+msgstr "Status is based on the planned return date and the absence of an actual return date"
+
+#: loan/templates/loan/loan_detail.html:74
+#, fuzzy
+#| msgid "Modifier un livre"
+msgid "Modifier l'emprunt"
+msgstr "Update the book"
+
+#: loan/templates/loan/loan_detail.html:75
+#, fuzzy
+#| msgid "Enregistrer"
+msgid "Enregistrer le retour"
+msgstr "Save"
+
+#: loan/templates/loan/loan_detail.html:76
+msgid "Supprimer l'emprunt"
+msgstr "Delete loan"
+
+#: loan/templates/loan/loan_form.html:15
+msgid "Enregistrez le prêt d'un livre du catalogue à un emprunteur."
+msgstr "Register a book loan of catalog to a borrower"
+
+#: loan/templates/loan/loan_form.html:24
+#, fuzzy
+#| msgid "Livre disponible à l'emprunt"
+msgid "Livre et emprunteur"
+msgstr "Book available for loan"
+
+#: loan/templates/loan/loan_form.html:34
+msgid ""
+"Seuls les livres avec au moins un exemplaire disponible sont recommandés."
+msgstr "Only books with at least one copy available are recommandated"
+
+#: loan/templates/loan/loan_form.html:49
+msgid "Dates"
+msgstr "Dates"
+
+#: loan/templates/loan/loan_form.html:79
+msgid ""
+"À laisser vide tant que le livre n'a pas été rendu. Le statut est calculé "
+"automatiquement à l'affichage."
+msgstr "To keep empty while the book has not been returned. The status is calculated authomaticaly on display"
+
+#: loan/templates/loan/loan_form.html:86
+#, fuzzy
+#| msgid "Enregistrer"
+msgid "Enregistrer l'emprunt"
+msgstr "Save loan"
+
+#: loan/templates/loan/loans_list.html:3 loan/templates/loan/loans_list.html:4
+#: loan/templates/loan/loans_list.html:10 templates/base.html:55
+#: templates/components/sidebar.html:33
+msgid "Emprunts"
+msgstr "Loans"
+
+#: loan/templates/loan/loans_list.html:11
+msgid "Suivi des prêts en cours et de l'historique des retours."
+msgstr "Monitoring of outstanding loans and the historical of returns"
+
+#: loan/templates/loan/loans_list.html:14
+#, fuzzy
+#| msgid "Ajouter un livre"
+msgid "Ajouter un emprunt"
+msgstr "Add a book"
+
+#: loan/templates/loan/loans_list.html:18
+msgid "Statistiques des emprunts"
+msgstr "Loans stats"
+
+#: loan/templates/loan/loans_list.html:21
+msgid "Emprunts au total"
+msgstr "Total loans"
+
+#: loan/templates/loan/loans_list.html:25
+msgid "Résultats"
+msgstr "Results"
+
+#: loan/templates/loan/loans_list.html:29
+msgid "Filtrer les emprunts"
+msgstr "Filter loans"
+
+#: loan/templates/loan/loans_list.html:32
+msgid "Rechercher par emprunteur"
+msgstr "Search by borrower"
+
+#: loan/templates/loan/loans_list.html:33
+msgid "Filtrer par emprunteur ou livre…"
+msgstr "Filter by borrower or book..."
+
+#: loan/templates/loan/loans_list.html:36
+msgid "Statut de l'emprunt"
+msgstr "Loan status"
+
+#: loan/templates/loan/loans_list.html:38
+msgid "Tous les statuts"
+msgstr "All status"
+
+#: loan/templates/loan/loans_list.html:39
+#: loan/templates/loan/loans_list.html:104
+#: loan/templates/loan/loans_list.html:142
+msgid "En cours"
+msgstr "In progress"
+
+#: loan/templates/loan/loans_list.html:41
+#: loan/templates/loan/loans_list.html:123
+#: loan/templates/loan/loans_list.html:161
+msgid "Rendu"
+msgstr "Returned"
+
+#: loan/templates/loan/loans_list.html:48
+msgid "Liste des emprunts"
+msgstr "List of loans"
+
+#: loan/templates/loan/loans_list.html:53
+msgid "Livre"
+msgstr "Book"
+
+#: loan/templates/loan/loans_list.html:86
+#: loan/templates/loan/loans_list.html:107
+#: loan/templates/loan/loans_list.html:126
+#: loan/templates/loan/loans_list.html:145
+#: loan/templates/loan/loans_list.html:164
+msgid "Actions sur cet emprunt"
+msgstr "Actions on this loan"
+
+#: loan/templates/loan/loans_list.html:88
+#: loan/templates/loan/loans_list.html:109
+#: loan/templates/loan/loans_list.html:128
+#: loan/templates/loan/loans_list.html:147
+#: loan/templates/loan/loans_list.html:166
+msgid "Voir le détail"
+msgstr "See detail"
+
+#: loan/views.py:19
+msgid "Add a loan"
+msgstr "Add a loan"
+
+#: loan/views.py:68
+msgid "Edit a loan"
+msgstr "Edit a loan"
+
+#: templates/base.html:19
+msgid "Aller au contenu principal"
+msgstr "GO to the main content"
+
+#: templates/base.html:23
+msgid "Fermer le menu"
+msgstr "Close the menu"
+
+#: templates/base.html:25 templates/components/sidebar.html:3
+msgid "Navigation principale"
+msgstr "Principal navigation"
+
+#: templates/base.html:42 templates/components/sidebar.html:20
+msgid "Espace de gestion"
+msgstr "Management space"
+
+#: templates/base.html:46 templates/components/sidebar.html:24
+msgid "Sections principales"
+msgstr "Principal section"
+
+#: templates/base.html:47 templates/components/sidebar.html:25
+msgid "Catalogue"
+msgstr "Catalog"
+
+#: templates/base.html:57 templates/components/sidebar.html:35
+msgid "Système"
+msgstr "System"
+
+#: templates/base.html:58 templates/components/sidebar.html:36
+msgid "Administration"
+msgstr "Administration"
+
+#: templates/base.html:62 templates/components/sidebar.html:40
+msgid "Connecté en tant que"
+msgstr "Logged in as"
+
+#: templates/base.html:62 templates/components/sidebar.html:40
+msgid "Bibliothécaire"
+msgstr "Librarian"
+
+#: templates/base.html:69
+msgid "Ouvrir le menu de navigation"
+msgstr "Open the navigation menu"
+
+#: templates/base.html:73
+msgid "Fil d\\"
+msgstr ""
+
+#: templates/base.html:77
+msgid "Accueil"
+msgstr "Home"
+
+#: templates/base.html:84
+msgid "Rechercher"
+msgstr "Search"
+
+#: templates/base.html:85
+msgid "Rechercher…"
+msgstr "Search..."
+
+#: templates/base.html:96
+msgid "Bibliothèque Municipale"
+msgstr ""
+
+#: templates/base.html:96
+msgid "Tous droits réservés."
+msgstr "All rights reserved"
+
+#: templates/base.html:97
+#, fuzzy
+#| msgid "Retour à la liste"
+msgid "Retour en haut"
+msgstr "Back"
 
 #: venv/lib/python3.14/site-packages/click/_termui_impl.py:192
 msgid "d"
@@ -1755,6 +2878,137 @@ msgstr ""
 #: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:236
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:62
+msgid "Average Duration (sec)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:81
+msgid "Could not find job {} in the database! Skipping execution..."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:105
+msgid ""
+"Maximum runtime of {} seconds exceeded! Not all jobs could be completed "
+"successfully. Pending jobs: {}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:124
+msgid "Executed job '{}'!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:132
+msgid "Run the selected django jobs"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:159
+msgid "Status"
+msgstr "Status"
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/admin.py:160
+msgid "Duration (sec)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:18
+msgid "Unique id for this job."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:26
+msgid "Date and time at which this job is scheduled to be executed next."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:72
+msgid "Unique ID for this job execution."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:78
+msgid "The job that this execution relates to."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:86
+msgid "The current status of this job execution."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:91
+msgid "Date and time at which this job was executed."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:101
+msgid "Total run time of this job (in seconds)."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:109
+msgid "Timestamp at which this job was finished."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:116
+msgid "Details of exception that occurred during job execution (if any)."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django_apscheduler/models.py:123
+msgid "Traceback of exception that occurred during job execution (if any)."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1311
+#, python-format
+msgid "Attempting to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1316
+#, python-format
+msgid "Connected to qpid with SASL mechanism %s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1334
+#, python-format
+msgid "Unable to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#~ msgid "name"
+#~ msgstr "name"
+
+#~ msgid "Authors"
+#~ msgstr "Authors"
+
+#, fuzzy
+#~| msgid "Modifier un livre"
+#~ msgid "Modifier un auteur"
+#~ msgstr "Update the book"
+
+#~ msgid "title"
+#~ msgstr "title"
+
+#~ msgid "isbn"
+#~ msgstr "isbn"
+
+#~ msgid "Modifier un livre"
+#~ msgstr "Update the book"
+
+#, fuzzy
+#~| msgid "Modifier un livre"
+#~ msgid "Modifier un emprunt"
+#~ msgstr "Update the book"
+
+#~ msgid "Book List"
+#~ msgstr "Book List"
+
+#~ msgid "See information about all books"
+#~ msgstr "See information about all books"
+
+#~ msgid "view all"
+#~ msgstr "view all"
+
+#~ msgid "Search"
+#~ msgstr "Search"
+
+#~ msgid "Page 1 of 10"
+#~ msgstr "Page 1 of 10"
+
+#~ msgid "Previous"
+#~ msgstr "Previous"
+
+#~ msgid "Next"
+#~ msgstr "Next"
 
 #~ msgid "Organization"
 #~ msgstr "Organization"

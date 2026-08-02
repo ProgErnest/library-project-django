@@ -2,150 +2,142 @@ from datetime import date
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 from .models import Book
 
-class CreateBookForm(forms.ModelForm):
 
+class CreateBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = [
-            'title',
-            'subtitle',
-            'language',
-            'genre',
-            'isbn',
-            'author',
-            'num_pages',
-            'available',
-            'publication_date',
-            'total_copies',
-            'available_copies',
-            'summary',
+            "title",
+            "subtitle",
+            "language",
+            "genre",
+            "isbn",
+            "author",
+            "num_pages",
+            "available",
+            "publication_date",
+            "total_copies",
+            "available_copies",
+            "summary",
         ]
-        localized_fields = ['publication_date']
+        localized_fields = ["publication_date"]
+        labels = {
+            "title": _("Title"),
+            "subtitle": _("Subtitle"),
+            "language": _("Language"),
+            "genre": _("Genre"),
+            "isbn": _("ISBN"),
+            "author": _("Author"),
+            "num_pages": _("Number of pages"),
+            "available": _("Available"),
+            "publication_date": _("Publication date"),
+            "total_copies": _("Total copies"),
+            "available_copies": _("Available copies"),
+            "summary": _("Summary"),
+        }
         widgets = {
-            'title': forms.TextInput(attrs={
-                'placeholder': 'Ex : Le Petit Prince'
-            }),
-            'subtitle': forms.TextInput(attrs={
-                'placeholder': 'Ex : Le livre de la royaute'
-            }),
-            'language': forms.TextInput(attrs={
-                'placeholder': 'Ex : French'
-            }),
-            'genre': forms.TextInput(attrs={
-                'placeholder': 'Ex : Roman'
-            }),
-            'isbn': forms.TextInput(attrs={
-                'placeholder': 'Ex : 978-3-16-148410-0'
-            }),
-            'num_pages': forms.NumberInput(attrs={
-                'min': '1',
-                'placeholder': 'Ex : 1488'
-            }),
-            'total_copies': forms.NumberInput(attrs={
-                'min': '0',
-                'placeholder': 'Ex : 5'
-            }),
-            'available_copies': forms.NumberInput(attrs={
-                'min': '0',
-                'placeholder': 'Ex : 4'
-            }),
-            'author': forms.Select(attrs={}),
-            'available': forms.CheckboxInput(attrs={
-                'checked': False
-            }),
-            'publication_date': forms.DateInput(attrs={
-                'type': 'date',
-            }),
-
+            "title": forms.TextInput(attrs={"placeholder": _("Example: Le Petit Prince")}),
+            "subtitle": forms.TextInput(attrs={"placeholder": _("Example: The royal book")}),
+            "language": forms.TextInput(attrs={"placeholder": _("Example: French")}),
+            "genre": forms.TextInput(attrs={"placeholder": _("Example: Novel")}),
+            "isbn": forms.TextInput(attrs={"placeholder": _("Example: 978-3-16-148410-0")}),
+            "num_pages": forms.NumberInput(attrs={"min": "1", "placeholder": _("Example: 1488")}),
+            "total_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 5")}),
+            "available_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 4")}),
+            "author": forms.Select(attrs={}),
+            "available": forms.CheckboxInput(attrs={"checked": False}),
+            "publication_date": forms.DateInput(attrs={"type": "date"}),
         }
 
     def clean_title(self):
-        title = self.cleaned_data.get('title', '').strip()
+        title = self.cleaned_data.get("title", "").strip()
         if not title:
-            raise ValidationError('Le titre est obligatoire.')
+            raise ValidationError(_("The title is required."))
         if len(title) < 2:
-            raise ValidationError('Le titre doit contenir au moins 2 caractères.')
+            raise ValidationError(_("The title must contain at least 2 characters."))
         if len(title) > 100:
-            raise ValidationError('Le titre ne peut pas dépasser 100 caractères.')
+            raise ValidationError(_("The title cannot exceed 100 characters."))
         return title
 
     def clean_subtitle(self):
-        subtitle = self.cleaned_data.get('subtitle', '').strip()
+        subtitle = self.cleaned_data.get("subtitle", "").strip()
         if subtitle and len(subtitle) > 100:
-            raise ValidationError('Le sous-titre ne peut pas dépasser 100 caractères.')
+            raise ValidationError(_("The subtitle cannot exceed 100 characters."))
         return subtitle
 
     def clean_language(self):
-        language = self.cleaned_data.get('language', '').strip()
+        language = self.cleaned_data.get("language", "").strip()
         if not language:
-            raise ValidationError('La langue est obligatoire.')
+            raise ValidationError(_("The language is required."))
         if len(language) < 2:
-            raise ValidationError('La langue est trop courte.')
+            raise ValidationError(_("The language is too short."))
         return language.title()
 
     def clean_genre(self):
-        genre = self.cleaned_data.get('genre', '').strip()
+        genre = self.cleaned_data.get("genre", "").strip()
         if not genre:
-            raise ValidationError('Le genre est obligatoire.')
+            raise ValidationError(_("The genre is required."))
         if len(genre) < 2:
-            raise ValidationError('Le genre est trop court.')
+            raise ValidationError(_("The genre is too short."))
         return genre.title()
 
     def clean_isbn(self):
-        isbn = self.cleaned_data.get('isbn', '').strip()
+        isbn = self.cleaned_data.get("isbn", "").strip()
         if not isbn:
-            raise ValidationError('L’ISBN est obligatoire.')
+            raise ValidationError(_("The ISBN is required."))
         if len(isbn) < 10 or len(isbn) > 17:
-            raise ValidationError('L’ISBN doit contenir entre 10 et 17 caractères.')
+            raise ValidationError(_("The ISBN must contain between 10 and 17 characters."))
         if not any(char.isdigit() for char in isbn):
-            raise ValidationError('L’ISBN doit contenir au moins un chiffre.')
+            raise ValidationError(_("The ISBN must contain at least one digit."))
         return isbn.upper()
 
     def clean_num_pages(self):
-        num_pages = self.cleaned_data.get('num_pages')
+        num_pages = self.cleaned_data.get("num_pages")
         if num_pages is not None and num_pages < 1:
-            raise ValidationError('Le nombre de pages doit être supérieur à 0.')
+            raise ValidationError(_("The number of pages must be greater than 0."))
         if num_pages is not None and num_pages > 5000:
-            raise ValidationError('Le nombre de pages ne peut pas dépasser 5000.')
+            raise ValidationError(_("The number of pages cannot exceed 5000."))
         return num_pages
 
     def clean_publication_date(self):
-        publication_date = self.cleaned_data.get('publication_date')
+        publication_date = self.cleaned_data.get("publication_date")
         if publication_date and publication_date > date.today():
-            raise ValidationError('La date de publication ne peut pas être dans le futur.')
+            raise ValidationError(_("The publication date cannot be in the future."))
         return publication_date
 
     def clean_total_copies(self):
-        total_copies = self.cleaned_data.get('total_copies')
+        total_copies = self.cleaned_data.get("total_copies")
         if total_copies is not None and total_copies < 0:
-            raise ValidationError('Le nombre total d’exemplaires ne peut pas être négatif.')
+            raise ValidationError(_("The total number of copies cannot be negative."))
         if total_copies is not None and total_copies > 1000:
-            raise ValidationError('Le nombre total d’exemplaires ne peut pas dépasser 1000.')
+            raise ValidationError(_("The total number of copies cannot exceed 1000."))
         return total_copies
 
     def clean_available_copies(self):
-        available_copies = self.cleaned_data.get('available_copies')
-        total_copies = self.cleaned_data.get('total_copies')
+        available_copies = self.cleaned_data.get("available_copies")
+        total_copies = self.cleaned_data.get("total_copies")
         if available_copies is not None and available_copies < 0:
-            raise ValidationError('Le nombre d’exemplaires disponibles ne peut pas être négatif.')
+            raise ValidationError(_("The number of available copies cannot be negative."))
         if total_copies is not None and available_copies is not None and available_copies > total_copies:
-            raise ValidationError('Les exemplaires disponibles ne peuvent pas dépasser le total.')
+            raise ValidationError(_("Available copies cannot exceed the total."))
         return available_copies
 
     def clean_summary(self):
-        summary = self.cleaned_data.get('summary', '').strip()
+        summary = self.cleaned_data.get("summary", "").strip()
         if summary and len(summary) < 20:
-            raise ValidationError('Le résumé doit contenir au moins 20 caractères.')
+            raise ValidationError(_("The summary must contain at least 20 characters."))
         return summary
 
     def clean(self):
         cleaned_data = super().clean()
-        total_copies = cleaned_data.get('total_copies')
-        available_copies = cleaned_data.get('available_copies')
+        total_copies = cleaned_data.get("total_copies")
+        available_copies = cleaned_data.get("available_copies")
 
         if total_copies is not None and available_copies is None:
-            cleaned_data['available_copies'] = total_copies
+            cleaned_data["available_copies"] = total_copies
 
         return cleaned_data

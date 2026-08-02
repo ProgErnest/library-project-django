@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+{% load i18n %}
 
-{% block title %}{{ page_title|default:"Nouvel auteur" }} — Bibliothèque{% endblock title %}
+{% block title %} {{ page_title}} — {% trans "Bibliothèque" %} {% endblock title %}
 
 {% block content %}
       {% if form.non_field_errors %}
@@ -11,8 +12,8 @@
       {% endif %}
       <section class="page-header">
         <div>
-          <h1>{{ page_title|default:"Nouvel auteur" }}</h1>
-          <p>Renseignez les informations de l'auteur à ajouter ou modifier.</p>
+          <h1>{{ page_title }}</h1>
+          <p>{% trans "Renseignez les informations de l'auteur à ajouter ou modifier." %}</p>
         </div>
       </section>
 
@@ -21,31 +22,31 @@
         {{ form.non_field_errors }}
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Identité</legend>
+          <legend class="form-legend">{% trans "Identité" %}</legend>
           <div class="form-grid">
             <div class="form-field">
               <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
               {% if form.name.errors %}
-                {{ form.name|add_class:"form-input border-red-400 bg-red-50"|attr:"autocomplete=given-name,placeholder=Ex : Victor" }}
+                {{ form.name|add_class:"form-input border-red-400 bg-red-50"|attr:"autocomplete=given-name, placeholder=Victor" }}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.name.errors|join:", " }}</p>
               {% else %}
-                {{ form.name|add_class:"form-input"|attr:"autocomplete=given-name,placeholder=Ex : Victor" }}
+                {{ form.name|add_class:"form-input"|attr:"autocomplete=given-name, placeholder=Victor " }}
               {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.surname.id_for_label }}" class="form-label">{{ form.surname.label }}</label>
               {% if form.surname.errors %}
-                {{ form.surname|add_class:"form-input border-red-400 bg-red-50"|attr:"autocomplete=family-name,placeholder=Ex : Hugo" }}
+                {{ form.surname|add_class:"form-input border-red-400 bg-red-50"|attr:"autocomplete=family-name,placeholder=Hugo" }}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.surname.errors|join:", " }}</p>
               {% else %}
-                {{ form.surname|add_class:"form-input"|attr:"autocomplete=family-name,placeholder=Ex : Hugo" }}
+                {{ form.surname|add_class:"form-input"|attr:"autocomplete=family-name, placeholder=Hugo" }}
               {% endif %}
             </div>
             <div class="form-field">
               <label for="{{ form.birthday.id_for_label }}" class="form-label">{{ form.birthday.label }}</label>
               {% if form.birthday.errors %}
                 {{ form.birthday|add_class:"form-input border-red-400 bg-red-50" }}
-                <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.birthday.errors|join:", " }}</p>
+                <p class="mt-2 flex items-center gap-2 text-sm text-red-500"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.birthday.errors|join:", " }}</p>
               {% else %}
                 {{ form.birthday|add_class:"form-input" }}
               {% endif %}
@@ -53,33 +54,33 @@
             <div class="form-field">
               <label for="{{ form.nationality.id_for_label }}" class="form-label">{{ form.nationality.label }}</label>
               {% if form.nationality.errors %}
-                {{ form.nationality|add_class:"form-input border-red-400 bg-red-50"|attr:"placeholder=Ex : Française" }}
+                {{ form.nationality|add_class:"form-input border-red-400 bg-red-50"|attr:"placeholder=Française" }}
                 <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.nationality.errors|join:", " }}</p>
               {% else %}
-                {{ form.nationality|add_class:"form-input"|attr:"placeholder=Ex : Française" }}
+                {{ form.nationality|add_class:"form-input"|attr:"placeholder=Française" }}
               {% endif %}
             </div>
           </div>
         </fieldset>
 
         <fieldset class="form-fieldset">
-          <legend class="form-legend">Biographie</legend>
+          <legend class="form-legend">{% trans "Biographie" %}</legend>
           <div class="form-field">
             <label for="{{ form.biography.id_for_label }}" class="form-label">{{ form.biography.label }}</label>
             {% if form.biography.errors %}
-              {{ form.biography|add_class:"form-textarea border-red-400 bg-red-50"|attr:"rows=8,placeholder=Résumez le parcours et l'œuvre de l'auteur…" }}
+              {{ form.biography|add_class:"form-textarea border-red-400 bg-red-50"|attr:"rows=8, placeholder=Resumme" }}
               <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.biography.errors|join:", " }}</p>
             {% else %}
-              {{ form.biography|add_class:"form-textarea"|attr:"rows=8,placeholder=Résumez le parcours et l'œuvre de l'auteur…" }}
+              {{ form.biography|add_class:"form-textarea"|attr:"rows=8, placeholder=Résumez" }}
             {% endif %}
-            <p class="form-hint">Ce texte sera affiché dans son intégralité sur la fiche détaillée de l'auteur.</p>
+            <p class="form-hint">{% trans "Ce texte sera affiché dans son intégralité sur la fiche détaillée de l'auteur." %}</p>
           </div>
         </fieldset>
 
         <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
-          <a href="{% url 'authors_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>Annuler</a>
-          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>Enregistrer l'auteur</button>
+          <a href="{% url 'authors_list' %}" class="btn btn-ghost"><i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}</a>
+          <button type="submit" class="btn btn-primary"><i class="ph ph-floppy-disk" aria-hidden="true"></i>{% trans "Enregistrer l'auteur" %}</button>
         </div>
       </form>
 {% endblock content %}
- 
+
