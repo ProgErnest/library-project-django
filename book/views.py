@@ -67,7 +67,8 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
-        context["percent"] = (book.unavailable_copies / book.total_copies) * 100 if book.total_copies else 0
+        context["available_copies"] = book.total_copies - book.unavailable_copies
+        context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
         return context
 
 

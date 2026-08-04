@@ -38,5 +38,5 @@ class Book(models.Model):
 
 
     def __str__(self):
-        return f"{self.title} - {self.unavailable_copies} / {self.total_copies}"
+        return f"{self.title} - {self.total_copies - self.unavailable_copies} / {self.total_copies}"
 
