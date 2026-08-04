@@ -43,5 +43,5 @@ def send_authors_mail(self, id_r,action):
         email.attach_alternative(html, "text/html")
         email.send()
 
-    except(gaierror, SMTPException) as e :
+    except(SMTPException) as e :
         raise self.retry(exec=e, countdown=60)
