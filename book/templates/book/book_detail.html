@@ -57,7 +57,7 @@
             <h2 class="text-lg mb-3">{% trans "Exemplaires" %}</h2>
             <p class="flex items-baseline justify-between">
               <span class="text-sm text-slate">{% trans "Disponibles" %}</span>
-              <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ book.available_copies}}&nbsp;/&nbsp;{{ book.total_copies }}</span>
+              <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ book.unavailable_copies}}&nbsp;/&nbsp;{{ book.total_copies }}</span>
             </p>
             <div class="progress-track mt-3" role="img" aria-label="{% trans 'Exemplaires disponibles' %}">
               <div class="progress-fill" style="width:{{percent}}%"></div>

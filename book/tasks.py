@@ -3,32 +3,34 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext as _
-from .models import Loan
+from .models import Book
 
 RECIPIENT_LIST = ["cuba7843@gmail.com"]
 SITE_DOMAIN = "localhost:8000"
 
 @shared_task
-def loan_mail_notification(id_l,action):
+def book_notifications(id_b,action):
 
     if action == "created":
-        action_label = _("Nouvel emprunt créé")
+        action_label = _("Nouveau livre ajouté")
     elif action == "deleted":
-        action_label = _("Emprunt supprimé")
+        action_label = _("Livre supprimé")
     else:
-        action_label = _("Emprunt modifié")
+        action_label = _("Livre modifié")
 
-    loan = get_object_or_404(Loan, id=id_l)
-    subject = f"{action_label} — {loan.book.title} ({loan.borrower})"
+    book = get_object_or_404(Book, id=id_b)
+    available_copies = book.total_copies - book.unavailable_copies
+    subject = f"{action_label} — {book.title}"
 
     context = {
-        "loan": loan,
+        "book": book,
+        "available_copies": available_copies,
         "action": action,
         "action_label": action_label,
         "site_domain": SITE_DOMAIN,
     }
-    html = render_to_string("loan/email.html", context)
-    text = render_to_string("loan/email.txt", context)
+    html = render_to_string("book/mail.html", context)
+    text = render_to_string("book/mail.txt", context)
     email = EmailMultiAlternatives(
         subject=subject,
         body=text,

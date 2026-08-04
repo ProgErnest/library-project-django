@@ -21,7 +21,6 @@ class CreateBookForm(forms.ModelForm):
             "available",
             "publication_date",
             "total_copies",
-            "available_copies",
             "summary",
         ]
         localized_fields = ["publication_date"]
@@ -33,7 +32,6 @@ class CreateBookForm(forms.ModelForm):
             "isbn": _("ISBN"),
             "author": _("Author"),
             "num_pages": _("Number of pages"),
-            "available": _("Available"),
             "publication_date": _("Publication date"),
             "total_copies": _("Total copies"),
             "available_copies": _("Available copies"),
@@ -47,7 +45,6 @@ class CreateBookForm(forms.ModelForm):
             "isbn": forms.TextInput(attrs={"placeholder": _("Example: 978-3-16-148410-0")}),
             "num_pages": forms.NumberInput(attrs={"min": "1", "placeholder": _("Example: 1488")}),
             "total_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 5")}),
-            "available_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 4")}),
             "author": forms.Select(attrs={}),
             "available": forms.CheckboxInput(attrs={"checked": False}),
             "publication_date": forms.DateInput(attrs={"type": "date"}),
@@ -117,14 +114,14 @@ class CreateBookForm(forms.ModelForm):
             raise ValidationError(_("The total number of copies cannot exceed 1000."))
         return total_copies
 
-    def clean_available_copies(self):
-        available_copies = self.cleaned_data.get("available_copies")
-        total_copies = self.cleaned_data.get("total_copies")
-        if available_copies is not None and available_copies < 0:
-            raise ValidationError(_("The number of available copies cannot be negative."))
-        if total_copies is not None and available_copies is not None and available_copies > total_copies:
-            raise ValidationError(_("Available copies cannot exceed the total."))
-        return available_copies
+    # def clean_available_copies(self):
+    #     available_copies = self.cleaned_data.get("available_copies")
+    #     total_copies = self.cleaned_data.get("total_copies")
+    #     if available_copies is not None and available_copies < 0:
+    #         raise ValidationError(_("The number of available copies cannot be negative."))
+    #     if total_copies is not None and available_copies is not None and available_copies > total_copies:
+    #         raise ValidationError(_("Available copies cannot exceed the total."))
+    #     return available_copies
 
     def clean_summary(self):
         summary = self.cleaned_data.get("summary", "").strip()
@@ -135,9 +132,5 @@ class CreateBookForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         total_copies = cleaned_data.get("total_copies")
-        available_copies = cleaned_data.get("available_copies")
-
-        if total_copies is not None and available_copies is None:
-            cleaned_data["available_copies"] = total_copies
-
+        # available_copies = cleaned_data.get("available_copies")
         return cleaned_data
