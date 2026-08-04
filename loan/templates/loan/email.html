@@ -1,0 +1,170 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<title>{{ action_label }} — {% trans "Emprunt" %}</title>
+<!--[if mso]>
+<noscript>
+<xml>
+<o:OfficeDocumentSettings>
+  <o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+</noscript>
+<![endif]-->
+<style>
+  body, table, td, p, a { margin: 0; padding: 0; }
+  body, table, td { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  body { background-color: #f3f4f6; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  .ExternalClass { width: 100%; }
+  .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
+  a { color: #4f46e5; text-decoration: none; }
+  img { -ms-interpolation-mode: bicubic; border: 0; line-height: 100%; }
+  .container { width: 100%; max-width: 600px; margin: 0 auto; }
+  .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+  @media screen and (max-width: 600px) {
+    .container { width: 100% !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+    .stack { display: block !important; width: 100% !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:40px 16px; background-color:#f3f4f6;">
+
+  <!-- Header/Branding -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;">
+    <tr>
+      <td align="center" style="padding: 0 0 24px 0;">
+        <table role="presentation" class="container" cellpadding="0" cellspacing="0">
+          <tr>
+            <td align="center" style="padding: 0 0 16px 0;">
+              <div style="display:inline-block; background-color:#4f46e5; color:#ffffff; font-size:28px; line-height:56px; width:56px; height:56px; border-radius:14px; text-align:center;">
+                <span style="font-family:Georgia,serif; font-weight:bold;">📚</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="font-size:20px; font-weight:700; color:#111827;">{% trans "Bibliothèque Municipale" %}</td>
+          </tr>
+          <tr>
+            <td align="center" style="font-size:13px; color:#6b7280; padding-top:4px;">{% trans "Gestion des emprunts" %}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Main card -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;">
+    <tr>
+      <td align="center">
+        <table role="presentation" class="container" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <div class="card" style="background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+                <!-- Action banner -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{% if action == 'created' %}#4f46e5{% elif action == 'updated' %}#d97706{% else %}#dc2626{% endif %};">
+                  <tr>
+                    <td align="center" style="padding:28px 24px;">
+                      <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.85); font-weight:600;">{{ action_label }}</div>
+                      <div style="font-size:26px; font-weight:700; color:#ffffff; padding-top:6px;">{{ loan.borrower }} / {{ loan.book.title }}</div>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Body -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="px" style="padding:32px 32px 24px 32px;">
+                  <tr>
+                    <td style="font-size:15px; color:#374151; line-height:1.6;">
+                      <p style="margin:0 0 12px 0;">
+                        {% if action == 'created' %}
+                          {% blocktrans %}Bonjour, un nouvel emprunt vient d'être <strong>enregistré</strong>.{% endblocktrans %}
+                        {% elif action == 'updated' %}
+                          {% blocktrans %}Bonjour, les informations d'un emprunt ont été <strong>modifiées</strong>.{% endblocktrans %}
+                        {% else %}
+                          {% blocktrans %}Bonjour, un emprunt a été <strong>supprimé</strong>.{% endblocktrans %}
+                        {% endif %}
+                      </p>
+                      <p style="margin:0 0 20px 0;">{% trans "Voici le récapitulatif de l'emprunt :" %}</p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Details table -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="px" style="padding:0 32px;">
+                  <tr>
+                    <td>
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb; border-radius:12px; overflow:hidden;">
+                        <tr style="background-color:#f9fafb;">
+                          <td style="padding:12px 16px; font-size:13px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #e5e7eb;">{% trans "Champ" %}</td>
+                          <td style="padding:12px 16px; font-size:13px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #e5e7eb; border-left:1px solid #e5e7eb;">{% trans "Valeur" %}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280; border-bottom:1px solid #f3f4f6;">{% trans "Emprunteur" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-bottom:1px solid #f3f4f6; border-left:1px solid #f3f4f6;">{{ loan.borrower }}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280; border-bottom:1px solid #f3f4f6;">{% trans "Livre" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-bottom:1px solid #f3f4f6; border-left:1px solid #f3f4f6;">{{ loan.book.title }}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280; border-bottom:1px solid #f3f4f6;">{% trans "Date d'emprunt" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-bottom:1px solid #f3f4f6; border-left:1px solid #f3f4f6;">{{ loan.loan_date|date:"d/m/Y" }}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280; border-bottom:1px solid #f3f4f6;">{% trans "Retour prévu" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-bottom:1px solid #f3f4f6; border-left:1px solid #f3f4f6;">{{ loan.return_date|date:"d/m/Y" }}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280; border-bottom:1px solid #f3f4f6;">{% trans "Retour effectif" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-bottom:1px solid #f3f4f6; border-left:1px solid #f3f4f6;">{{ loan.effective_return_date|date:"d/m/Y"|default:"—" }}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:12px 16px; font-size:14px; color:#6b7280;">{% trans "Statut" %}</td>
+                          <td style="padding:12px 16px; font-size:14px; color:#111827; font-weight:600; border-left:1px solid #f3f4f6;">{{ loan.status }}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- CTA -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="px" style="padding:28px 32px 32px 32px;">
+                  <tr>
+                    <td align="center">
+                      {% if action != 'deleted' %}
+                      <a href="http://{{ site_domain }}{% url 'detail_loan' loan.pk %}" style="display:inline-block; background-color:#4f46e5; color:#ffffff; text-decoration:none; font-size:15px; font-weight:600; padding:14px 32px; border-radius:10px;">
+                        {% trans "Voir le détail de l'emprunt" %} →
+                      </a>
+                      {% else %}
+                      <div style="font-size:14px; color:#6b7280; font-weight:600;">{% trans "Aucune action requise — cet emprunt a été supprimé." %}</div>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Footer -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb; border-top:1px solid #e5e7eb;">
+                  <tr>
+                    <td align="center" class="px" style="padding:20px 32px; font-size:12px; color:#9ca3af; line-height:1.6;">
+                      <p style="margin:0 0 4px 0;">{% trans "Ceci est un message automatique. Merci de ne pas y répondre." %}</p>
+                      <p style="margin:0;">© 2026 {% trans "Bibliothèque Municipale" %} — {% trans "Tous droits réservés." %}</p>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

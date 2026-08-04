@@ -1,0 +1,33 @@
+{% load i18n %}{% trans "Bibliothèque Municipale" %} — {% trans "Catalogue des livres" %}
+==================================================
+
+{{ action_label }} — {{ book.title }}
+
+{% if action == 'created' %}
+{% trans "Bonjour, un nouveau livre vient d'être ajouté au catalogue." %}
+{% elif action == 'updated' %}
+{% trans "Bonjour, les informations d'un livre ont été modifiées." %}
+{% else %}
+{% trans "Bonjour, un livre a été retiré du catalogue." %}
+{% endif %}
+
+{% trans "Voici le récapitulatif de la fiche :" %}
+
+{% trans "Titre" %}        : {{ book.title }}
+{% trans "Sous-titre" %}   : {{ book.subtitle|default:"—" }}
+{% trans "ISBN" %}         : {{ book.isbn }}
+{% trans "Langue" %}       : {{ book.language }}
+{% trans "Genre" %}        : {{ book.genre }}
+{% trans "Pages" %}        : {{ book.num_pages }}
+{% trans "Publication" %}  : {{ book.publication_date|date:"d/m/Y" }}
+{% trans "Auteur" %}       : {{ book.author }}
+{% trans "Exemplaires" %}  : {{ book.available_copies }} / {{ book.total_copies }} disponibles
+{% trans "Résumé" %}       : {{ book.summary|default:"—" }}
+
+{% if action != 'deleted' %}
+{% trans "Détails" %} : http://{{ site_domain }}{% url 'book_detail' book.pk %}
+{% endif %}
+
+---
+{% trans "Ceci est un message automatique. Merci de ne pas y répondre." %}
+© 2026 {% trans "Bibliothèque Municipale" %} — {% trans "Tous droits réservés." %}

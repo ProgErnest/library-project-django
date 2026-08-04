@@ -6,7 +6,7 @@
       <section class="detail-hero">
         <div class="flex flex-wrap items-center gap-6 justify-between">
           <div class="flex items-center gap-5">
-            <span class="avatar-tile w-20 h-20 text-2xl" aria-hidden="true">{{ author.surname|slice:":1" }} {{ author.name|slice:":1" }}</span>
+            <span class="avatar-tile w-20 h-20 text-2xl" aria-hidden="true">{{ author.surname|slice:":1" }}{{ author.name|slice:":1" }}</span>
             <div>
               <h1 class="text-3xl">{{ author.surname }} {{ author.name }}</h1>
               <p class="text-sm text-slate mt-1">{% trans "Auteur référencé au catalogue" %}</p>
@@ -42,21 +42,9 @@
                     <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span>
                   {% endif %}
                 </li>
+              {% empty %}
+                <li class="text-sm text-slate">{% trans "Aucun livre associé à cet auteur pour le moment." %}</li>
               {% endfor %}
-              <li class="flex items-center justify-between border-b pb-3">
-                <div>
-                  <a href="book-detail.html" class="font-medium hover:underline" style="color:var(--color-ink)">{% trans "Notre-Dame de Paris" %}</a>
-                  <p class="text-sm text-slate">{% trans "Roman" %} · 1831</p>
-                </div>
-                <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span>
-              </li>
-              <li class="flex items-center justify-between">
-                <div>
-                  <a href="book-detail.html" class="font-medium hover:underline" style="color:var(--color-ink)">{% trans "Le Dernier Jour d'un condamné" %}</a>
-                  <p class="text-sm text-slate">{% trans "Roman" %} · 1829</p>
-                </div>
-                <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span>
-              </li>
             </ul>
           </article>
         </section>

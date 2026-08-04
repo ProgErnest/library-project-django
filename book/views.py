@@ -47,11 +47,12 @@ class BookListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["total_books"] = context["books"].count()
-        context["available_books"] = context["books"].filter(available_copies__gt=0).count()
-        context["unavailable_books"] = context["books"].filter(available_copies=0).count()
+        books = Book.objects.all()
+        context["total_books"] = books.count()
+        context["available_books"] = books.filter(available_copies__gt=0).count()
+        context["unavailable_books"] = books.filter(available_copies=0).count()
         context["availability_rate"] = round((context["available_books"] / context["total_books"]) * 100, 1) if context["total_books"] else 0
-        context["genres"] = context["books"].values_list("genre", flat=True).distinct()
+        context["genres"] = books.values_list("genre", flat=True).distinct()
         return context
 
 

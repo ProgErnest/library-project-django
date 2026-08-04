@@ -76,13 +76,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# DEFAULT_FROM_EMAIL = "bibliotheque@example.com"
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_HOST_USER = '53d0a7a2efae5e'
-# EMAIL_HOST_PASSWORD = '19af61f046ad70'
-# EMAIL_PORT = '2525'
-# EMAIL_USE_TLS = True
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+DEFAULT_FROM_EMAIL = "bibliotheque@example.com"
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '53d0a7a2efae5e'
+EMAIL_HOST_PASSWORD = '19af61f046ad70'
+EMAIL_PORT = '2525'
+EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

@@ -38,10 +38,10 @@
             <label for="filter-nationality" class="sr-only">{% trans "Filtrer par nationalité" %}</label>
             <select class="form-select" id="filter-nationality" name="nationality">
               <option value="">{% trans "Toutes les nationalités" %}</option>
-              <option value="Française" {% if request.GET.nationality == 'Française' %}selected{% endif %}>{% trans "Française" %}</option>
-              <option value="Britannique" {% if request.GET.nationality == 'Britannique' %}selected{% endif %}>{% trans "Britannique" %}</option>
-              <option value="Colombienne" {% if request.GET.nationality == 'Colombienne' %}selected{% endif %}>{% trans "Colombienne" %}</option>
-              <option value="Japonaise" {% if request.GET.nationality == 'Japonaise' %}selected{% endif %}>{% trans "Japonaise" %}</option>
+              {% for nationality in nationalities %}
+                  <option value="{{ nationality }}" {% if request.GET.nationality == nationality %}selected{% endif %}>{{ nationality }}</option>
+              {% endfor %}
+
             </select>
           </div>
           <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>{% trans "Filtrer" %}</button>
@@ -82,115 +82,6 @@
                 </div>
             </template>
 {% endfor %}
-          <article class="card">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true">JA</span>
-                <div>
-                  <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">Jane Austen</h3>
-                  <p class="text-sm text-slate">{% trans "Britannique" %}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>16/12/1775</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>4 {% trans "livres" %}</span>
-            </div>
-            <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Romancière anglaise reconnue pour ses observations subtiles de la société géorgienne et ses portraits de femmes indépendantes d'esprit…" %}</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
-              <a href="author-detail.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Voir la fiche de Jane Austen' %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href="author-form.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Modifier Jane Austen' %}"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
-              <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label="{% trans 'Supprimer Jane Austen' %}"><i class="ph ph-trash" aria-hidden="true"></i></button>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true">GM</span>
-                <div>
-                  <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">Gabriel García Márquez</h3>
-                  <p class="text-sm text-slate">{% trans "Colombienne" %}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>06/03/1927</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>9 {% trans "livres" %}</span>
-            </div>
-            <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Écrivain et journaliste, chef de file du réalisme magique, lauréat du prix Nobel de littérature en 1982…" %}</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
-              <a href="author-detail.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Voir la fiche de Gabriel García Márquez' %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href="author-form.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Modifier Gabriel García Márquez' %}"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
-              <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label="{% trans 'Supprimer Gabriel García Márquez' %}"><i class="ph ph-trash" aria-hidden="true"></i></button>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true">HM</span>
-                <div>
-                  <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">Haruki Murakami</h3>
-                  <p class="text-sm text-slate">{% trans "Japonaise" %}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>12/01/1949</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>11 {% trans "livres" %}</span>
-            </div>
-            <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Romancier contemporain connu pour son univers onirique mêlant réalisme et fantastique, traduit dans plus de cinquante langues…" %}</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
-              <a href="author-detail.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Voir la fiche de Haruki Murakami' %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href="author-form.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Modifier Haruki Murakami' %}"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
-              <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label="{% trans 'Supprimer Haruki Murakami' %}"><i class="ph ph-trash" aria-hidden="true"></i></button>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true">VW</span>
-                <div>
-                  <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">Virginia Woolf</h3>
-                  <p class="text-sm text-slate">{% trans "Britannique" %}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>25/01/1882</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>5 {% trans "livres" %}</span>
-            </div>
-            <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Figure du modernisme littéraire britannique, pionnière du monologue intérieur et de l'écriture du flux de conscience…" %}</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
-              <a href="author-detail.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Voir la fiche de Virginia Woolf' %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href="author-form.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Modifier Virginia Woolf' %}"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
-              <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label="{% trans 'Supprimer Virginia Woolf' %}"><i class="ph ph-trash" aria-hidden="true"></i></button>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true">AC</span>
-                <div>
-                  <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">Albert Camus</h3>
-                  <p class="text-sm text-slate">{% trans "Française" %}</p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4">
-              <span class="badge-neutral"><i class="ph ph-cake" aria-hidden="true"></i>07/11/1913</span>
-              <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>7 {% trans "livres" %}</span>
-            </div>
-            <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Écrivain et philosophe, figure de l'absurde et de la révolte, lauréat du prix Nobel de littérature en 1957…" %}</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
-              <a href="author-detail.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Voir la fiche de Albert Camus' %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href="author-form.html" class="btn btn-ghost btn btn-sm" aria-label="{% trans 'Modifier Albert Camus' %}"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
-              <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label="{% trans 'Supprimer Albert Camus' %}"><i class="ph ph-trash" aria-hidden="true"></i></button>
-            </div>
-          </article>
 
         </div>
       </section>

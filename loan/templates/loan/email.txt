@@ -1,0 +1,31 @@
+{% load i18n %}{% trans "Bibliothèque Municipale" %} — {% trans "Gestion des emprunts" %}
+==================================================
+
+{{ action_label }} — {{ loan.borrower }} / {{ loan.book.title }}
+
+{% if action == 'created' %}
+{% trans "Bonjour, un nouvel emprunt vient d'être enregistré." %}
+{% elif action == 'updated' %}
+{% trans "Bonjour, les informations d'un emprunt ont été modifiées." %}
+{% else %}
+{% trans "Bonjour, un emprunt a été supprimé." %}
+{% endif %}
+
+{% trans "Voici le récapitulatif de l'emprunt :" %}
+
+{% trans "Emprunteur" %}       : {{ loan.borrower }}
+{% trans "Livre" %}            : {{ loan.book.title }}
+{% trans "Date d'emprunt" %}   : {{ loan.loan_date|date:"d/m/Y" }}
+{% trans "Retour prévu" %}     : {{ loan.return_date|date:"d/m/Y" }}
+{% if loan.effective_return_date %}
+{% trans "Retour effectif" %}  : {{ loan.effective_return_date|date:"d/m/Y" }}
+{% endif %}
+{% trans "Statut" %}           : {{ loan.status }}
+
+{% if action != 'deleted' %}
+{% trans "Détails" %} : http://{{ site_domain }}{% url 'detail_loan' loan.pk %}
+{% endif %}
+
+---
+{% trans "Ceci est un message automatique. Merci de ne pas y répondre." %}
+© 2026 {% trans "Bibliothèque Municipale" %} — {% trans "Tous droits réservés." %}
