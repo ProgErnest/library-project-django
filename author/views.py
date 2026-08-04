@@ -46,8 +46,10 @@ class AuthorListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         authors = context["authors"]
-        context["total_authors"] = authors.count()
-        context["nationality_count"] = authors.values_list("nationality", flat=True).distinct().count()
+        author_list = Author.objects.all()
+        context["total_authors"] = author_list.count()
+        context["nationality_count"] = author_list.values_list("nationality", flat=True).distinct().count()
+        context["nationalities"] = author_list.values_list("nationality", flat=True).distinct()
         context["results_count"] = authors.count()
         return context
 

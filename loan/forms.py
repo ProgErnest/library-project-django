@@ -19,7 +19,7 @@ class LoanForm(forms.ModelForm):
 
     class Meta:
         model = Loan
-        fields = ["book", "borrower", "loan_date", "return_date", "effective_return_date"]
+        fields = ["book", "borrower", "return_date", "effective_return_date"]
         labels = {
             "book": _("Book"),
             "borrower": _("Borrower"),

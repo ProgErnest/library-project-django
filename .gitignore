@@ -6,3 +6,4 @@ venv
 .gitignore
 node_modules/
 staticfiles/
+.env
