@@ -1,12 +1,12 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-
-from core.emails import send_personalized_email
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 
 from .models import Book
 
-RECIPIENT_LIST = ["client@gmail.com"]
+RECIPIENT_LIST = ["sahitndaheu@gmail.com"]
 SITE_DOMAIN = "localhost:8000"
 
 
@@ -30,15 +30,16 @@ def book_saved(sender, instance, created, **kwargs):
         "site_domain": SITE_DOMAIN,
     }
 
-    send_personalized_email(
+    html = render_to_string("book/mail.html", context)
+    text = render_to_string("book/mail.txt", context)
+    email = EmailMultiAlternatives(
         subject=subject,
-        context=context,
-        html_template="book/mail.html",
-        text_template="book/mail.txt",
-        recipient_list=RECIPIENT_LIST,
+        body=text,
+        from_email=None,
+        to=RECIPIENT_LIST,
     )
-
-
+    email.attach_alternative(html, "text/html")
+    email.send()
 @receiver(post_delete, sender=Book)
 def book_deleted(sender, instance, **kwargs):
     action = "deleted"
@@ -54,10 +55,13 @@ def book_deleted(sender, instance, **kwargs):
         "site_domain": SITE_DOMAIN,
     }
 
-    send_personalized_email(
+    html = render_to_string("book/mail.html", context)
+    text = render_to_string("book/mail.txt", context)
+    email = EmailMultiAlternatives(
         subject=subject,
-        context=context,
-        html_template="book/mail.html",
-        text_template="book/mail.txt",
-        recipient_list=RECIPIENT_LIST,
+        body=text,
+        from_email=None,
+        to=RECIPIENT_LIST,
     )
+    email.attach_alternative(html, "text/html")
+    email.send()

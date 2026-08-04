@@ -95,7 +95,7 @@
                 <td class="cell-mono text-sm">{{ book.num_pages }}</td>
                 <td class="cell-mono text-sm">{{ book.publication_date }}</td>
                 <td class="cell-mono text-sm">{{ book.available_copies}}/{{ book.total_copies }}</td>
-                {% if book.available %}
+                {% if book.available_copies > 0 %}
                   <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>               
                 {% else %}
                   <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>

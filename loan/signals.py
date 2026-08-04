@@ -1,12 +1,13 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 
-from core.emails import send_personalized_email
 
 from .models import Loan
 
-RECIPIENT_LIST = ["client@gmail.com"]
+RECIPIENT_LIST = ["cuba7843@gmail.com"]
 SITE_DOMAIN = "localhost:8000"
 
 
@@ -29,15 +30,16 @@ def loan_saved(sender, instance, created, **kwargs):
         "action_label": action_label,
         "site_domain": SITE_DOMAIN,
     }
-
-    send_personalized_email(
+    html = render_to_string("loan/email.html", context)
+    text = render_to_string("loan/email.txt", context)
+    email = EmailMultiAlternatives(
         subject=subject,
-        context=context,
-        html_template="loan/email.html",
-        text_template="loan/email.txt",
-        recipient_list=RECIPIENT_LIST,
+        body=text,
+        from_email=None,
+        to=RECIPIENT_LIST,
     )
-
+    email.attach_alternative(html, "text/html")
+    email.send()
 
 @receiver(post_delete, sender=Loan)
 def loan_deleted(sender, instance, **kwargs):
@@ -54,10 +56,13 @@ def loan_deleted(sender, instance, **kwargs):
         "site_domain": SITE_DOMAIN,
     }
 
-    send_personalized_email(
+    html = render_to_string("loan/email.html", context)
+    text = render_to_string("loan/email.txt", context)
+    email = EmailMultiAlternatives(
         subject=subject,
-        context=context,
-        html_template="loan/email.html",
-        text_template="loan/email.txt",
-        recipient_list=RECIPIENT_LIST,
+        body=text,
+        from_email=None,
+        to=RECIPIENT_LIST,
     )
+    email.attach_alternative(html, "text/html")
+    email.send()
