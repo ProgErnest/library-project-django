@@ -4,68 +4,35 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from core.emails import send_personalized_email
-
+from django.db import transaction 
 from .models import Author
-
+from .tasks import send_authors_mail
 RECIPIENT_LIST = ["cuba7843@gmail.com"]
 SITE_DOMAIN = "localhost:8000"
 
 
 @receiver(post_save, sender=Author)
 def author_saved(sender, instance, created, **kwargs):
-    if created:
-        action = "created"
-        action_label = _("Nouvel auteur ajouté")
-        print("[SIGNAL]: Un auteur cree ", instance.surname, instance.name)
-    else:
-        action = "updated"
-        action_label = _("Auteur modifié")
-        print("[SIGNAL]: Un auteur modifie ", instance.surname, instance.name)
 
-    subject = f"{action_label} — {instance.name} {instance.surname}"
+    action = "created" if created else "updated"
+    # if created:
+    #     action = "created"
+    #     action_label = _("Nouvel auteur ajouté")
+    #     print("[SIGNAL]: Un auteur cree ", instance.surname, instance.name)
+    # else:
+    #     action = "updated"
+    #     action_label = _("Auteur modifié")
+    #     print("[SIGNAL]: Un auteur modifie ", instance.surname, instance.name)
 
-    context = {
-        "author": instance,
-        "action": action,
-        "action_label": action_label,
-        "site_domain": SITE_DOMAIN,
-    }
-
-    html = render_to_string("author/author_email.html", context)
-    text = render_to_string("author/author_email.txt", context)
-    email = EmailMultiAlternatives(
-        subject=subject,
-        body=text,
-        from_email=None,
-        to=RECIPIENT_LIST,
+    transaction.on_commit(
+        lambda:send_authors_mail.delay(instance.id, action)
     )
-    email.attach_alternative(html, "text/html")
-    email.send()
+
 
 
 @receiver(post_delete, sender=Author)
 def author_deleted(sender, instance, **kwargs):
     action = "deleted"
-    action_label = _("Auteur supprimé")
-    print("[SIGNAL]: Un auteur supprime ", instance.surname, instance.name)
-
-    subject = f"{action_label} — {instance.name} {instance.surname}"
-
-    context = {
-        "author": instance,
-        "action": action,
-        "action_label": action_label,
-        "site_domain": SITE_DOMAIN,
-    }
-
-    html = render_to_string("author/author_email.html", context)
-    text = render_to_string("author/author_email.txt", context)
-    email = EmailMultiAlternatives(
-        subject=subject,
-        body=text,
-        from_email=None,
-        to=RECIPIENT_LIST,
+    transaction.on_commit(
+        lambda:send_authors_mail.delay(instance.id, action)
     )
-
-    email.attach_alternative(html, "text/html")
-    email.send()
