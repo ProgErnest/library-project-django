@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from django.db.models import Q
+from django.db.models import Q,F
 from django.urls import reverse_lazy
 
 from .models import Book
@@ -39,18 +39,19 @@ class BookListView(ListView):
 
         if availability:
             if availability == "0":
-                queryset = queryset.filter(Q(available_copies__lte=0))
+                queryset = queryset.filter(Q(unavailable_copies__gte=total_copies))
             else:
-                queryset = queryset.filter(Q(available_copies__gte=1))
+                queryset = queryset.filter(Q(unavailable_copies__lt=total_copies))
 
-        return queryset.select_related("author")
+        return queryset.select_related("author").annotate(available_copies=F("total_copies") - F("unavailable_copies"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         books = Book.objects.all()
+        total = books.values_list("total_copies", flat=True)
         context["total_books"] = books.count()
-        context["available_books"] = books.filter(available_copies__gt=0).count()
-        context["unavailable_books"] = books.filter(available_copies=0).count()
+        context["available_books"] = books.filter(unavailable_copies__lt=total).count()
+        context["unavailable_books"] = books.filter(unavailable_copies__gte=total).count()
         context["availability_rate"] = round((context["available_books"] / context["total_books"]) * 100, 1) if context["total_books"] else 0
         context["genres"] = books.values_list("genre", flat=True).distinct()
         return context
@@ -66,7 +67,8 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
-        context["percent"] = (book.available_copies / book.total_copies) * 100 if book.total_copies else 0
+        context["available_copies"] = book.total_copies - book.unavailable_copies
+        context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
         return context
 
 

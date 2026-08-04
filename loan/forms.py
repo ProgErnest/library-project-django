@@ -46,8 +46,8 @@ class LoanForm(forms.ModelForm):
         effective_return_date = cleaned_data.get("effective_return_date")
         book = cleaned_data.get("book")
 
-        if book and not book.available_copies:
-            raise ValidationError(_("This book no longer has copies available for a loan."))
+        # if book and not book.available_copies:
+        #     raise ValidationError(_("This book no longer has copies available for a loan."))
 
         if return_date and effective_return_date and effective_return_date < return_date:
             raise ValidationError(_("The effective return date cannot be earlier than the planned return date."))

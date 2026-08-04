@@ -27,7 +27,7 @@ class Book(models.Model):
     )
     summary = models.TextField(_("Summary"), null=True, blank=True)
     total_copies = models.PositiveIntegerField(_("Total copies"), default=1)
-    available_copies = models.PositiveIntegerField(_("Available copies"), default=1, blank=True, null=True)
+    unavailable_copies = models.PositiveIntegerField(_("Unavailable copies"), default=0, blank=True, null=True)
 
     objects = BookQuery.as_manager()
 
@@ -35,12 +35,8 @@ class Book(models.Model):
         verbose_name = _("Book")
         verbose_name_plural = _("Books")
 
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        if is_new:
-            self.available_copies = self.total_copies
-        super().save(*args, **kwargs)
+
 
     def __str__(self):
-        return f"{self.title} - {self.available_copies} / {self.total_copies}"
+        return f"{self.title} - {self.total_copies - self.unavailable_copies} / {self.total_copies}"
 

@@ -17,8 +17,12 @@ class Loan(models.Model):
         super().save(*args, **kwargs)
 
         if is_new:
-            self.book.available_copies -= 1
+            self.book.unavailable_copies += 1
             self.book.save()
+        else:
+            if self.effective_return_date and self.effective_return_date <= timezone.now().date():
+                self.book.unavailable_copies -= 1
+                self.book.save()
 
     class Meta:
         verbose_name = _("loan")
