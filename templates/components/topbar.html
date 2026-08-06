@@ -1,25 +1,79 @@
 {% load i18n %}
-
-        <header class="topbar">
-            <div class="topbar-inner">
+<header class="topbar">
+    <div class="topbar-inner">
+        <!-- Zone gauche : menu mobile + fil d'Ariane -->
+        <div class="flex items-center gap-3 min-w-0">
             <label for="nav-toggle" class="menu-btn md:hidden" aria-label="{% trans 'Ouvrir le menu de navigation' %}">
                 <i class="ph ph-list" aria-hidden="true"></i>
             </label>
-
-            <nav class="breadcrumb" aria-label="{% trans 'Fil dariane' %}">
+            <nav class="breadcrumb truncate" aria-label="{% trans 'Fil dariane' %}">
                 {% block breadcrumb %}
                 <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
                 <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
                 <span class="current">{% trans "Accueil" %}</span>
                 {% endblock %}
             </nav>
+        </div>
 
-            {% block header_actions %}
-                <form class="search-form" role="search" action="#" method="get">
-                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
-                <label for="search-global" class="sr-only">{% trans "Rechercher" %}</label>
-                <input type="search" id="search-global" name="q" placeholder="{% trans 'Rechercher…' %}">
-                </form>
-            {% endblock %}
-            </div>
-        </header>
+        <!-- Zone centrale : recherche -->
+        {% block header_actions %}
+        <form class="search-form hidden md:flex" role="search" action="#" method="get">
+            <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+            <label for="search-global" class="sr-only">{% trans "Rechercher" %}</label>
+            <input type="search" id="search-global" name="q" placeholder="{% trans 'Rechercher…' %}">
+        </form>
+        {% endblock %}
+
+        <!-- Zone droite : langue + profil -->
+        <div class="flex items-center gap-3 ml-auto shrink-0">
+            <!-- Sélecteur de langue compact -->
+            <form action="{% url 'set_language' %}" method="post" title="{% trans 'Changer de langue' %}">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                <label for="language-select" class="sr-only">{% trans "Changer de langue" %}</label>
+                <div class="relative">
+                    <i class="ph ph-globe absolute left-3 top-1/2 -translate-y-1/2 text-slate" aria-hidden="true"></i>
+                    <select name="language" id="language-select" onchange="this.form.submit()"
+                        class="form-select !w-auto !pl-9 !py-2 !pr-8 !text-sm cursor-pointer !border-line hover:!border-brass transition-colors">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% for lang_code, lang_name in LANGUAGES %}
+                        <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+                            {{ lang_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+
+            <!-- Séparateur vertical -->
+            <span class="hidden sm:block h-6 w-px" style="background-color: var(--color-line);" aria-hidden="true"></span>
+
+            <!-- Menu profil -->
+            <details class="relative group">
+                <summary class="flex items-center gap-2 rounded-full cursor-pointer list-none p-1 pr-3 transition hover:bg-paper" aria-label="{% trans 'Menu du profil' %}">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold text-white" style="background-color: var(--color-brass);">
+                        {{ request.user.username|slice:":1"|upper }}
+                    </span>
+                    <span class="hidden lg:block text-sm font-medium text-ink">{{ request.user.username }}</span>
+                    <i class="ph ph-caret-down text-xs text-slate" aria-hidden="true"></i>
+                </summary>
+                <div class="absolute right-0 top-12 z-30 w-60 rounded-xl border border-line bg-white p-2 shadow-lg">
+                    <div class="border-b px-3 py-3 mb-1" style="border-color: var(--color-line); background-color: var(--color-paper); border-radius: 0.5rem;">
+                        <p class="text-sm font-semibold text-ink">{{ request.user.get_full_name|default:request.user.username }}</p>
+                        <p class="text-xs text-slate truncate">{{ request.user.email|default:"" }}</p>
+                    </div>
+                    <a href="{% url 'profile' %}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate transition hover:bg-paper hover:text-ink">
+                        <i class="ph ph-user-circle text-lg" aria-hidden="true"></i>{% trans "Mon profil" %}
+                    </a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-rust transition hover:bg-rust/10">
+                            <i class="ph ph-sign-out text-lg" aria-hidden="true"></i>{% trans "Se déconnecter" %}
+                        </button>
+                    </form>
+                </div>
+            </details>
+        </div>
+    </div>
+</header>
