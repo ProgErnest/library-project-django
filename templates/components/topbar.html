@@ -1,0 +1,25 @@
+{% load i18n %}
+
+        <header class="topbar">
+            <div class="topbar-inner">
+            <label for="nav-toggle" class="menu-btn md:hidden" aria-label="{% trans 'Ouvrir le menu de navigation' %}">
+                <i class="ph ph-list" aria-hidden="true"></i>
+            </label>
+
+            <nav class="breadcrumb" aria-label="{% trans 'Fil dariane' %}">
+                {% block breadcrumb %}
+                <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+                <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+                <span class="current">{% trans "Accueil" %}</span>
+                {% endblock %}
+            </nav>
+
+            {% block header_actions %}
+                <form class="search-form" role="search" action="#" method="get">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <label for="search-global" class="sr-only">{% trans "Rechercher" %}</label>
+                <input type="search" id="search-global" name="q" placeholder="{% trans 'Rechercher…' %}">
+                </form>
+            {% endblock %}
+            </div>
+        </header>

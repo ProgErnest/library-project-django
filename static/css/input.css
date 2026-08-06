@@ -131,11 +131,14 @@
     @apply flex items-center gap-3 rounded-lg border border-line bg-white px-4 py-3;
   }
 
-  .app-shell {
-    @apply flex min-h-screen bg-paper text-slate;
+.app-shell {
+    @apply flex  bg-paper text-slate;
   }
   .app-main {
-    @apply flex-1 min-h-screen bg-paper;
+    @apply flex flex-1 flex-col  bg-white;
+  }
+  .app-main main {
+    @apply flex-1 min-h-screen;
   }
   .app-overlay {
     @apply fixed inset-0 z-40 hidden bg-slate/40;

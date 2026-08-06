@@ -1,0 +1,128 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Profil" %} — {% trans "Bibliothèque" %}{% endblock %}
+
+{% block content %}
+  <!-- En-tête de page -->
+  <section class="page-header">
+    <div>
+      <h1>{% trans "Mon profil" %}</h1>
+      <p>{% trans "Gérez vos informations personnelles et vos coordonnées." %}</p>
+    </div>
+    <span class="badge badge-brass">
+      <i class="ph ph-user-circle" aria-hidden="true"></i>
+      {{ request.user.profile.get_role_display }}
+    </span>
+  </section>
+
+  <!-- Messages flash -->
+  {% if messages %}
+    {% for message in messages %}
+    <div class="mb-4 rounded-lg border px-4 py-3 text-sm {% if message.tags == 'success' %}" style="border-color: var(--color-forest); background-color: color-mix(in srgb, var(--color-forest) 8%, white); color: var(--color-forest);{% endif %}">
+      <div class="flex items-center gap-2">
+        <i class="ph {% if message.tags == 'success' %}ph-check-circle{% else %}ph-info{% endif %}" aria-hidden="true"></i>
+        <span>{{ message }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <!-- Colonne gauche : Informations du profil -->
+    <section class="card !p-0 overflow-hidden" aria-label="{% trans 'Informations du compte' %}">
+      <div class="p-6 text-center" style="background: linear-gradient(135deg, var(--color-ink) 0%, #16304e 100%);">
+        <span class="avatar-tile !h-20 !w-20 !text-3xl" style="background-color: var(--color-brass); color: white;">
+          {{ request.user.username|slice:":1"|upper }}
+        </span>
+        <h2 class="mt-4 text-xl" style="color: white;">{{ request.user.get_full_name|default:request.user.username }}</h2>
+        <p class="mt-1 text-sm" style="color: rgba(255,255,255,0.7);">@{{ request.user.username }}</p>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="meta-row">
+          <span class="meta-label"><i class="ph ph-envelope" aria-hidden="true"></i>{% trans "Email" %}</span>
+          <span class="meta-value">{{ request.user.email|default:"—" }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label"><i class="ph ph-identification-badge" aria-hidden="true"></i>{% trans "Rôle" %}</span>
+          <span class="meta-value">{{ request.user.profile.get_role_display }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label"><i class="ph ph-calendar" aria-hidden="true"></i>{% trans "Membre depuis" %}</span>
+          <span class="meta-value">{{ request.user.date_joined|date:"d/m/Y" }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label"><i class="ph ph-phone" aria-hidden="true"></i>{% trans "Téléphone" %}</span>
+          <span class="meta-value">{{ request.user.profile.phone_number|default:"—" }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label"><i class="ph ph-map-pin" aria-hidden="true"></i>{% trans "Adresse" %}</span>
+          <span class="meta-value">{{ request.user.profile.address|default:"—" }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Colonne droite : Formulaire de mise à jour -->
+    <section class="card lg:col-span-2" aria-label="{% trans 'Modifier mes informations' %}">
+      <h2 class="mb-6 text-2xl">{% trans "Modifier mes informations" %}</h2>
+
+      {% if form.non_field_errors %}
+      <div class="mb-6 rounded-lg border px-4 py-3 text-sm" style="border-color: var(--color-rust); background-color: color-mix(in srgb, var(--color-rust) 8%, white); color: var(--color-rust);">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="{{ form.phone_number.id_for_label }}" class="form-label">
+              <i class="ph ph-phone mr-1" aria-hidden="true"></i>{% trans "Téléphone" %}
+            </label>
+            <input
+              type="text"
+              name="{{ form.phone_number.html_name }}"
+              id="{{ form.phone_number.id_for_label }}"
+              value="{{ form.phone_number.value|default:'' }}"
+              class="form-input"
+              placeholder="{% trans 'Ex : +33 6 12 34 56 78' %}"
+              {% if form.phone_number.errors %}aria-invalid="true"{% endif %}
+            >
+            {% if form.phone_number.errors %}
+            <p class="text-xs" style="color: var(--color-rust);">{{ form.phone_number.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div class="form-field">
+            <label for="{{ form.address.id_for_label }}" class="form-label">
+              <i class="ph ph-map-pin mr-1" aria-hidden="true"></i>{% trans "Adresse" %}
+            </label>
+            <input
+              type="text"
+              name="{{ form.address.html_name }}"
+              id="{{ form.address.id_for_label }}"
+              value="{{ form.address.value|default:'' }}"
+              class="form-input"
+              placeholder="{% trans 'Ex : 12 rue des Lilas, 75000 Paris' %}"
+              {% if form.address.errors %}aria-invalid="true"{% endif %}
+            >
+            {% if form.address.errors %}
+            <p class="text-xs" style="color: var(--color-rust);">{{ form.address.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 border-t pt-6" style="border-color: var(--color-line);">
+          <button type="submit" class="btn btn-primary">
+            <i class="ph ph-save" aria-hidden="true"></i>{% trans "Enregistrer les modifications" %}
+          </button>
+          <a href="{% url 'get_all_books' %}" class="btn btn-ghost">
+            <i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour à la bibliothèque" %}
+          </a>
+        </div>
+      </form>
+    </section>
+  </div>
+{% endblock content %}
