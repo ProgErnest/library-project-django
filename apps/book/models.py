@@ -18,8 +18,7 @@ class Genre(models.Model):
         verbose_name_plural = _("Genres")
         ordering = ["name"]
 
-    def __str__(self):
-        
+    def __str__(self):    
         return self.name
 
 class Book(models.Model):
