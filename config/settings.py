@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'author',
-    'book',
-    'loan',
+    'apps.accounts',
+    'apps.author',
+    'apps.book',
+    'apps.loan',
     'templates',
     'django_apscheduler'
 ]

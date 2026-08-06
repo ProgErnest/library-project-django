@@ -21,9 +21,10 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
-    path('authors/', include('author.urls')),
-    path('books/', include('book.urls')),
-    path('loans/', include('loan.urls')),
+    path('accounts/', include('apps.accounts.urls')),
+    path('authors/', include('apps.author.urls')),
+    path('books/', include('apps.book.urls')),
+    path('loans/', include('apps.loan.urls')),
 ]
-handler404 = "author.views.page_non_trouvee"
-handler500 = "author.views.erreur_serveur"
+handler404 = "apps.author.views.page_non_trouvee"
+handler500 = "apps.author.views.erreur_serveur"

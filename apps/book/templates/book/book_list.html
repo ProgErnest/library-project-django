@@ -1,0 +1,126 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+{% block title %}{% trans "Bibliothèque" %} - {% trans "Livres" %}{% endblock %}
+
+    {% block content %}
+      <section class="page-header">
+        <div>
+          <h1>{% trans "Livres" %}</h1>
+          <p>{% trans "L'ensemble des ouvrages référencés dans le catalogue." %}</p>
+        </div>
+        <a href="{% url 'create_book' %}" class="btn btn-primary">
+          <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un livre" %}
+        </a>
+      </section>
+
+      <section class="stat-bar" aria-label="{% trans 'Statistiques des livres' %}">
+        <div class="stat-item">
+          <span class="stat-value">{{ total_books }}</span>
+          <span class="stat-label">{% trans "Livres au catalogue" %}</span>
+        </div>
+
+
+        <div class="stat-item">
+          <span class="stat-value">{{ available_books }}</span>
+          <span class="stat-label">{% trans "Disponibles" %}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ unavailable_books }}</span>
+          <span class="stat-label">{% trans "Indisponibles" %}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ availability_rate }}%</span>
+          <span class="stat-label">{% trans "Taux de disponibilité" %}</span>
+        </div>
+      </section>
+
+      <section aria-label="{% trans 'Filtrer les livres' %}">
+        <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
+          <div class="form-field" style="flex:1 1 16rem">
+            <div class="form-input text-xl grid grid-cols-20 items-center">            
+              <label for="" class="text-xl"><i class="ph ph-magnifying-glass text-3xl"></i></label>
+              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" placeholder="{% trans 'Rechercher des livres' %}">
+            </div>
+          </div>
+          <div class="form-field" style="width:11rem">
+            <label for="filter-genre" class="sr-only">{% trans "Filtrer par genre" %}</label>
+            <select class="form-select" id="filter-genre" name="genre">
+              <option value="">{% trans "Tous les genres" %}</option>
+              {% for genre in genres %}
+                <option value ={{ genre }}>{{ genre }}</genre>
+              {% endfor %}
+  
+            </select>
+          </div>
+          <div class="form-field" style="width:11rem">
+            <label for="filter-available" class="sr-only">{% trans "Disponibilité" %}</label>
+            <select class="form-select" id="filter-available" name="available">
+              <option value="">{% trans "Disponibilité" %}</option>
+              <option value="1">{% trans "Disponible" %}</option>
+              <option value="0">{% trans "Indisponible" %}</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>{% trans "Filtrer" %}</button>
+        </form>
+      </section>
+
+      <section aria-label="{% trans 'Liste des livres' %}">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Titre" %}</th>
+                <th scope="col">{% trans "Auteur" %}</th>
+                <th scope="col">ISBN</th>
+                <th scope="col">{% trans "Genre" %}</th>
+                <th scope="col">{% trans "Langue" %}</th>
+                <th scope="col">{% trans "Pages" %}</th>
+                <th scope="col">{% trans "Publication" %}</th>
+                <th scope="col">{% trans "Copies" %}</th>
+                <th scope="col">{% trans "Statut" %}</th>
+                <th scope="col"><span class="sr-only">{% trans "Actions" %}</span></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+              <tr>
+                <td>
+                  <p class="font-black" style="max-width:14rem" title="Les Misérables"><a href={% url "book_detail" book.pk %} class="hover:underline" style="color:var(--color-ink)">{{ book.title }}</a></p>
+                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="Fantine, Cosette, Marius, l'idylle rue Plumet, Jean Valjean">{{ book.subtitle }}</p>
+                </td>
+                <td class="cell-secondary"><a href={% url "detail_author" book.author.pk %} class="hover:underline text-sm font-bold" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }}</a></td>
+                <td class="cell-mono text-sm">{{ book.isbn }}</td>
+                <td class="cell-secondary text-sm">{{ book.genre }}</td>
+                <td class="cell-secondary text-sm">{{ book.language }}</td>
+                <td class="cell-mono text-sm">{{ book.num_pages }}</td>
+                <td class="cell-mono text-sm">{{ book.publication_date }}</td>
+                <td class="cell-mono text-sm">{{ book.available_copies}}/{{ book.total_copies }}</td>
+                {% if book.available_copies > 0 %}
+                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>               
+                {% else %}
+                  <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>
+                {% endif %}
+                <td>
+                  <details class="row-menu">
+                    <summary class="row-menu-btn" aria-label="{% trans 'Actions sur ce livre' %}"><i class="ph ph-dots-three-vertical" aria-hidden="true"></i></summary>
+                    <div class="row-menu-list">
+                      <a href={% url "book_detail" book.pk %}><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir la fiche" %}</a>
+                      <a href={% url "update_book" book.pk %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
+                      <hr>
+                      <a href={% url "delete_book" book.pk %} class="danger"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
+                    </div>
+                  </details>
+                </td>
+              </tr>            
+            {% endfor %}
+
+      
+            </tbody>
+          </table>
+        </div>
+      </section>    
+    {% endblock %}
+
+
+</body>
+</html>

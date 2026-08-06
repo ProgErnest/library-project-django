@@ -1,0 +1,34 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+    {% block title %}{% trans "Bibliothèque" %}{% endblock %}
+
+  {% block extra_head %}{% endblock %}
+{% block main_layout %}
+
+  <a href="#main-content" class="skip-link">{% trans "Aller au contenu principal" %}</a>
+
+  <div class="app-shell">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" aria-hidden="true">
+    <label for="nav-toggle" class="app-overlay" aria-label="{% trans 'Fermer le menu' %}"></label>
+
+    {% include "components/sidebar.html" %}
+
+    <div class="app-main">
+
+      {% include "components/topbar.html" %}
+      <main id="main-content" class="p-4 md:p-8 space-y-8">
+          {% block content %}{% endblock %}
+      </main>     
+      {% include "components/footer.html" %}
+
+    </div>
+
+  </div>
+
+{% endblock main_layout %}
+
+  {% block extra_js %}{% endblock %}
+
