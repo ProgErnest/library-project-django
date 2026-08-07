@@ -8,8 +8,8 @@ from apps.book.models import Book
 
 class Loan(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="loans", verbose_name=_("Book"))
-    borrower = models.CharField(_("Borrower"), max_length=50)
-    borrower_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loans", verbose_name=_("Borrower"))
+    borrower = models.CharField(_("Borrower"), max_length=50, blank=True, null=True)
+    borrower_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="loans", verbose_name=_("Borrower"), blank=True, null=True)
     loan_date = models.DateField(_("Loan date"), auto_now=False, auto_now_add=False, default=timezone.now)
     return_date = models.DateField(_("Return date"), auto_now=False, auto_now_add=False)
     effective_return_date = models.DateField(_("Effective return date"), null=True, blank=True, auto_now=False, auto_now_add=False)
@@ -30,6 +30,9 @@ class Loan(models.Model):
         verbose_name = _("loan")
         verbose_name_plural = _("loans")
         ordering = ["-loan_date"]
+        permissions = [
+            ("view_all_loans", _("Can view all loans")),
+        ]
 
     @property
     def status(self):
@@ -41,4 +44,4 @@ class Loan(models.Model):
 
     def __str__(self):
         
-        return f"{self.book.title} {_('borrowed by')} {self.borrower.username if self.borrower else _('Unknown borrower')}"
+        return f"{self.book.title} {_('borrowed by')} {self.borrower_id.username if self.borrower_id else _('Unknown borrower')}"
