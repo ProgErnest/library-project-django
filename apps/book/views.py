@@ -109,6 +109,7 @@ class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
 #__________________________Genre Views__________________________
 
+
 class GenreListView(ListView):
     model = Genre
     template_name = "book/genre_list.html"
