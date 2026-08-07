@@ -133,7 +133,7 @@ class GenreDetailView(DetailView):
         )
         return context
 
-class GenreCreateView(LoginRequiredMixin, CreateView):
+class GenreCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Genre
     form_class = GenreForm
     template_name = "book/genre_form.html"
