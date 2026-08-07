@@ -2,6 +2,7 @@ from django.utils import timezone
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 from apps.book.models import Book
 from .models import Loan
@@ -9,8 +10,25 @@ from .models import Loan
 
 class LoanForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
         self.fields["book"].queryset = Book.objects.filter(available=True)
+
+        if self.user is not None:
+            self.fields["borrower_id"].label_from_instance = self._borrower_label
+            if not self.user.is_staff:
+                # Le staff peut choisir librement l'emprunteur parmi tous les utilisateurs.
+                # self.fields["borrower_id"].queryset = User.objects.all().order_by("username")
+                # Un non-staff enregistre toujours un emprunt pour lui-même.
+                self.fields["borrower_id"].queryset = User.objects.filter(pk=self.user.pk)
+                self.fields["borrower_id"].initial = self.user
+                self.fields["borrower_id"].disabled = True
+                self.fields["borrower_id"].required = False
+
+    @staticmethod
+    def _borrower_label(obj):
+        name = obj.get_full_name().strip()
+        return name if name else obj.username
 
     return_date = forms.DateField(
         label=_("Return date"),
@@ -19,25 +37,32 @@ class LoanForm(forms.ModelForm):
 
     class Meta:
         model = Loan
-        fields = ["book", "borrower", "return_date", "effective_return_date"]
+        fields = ["book", "borrower_id", "return_date", "effective_return_date"]
         labels = {
             "book": _("Book"),
-            "borrower": _("Borrower"),
+            "borrower_id": _("Borrower"),
             "loan_date": _("Loan date"),
             "return_date": _("Return date"),
             "effective_return_date": _("Effective return date"),
         }
-    def clean_borrower(self):
-        borrower = self.cleaned_data.get("borrower", "").strip()
-        if not borrower:
-            raise ValidationError(_("The borrower name is required."))
-        if len(borrower) < 2:
-            raise ValidationError(_("The borrower name is too short."))
-        if len(borrower) > 100:
-            raise ValidationError(_("The borrower name cannot exceed 100 characters."))
-        if any(char.isdigit() for char in borrower):
-            raise ValidationError(_("The borrower name must not contain digits."))
-        return borrower.title()
+    def clean_borrower_id(self):
+        borrower_id = self.cleaned_data.get("borrower_id")
+        if self.user is not None and not self.user.is_staff:
+            # Un non-staff emprunte toujours pour lui-même.
+            return self.user
+        if not borrower_id:
+            raise ValidationError(_("The borrower is required."))
+        return borrower_id
+
+    def save(self, commit=True):
+        if self.user is not None and not self.user.is_staff:
+            # Sécurité : un non-staff ne peut jamais enregistrer un emprunt
+            # pour un autre utilisateur, même en manipulant le POST.
+            self.instance.borrower_id = self.user
+        if self.instance.borrower_id:
+            name = self.instance.borrower_id.get_full_name().strip()
+            self.instance.borrower = name or self.instance.borrower_id.username
+        return super().save(commit=commit)
 
     def clean(self):
         
