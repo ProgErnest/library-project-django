@@ -21,6 +21,10 @@ class Genre(models.Model):
     def __str__(self):    
         return self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("genre_detail", kwargs={"slug": self.slug})
+
 class Book(models.Model):
     title = models.CharField(_("Title"), max_length=50)
     subtitle = models.CharField(_("Subtitle"), max_length=50)
@@ -28,7 +32,7 @@ class Book(models.Model):
     language = models.CharField(_("Language"), max_length=50)
     genre = models.CharField(_("Genre"), max_length=50)
     genre_id = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, verbose_name=_("Genre"), related_name="books")
-    cover = models.ImageField(_("Cover"), upload_to="book_covers/", null=True, blank=True)
+    cover = models.ImageField(_("Cover"), upload_to="book_covers/%Y/%m/", null=True, blank=True)
     num_pages = models.PositiveIntegerField(_("Number of pages"))
     publication_date = models.DateField(_("Publication date"))
     available = models.BooleanField(_("Available"), default=True)
@@ -48,12 +52,16 @@ class Book(models.Model):
     class Meta:
         verbose_name = _("Book")
         verbose_name_plural = _("Books")
+        ordering = ["-publication_date"]
 
 
 
     def __str__(self):
         return f"{self.title} - {self.total_copies - self.unavailable_copies} / {self.total_copies}"
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse("book_detail", kwargs={"pk": self.pk})
 
 class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews", verbose_name=_("Book"))

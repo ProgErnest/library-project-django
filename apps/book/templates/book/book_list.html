@@ -18,8 +18,6 @@
           <span class="stat-value">{{ total_books }}</span>
           <span class="stat-label">{% trans "Livres au catalogue" %}</span>
         </div>
-
-
         <div class="stat-item">
           <span class="stat-value">{{ available_books }}</span>
           <span class="stat-label">{% trans "Disponibles" %}</span>
@@ -35,29 +33,29 @@
       </section>
 
       <section aria-label="{% trans 'Filtrer les livres' %}">
-        <form class="flex flex-wrap gap-3 items-center" action="#" method="get">
+        <form class="flex flex-wrap gap-3 items-center" action="" method="get">
           <div class="form-field" style="flex:1 1 16rem">
-            <div class="form-input text-xl grid grid-cols-20 items-center">            
-              <label for="" class="text-xl"><i class="ph ph-magnifying-glass text-3xl"></i></label>
-              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" placeholder="{% trans 'Rechercher des livres' %}">
+            <label for="filter-title" class="sr-only">{% trans "Rechercher des livres" %}</label>
+            <div class="form-input text-xl grid grid-cols-20 items-center">
+              <span class="text-xl" aria-hidden="true"><i class="ph ph-magnifying-glass text-3xl"></i></span>
+              <input class="form-input col-span-19 text-lg" id="filter-title" name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% trans 'Rechercher des livres' %}">
             </div>
           </div>
           <div class="form-field" style="width:11rem">
             <label for="filter-genre" class="sr-only">{% trans "Filtrer par genre" %}</label>
-            <select class="form-select" id="filter-genre" name="genre">
+            <select class="form-select" id="filter-genre" name="genre_id">
               <option value="">{% trans "Tous les genres" %}</option>
               {% for genre in genres %}
-                <option value ={{ genre }}>{{ genre }}</genre>
+                <option value="{{ genre.id }}" {% if request.GET.genre_id == genre.id|stringformat:"s" %}selected{% endif %}>{{ genre.name }}</option>
               {% endfor %}
-  
             </select>
           </div>
           <div class="form-field" style="width:11rem">
             <label for="filter-available" class="sr-only">{% trans "Disponibilité" %}</label>
             <select class="form-select" id="filter-available" name="available">
               <option value="">{% trans "Disponibilité" %}</option>
-              <option value="1">{% trans "Disponible" %}</option>
-              <option value="0">{% trans "Indisponible" %}</option>
+              <option value="1" {% if request.GET.available == '1' %}selected{% endif %}>{% trans "Disponible" %}</option>
+              <option value="0" {% if request.GET.available == '0' %}selected{% endif %}>{% trans "Indisponible" %}</option>
             </select>
           </div>
           <button type="submit" class="btn btn-ghost"><i class="ph ph-funnel" aria-hidden="true"></i>{% trans "Filtrer" %}</button>
@@ -85,18 +83,24 @@
             {% for book in books %}
               <tr>
                 <td>
-                  <p class="font-black" style="max-width:14rem" title="Les Misérables"><a href={% url "book_detail" book.pk %} class="hover:underline" style="color:var(--color-ink)">{{ book.title }}</a></p>
-                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="Fantine, Cosette, Marius, l'idylle rue Plumet, Jean Valjean">{{ book.subtitle }}</p>
+                  <p class="font-black" style="max-width:14rem" title="{{ book.title }}"><a href={% url "book_detail" book.pk %} class="hover:underline" style="color:var(--color-ink)">{{ book.title }}</a></p>
+                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="{{ book.subtitle }}">{{ book.subtitle }}</p>
                 </td>
                 <td class="cell-secondary"><a href={% url "detail_author" book.author.pk %} class="hover:underline text-sm font-bold" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }}</a></td>
                 <td class="cell-mono text-sm">{{ book.isbn }}</td>
-                <td class="cell-secondary text-sm">{{ book.genre }}</td>
+                <td class="cell-secondary text-sm">
+                  {% if book.genre_id %}
+                    <a href={% url "genre_detail" book.genre_id.slug %} class="hover:underline">{{ book.genre_id.name }}</a>
+                  {% else %}
+                    {{ book.genre }}
+                  {% endif %}
+                </td>
                 <td class="cell-secondary text-sm">{{ book.language }}</td>
                 <td class="cell-mono text-sm">{{ book.num_pages }}</td>
                 <td class="cell-mono text-sm">{{ book.publication_date }}</td>
-                <td class="cell-mono text-sm">{{ book.available_copies}}/{{ book.total_copies }}</td>
+                <td class="cell-mono text-sm">{{ book.available_copies }}/{{ book.total_copies }}</td>
                 {% if book.available_copies > 0 %}
-                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>               
+                  <td><span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span></td>
                 {% else %}
                   <td><span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span></td>
                 {% endif %}
@@ -111,16 +115,39 @@
                     </div>
                   </details>
                 </td>
-              </tr>            
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="10">
+                  <div class="empty-state">
+                    <i class="ph ph-books" aria-hidden="true"></i>
+                    <h3>{% trans "Aucun livre trouvé" %}</h3>
+                    <p>{% trans "Aucun livre ne correspond à votre recherche ou au filtre sélectionné." %}</p>
+                  </div>
+                </td>
+              </tr>
             {% endfor %}
-
-      
             </tbody>
           </table>
         </div>
-      </section>    
+
+        {% if is_paginated %}
+          <nav class="pagination" aria-label="{% trans 'Pagination de la liste des livres' %}">
+            {% if page_obj.has_previous %}
+              <a class="pagination-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.genre_id %}&genre_id={{ request.GET.genre_id }}{% endif %}{% if request.GET.available %}&available={{ request.GET.available }}{% endif %}">
+                <i class="ph ph-caret-left" aria-hidden="true"></i>{% trans "Précédent" %}
+              </a>
+            {% endif %}
+            <span class="pagination-current">
+              {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} sur {{ total }}{% endblocktrans %}
+            </span>
+            {% if page_obj.has_next %}
+              <a class="pagination-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.genre_id %}&genre_id={{ request.GET.genre_id }}{% endif %}{% if request.GET.available %}&available={{ request.GET.available }}{% endif %}">
+                {% trans "Suivant" %}<i class="ph ph-caret-right" aria-hidden="true"></i>
+              </a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      </section>
     {% endblock %}
 
-
-</body>
-</html>

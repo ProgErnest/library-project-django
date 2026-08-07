@@ -14,9 +14,20 @@
         <a href="{% url 'authors_list' %}" class="sidebar-link {% if active_section == 'authors' %}active{% endif %}">
         <i class="ph ph-users"></i><span>{% trans "Auteurs" %}</span>
         </a>
-        <a href="{% url 'get_all_books' %}" class="sidebar-link {% if active_section == 'books' %}active{% endif %}">
-        <i class="ph ph-books"></i><span>{% trans "Livres" %}</span>
-        </a>
+        <details class="sidebar-group" {% if active_section == 'books' or active_section == 'genres' %}open{% endif %}>
+          <summary class="sidebar-link">
+            <i class="ph ph-books"></i><span>{% trans "Livres" %}</span>
+            <i class="ph ph-caret-down sidebar-group-caret" aria-hidden="true"></i>
+          </summary>
+          <div class="sidebar-submenu">
+            <a href="{% url 'get_all_books' %}" class="sidebar-link {% if active_section == 'books' %}active{% endif %}">
+              <i class="ph ph-book"></i><span>{% trans "Tous les livres" %}</span>
+            </a>
+            <a href="{% url 'get_all_genres' %}" class="sidebar-link {% if active_section == 'genres' %}active{% endif %}">
+              <i class="ph ph-tag"></i><span>{% trans "Genres" %}</span>
+            </a>
+          </div>
+        </details>
         <a href="{% url 'loan_list' %}" class="sidebar-link {% if active_section == 'loans' %}active{% endif %}">
         <i class="ph ph-arrows-left-right"></i><span>{% trans "Emprunts" %}</span>
         </a>

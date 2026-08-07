@@ -1,0 +1,87 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+{% load l10n %}
+{% block title %}{{ genre.name }} — {% trans "Genres" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block content %}
+      <section class="detail-hero">
+        <div class="flex flex-wrap items-center gap-6 justify-between">
+          <div class="flex items-center gap-5">
+            <span class="avatar-tile w-20 h-20 text-2xl" aria-hidden="true"><i class="ph ph-tags"></i></span>
+            <div>
+              <h1 class="text-3xl">{{ genre.name }}</h1>
+              <p class="text-sm text-slate mt-1">{% trans "Genre référencé au catalogue" %}</p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="badge-neutral"><i class="ph ph-tag" aria-hidden="true"></i>{{ genre.slug }}</span>
+                <span class="badge-brass"><i class="ph ph-books" aria-hidden="true"></i>{{ books|length }} {% trans "livres" %}</span>
+              </div>
+            </div>
+          </div>
+          <a href="{% url 'get_all_genres' %}" class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour à la liste" %}</a>
+        </div>
+      </section>
+
+      <div class="detail-grid lg:grid-cols-3">
+        <section class="space-y-6 lg:col-span-2">
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">{% trans "Description" %}</h2>
+            <p class="leading-relaxed">{{ genre.description|default:"—" }}</p>
+          </article>
+
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">{% trans "Livres associés" %}</h2>
+            {% if books %}
+              <ul class="space-y-3" style="list-style:none">
+                {% for book in books %}
+                  <li class="flex items-center justify-between border-b pb-3">
+                    <div>
+                      <a href="{% url 'book_detail' book.pk %}" class="font-medium hover:underline" style="color:var(--color-ink)">{{ book.title }}</a>
+                      <p class="text-sm text-slate">{{ book.author.surname }} {{ book.author.name }} · {{ book.publication_date }}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      {% if book.note_moyenne %}
+                        <span class="badge-neutral"><i class="ph ph-star" aria-hidden="true"></i>{{ book.note_moyenne|floatformat:1 }}</span>
+                      {% endif %}
+                      <span class="badge-neutral"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{{ book.nb_emprunts }}</span>
+                      {% if book.total_copies > book.unavailable_copies %}
+                        <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span>
+                      {% else %}
+                        <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-sm text-slate">{% trans "Aucun livre associé à ce genre pour le moment." %}</p>
+            {% endif %}
+          </article>
+        </section>
+
+        <aside class="space-y-6">
+          <div class="form-panel">
+            <h2 class="text-lg mb-3">{% trans "Métadonnées" %}</h2>
+            <div class="meta-row">
+              <span class="meta-label"><i class="ph ph-tag" aria-hidden="true"></i>{% trans "Nom" %}</span>
+              <span class="meta-value" style="font-family:var(--font-sans)">{{ genre.name }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label"><i class="ph ph-link" aria-hidden="true"></i>{% trans "Slug" %}</span>
+              <span class="meta-value" style="font-family:var(--font-mono)">{{ genre.slug }}</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label"><i class="ph ph-books" aria-hidden="true"></i>{% trans "Livres liés" %}</span>
+              <span class="meta-value" style="font-family:var(--font-mono)">{{ books|length }}</span>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
+            <div class="space-y-3">
+              <a href="{% url 'create_book' %}" class="btn btn-primary" style="width:100%;justify-content:center"><i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un livre" %}</a>
+              <a href="{% url 'create_genre' %}" class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un genre" %}</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+{% endblock content %}

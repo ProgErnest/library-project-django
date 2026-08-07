@@ -1,0 +1,77 @@
+{% extends "base_app.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block title %}{{ page_title }} — {% trans "Genres" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block breadcrumb %}
+  <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <a href="{% url 'get_all_genres' %}">{% trans "Genres" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <span class="current">{{ page_title }}</span>
+{% endblock %}
+
+{% block content %}
+  {% if form.non_field_errors %}
+    <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
+      <div class="flex items-center gap-2">
+        <i class="ph ph-warning-circle text-lg" aria-hidden="true"></i>
+        <span>{{ form.non_field_errors }}</span>
+      </div>
+    </div>
+  {% endif %}
+
+  <section class="page-header">
+    <div>
+      <h1>{{ page_title }}</h1>
+      <p>{% trans "Définissez une catégorie pour classer les ouvrages du catalogue." %}</p>
+    </div>
+    <a href="{% url 'get_all_genres' %}" class="btn btn-ghost">
+      <i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour à la liste" %}
+    </a>
+  </section>
+
+  <form class="form-panel" method="post" novalidate>
+    {% csrf_token %}
+
+    <fieldset class="form-fieldset">
+      <legend class="form-legend">
+        <i class="ph ph-tag" aria-hidden="true"></i>
+        {% trans "Informations du genre" %}
+      </legend>
+      {% trans "Ex : Roman" as placeholder_name %}
+      {% trans "Décrivez ce genre en quelques phrases…" as placeholder_desc %}
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+          {% if form.name.errors %}
+            {% render_field form.name class="form-input border-red-400 bg-red-50" required="required" placeholder=placeholder_name %}
+            <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.name.errors|join:", " }}</p>
+          {% else %}
+            {% render_field form.name class="form-input" required="required" placeholder=placeholder_name %}
+          {% endif %}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+          {% if form.description.errors %}
+            {% render_field form.description class="form-textarea border-red-400 bg-red-50" rows="5" placeholder=placeholder_desc %}
+            <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.description.errors|join:", " }}</p>
+          {% else %}
+            {% render_field form.description class="form-textarea" rows="5" placeholder=placeholder_desc %}
+          {% endif %}
+          <p class="form-hint">{% trans "Ce texte sera affiché sur la fiche détaillée du genre." %}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+      <a href="{% url 'get_all_genres' %}" class="btn btn-ghost">
+        <i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="ph ph-floppy-disk" aria-hidden="true"></i>{% trans "Enregistrer le genre" %}
+      </button>
+    </div>
+  </form>
+{% endblock content %}

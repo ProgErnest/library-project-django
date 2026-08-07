@@ -1,18 +1,35 @@
-{% extends "base.html" %}
+{% extends "base_app.html" %}
 {% load i18n %}
 {% load l10n %}
 {% block title %}{{ book.title }} — {% trans "Livres" %} — {% trans "Bibliothèque" %}{% endblock title %}
 
 {% block content %}
+
       <section class="detail-hero">
         <div class="flex flex-wrap items-start gap-6 justify-between">
-          <div>
-            <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-3xl">{{ book.title }}</h1>
-              <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{{ book.available }}</span>
+          <div class="flex items-start gap-5">
+            {% if book.cover %}
+              <img src="{{ book.cover.url }}" alt="{% trans 'Couverture de' %} {{ book.title }}" class="cover-thumb" style="width:6rem;height:8.5rem;object-fit:cover;border-radius:.75rem;box-shadow:var(--shadow-md,0 4px 12px rgba(0,0,0,.12))">
+            {% else %}
+              <span class="avatar-tile w-20 h-24 text-2xl" aria-hidden="true"><i class="ph ph-book" aria-hidden="true"></i></span>
+            {% endif %}
+            <div>
+              <div class="flex flex-wrap items-center gap-3">
+                <h1 class="text-3xl">{{ book.title }}</h1>
+                {% if available_copies > 0 %}
+                  <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Disponible" %}</span>
+                {% else %}
+                  <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Indisponible" %}</span>
+                {% endif %}
+              </div>
+              <p class="text-slate mt-1">{{ book.subtitle }}</p>
+              <p class="mt-3 text-sm">{% trans "Écrit par" %} <a href={% url "detail_author" book.author.pk %} class="font-medium hover:underline" style="color:var(--color-brass)">{{ book.author.surname }} {{ book.author.name }}</a></p>
+              {% if book.genre_id %}
+                <a href={% url "genre_detail" book.genre_id.slug %} class="badge-neutral mt-3 inline-flex items-center gap-1"><i class="ph ph-tag" aria-hidden="true"></i>{{ book.genre }}</a>
+              {% else %}
+                <span class="badge-neutral mt-3 inline-flex items-center gap-1"><i class="ph ph-tag" aria-hidden="true"></i>{{ book.genre }}</span>
+              {% endif %}
             </div>
-            <p class="text-slate mt-1">{{ book.subtitle }}</p>
-            <p class="mt-3 text-sm">{% trans "Écrit par" %} <a href={% url "detail_author" book.author.pk %} class="font-medium hover:underline" style="color:var(--color-brass)">{{ book.author.surname }} {{ book.author.name }}</a></p>
           </div>
           <a href={% url "get_all_books" %} class="btn btn-ghost"><i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour à la liste" %}</a>
         </div>
@@ -22,7 +39,7 @@
         <section class="space-y-6 lg:col-span-2">
           <article class="form-panel">
             <h2 class="text-xl mb-4">{% trans "Résumé" %}</h2>
-            <p class="leading-relaxed">{{ book.summary }}</p>
+            <p class="leading-relaxed">{{ book.summary|default:"—" }}</p>
           </article>
 
           <article class="form-panel">
@@ -50,6 +67,83 @@
               </div>
             </div>
           </article>
+
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">{% trans "Avis" %}</h2>
+            <div class="flex flex-wrap items-center gap-4 mb-5">
+              <span class="text-4xl font-display" style="color:var(--color-ink)">{{ average_rating|default:"–"|floatformat:1 }}</span>
+              <div>
+                <div class="flex items-center gap-1" aria-label="{% trans 'Note moyenne' %}">
+                  {% for i in "12345" %}
+                    <i class="ph {% if average_rating and average_rating >= i %}ph-star-fill{% else %}ph-star{% endif %}" style="color:{% if average_rating and average_rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}" aria-hidden="true"></i>
+                  {% endfor %}
+                </div>
+                <p class="text-sm text-slate">{{ reviews|length }} {% trans "avis" %}</p>
+              </div>
+            </div>
+
+            {% if reviews %}
+              <ul class="space-y-4" style="list-style:none">
+                {% for review in reviews %}
+                  <li class="border-b pb-4">
+                    <div class="flex items-center justify-between">
+                      <p class="font-medium" style="color:var(--color-ink)">{{ review.reviewer.get_full_name|default:review.reviewer.username }}</p>
+                      <p class="text-xs text-slate">{{ review.created_at|date }}</p>
+                    </div>
+                    <div class="flex items-center gap-1 mt-1">
+                      {% for i in "12345" %}
+                        <i class="ph {% if review.rating >= i %}ph-star-fill{% else %}ph-star{% endif %} text-sm" style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}" aria-hidden="true"></i>
+                      {% endfor %}
+                    </div>
+                    {% if review.comment %}
+                      <p class="text-sm text-slate mt-2">{{ review.comment }}</p>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-sm text-slate">{% trans "Aucun avis pour le moment. Soyez le premier à noter ce livre." %}</p>
+            {% endif %}
+          </article>
+
+          <article class="form-panel">
+            <h2 class="text-xl mb-4">{% trans "Emprunts" %}</h2>
+            <p class="text-sm text-slate mb-4">{{ total_loans }} {% trans "emprunt(s) associés à ce livre." %}</p>
+            {% if book.loans.all %}
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{% trans "Emprunteur" %}</th>
+                      <th scope="col">{% trans "Date d'emprunt" %}</th>
+                      <th scope="col">{% trans "Retour prévu" %}</th>
+                      <th scope="col">{% trans "Statut" %}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for loan in book.loans.all %}
+                      <tr>
+                        <td class="cell-secondary">{{ loan.borrower_id.get_full_name|default:loan.borrower }}</td>
+                        <td class="cell-mono text-sm">{{ loan.loan_date }}</td>
+                        <td class="cell-mono text-sm">{{ loan.return_date }}</td>
+                        <td>
+                          {% if loan.status == 'Rendu' %}
+                            <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{{ loan.status }}</span>
+                          {% elif loan.status == 'En retard' %}
+                            <span class="badge-danger"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ loan.status }}</span>
+                          {% else %}
+                            <span class="badge-brass"><i class="ph ph-clock" aria-hidden="true"></i>{{ loan.status }}</span>
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <p class="text-sm text-slate">{% trans "Aucun emprunt enregistré pour ce livre." %}</p>
+            {% endif %}
+          </article>
         </section>
 
         <aside class="space-y-6">
@@ -57,10 +151,10 @@
             <h2 class="text-lg mb-3">{% trans "Exemplaires" %}</h2>
             <p class="flex items-baseline justify-between">
               <span class="text-sm text-slate">{% trans "Disponibles" %}</span>
-              <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ available_copies}}&nbsp;/&nbsp;{{ book.total_copies }}</span>
+              <span class="font-mono font-semibold text-lg" style="color:var(--color-ink)">{{ available_copies }}&nbsp;/&nbsp;{{ book.total_copies }}</span>
             </p>
             <div class="progress-track mt-3" role="img" aria-label="{% trans 'Exemplaires disponibles' %}">
-              <div class="progress-fill" style="width:{{percent}}%"></div>
+              <div class="progress-fill" style="width:{{ percent }}%"></div>
             </div>
             <p class="text-xs text-slate mt-2">{{ percent }}&nbsp;{% trans "% des exemplaires sont actuellement disponibles au prêt." %}</p>
           </div>
@@ -68,9 +162,9 @@
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Auteur" %}</h2>
             <a href={% url "detail_author" book.author.pk %} class="flex items-center gap-3 hover:underline">
-              <span class="avatar-tile w-11 h-11" aria-hidden="true">{{ book.author.surname|slice:":1" }}{{ book.author.name|slice:":1" }} </span>
+              <span class="avatar-tile w-11 h-11" aria-hidden="true">{{ book.author.surname|slice:":1" }}{{ book.author.name|slice:":1" }}</span>
               <span>
-                <span class="block font-medium" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }} </span>
+                <span class="block font-medium" style="color:var(--color-ink)">{{ book.author.surname }} {{ book.author.name }}</span>
                 <span class="block text-xs text-slate">{% trans "Voir la fiche auteur" %}</span>
               </span>
             </a>
@@ -79,12 +173,15 @@
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
+              {% if can_borrow %}
+                <a href={% url "create_loan" %} class="btn btn-primary" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Emprunter ce livre" %}</a>
+              {% else %}
+                <a href={% url "create_loan" %} class="btn btn-primary" style="width:100%;justify-content:center;opacity:.5;pointer-events:none" aria-disabled="true"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Emprunter ce livre" %}</a>
+              {% endif %}
               <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier la fiche" %}</a>
-              <a href={% url "create_loan" %} class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Créer un emprunt" %}</a>
-              <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</button>
+              <a href={% url "delete_book" book.pk %} class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</a>
             </div>
           </div>
         </aside>
       </div>
 {% endblock content %}
-
