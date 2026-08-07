@@ -1,0 +1,66 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+{% block title %}{% trans "Genres" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block content %}
+      <section class="page-header" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">{% trans "Genres" %}</h1>
+          <p>{% trans "Les catégories et genres référencés dans le catalogue de la bibliothèque." %}</p>
+        </div>
+        <a href="{% url 'create_genre' %}" class="btn btn-primary">
+          <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un genre" %}
+        </a>
+      </section>
+
+      <section class="stat-bar" aria-label="{% trans 'Statistiques des genres' %}">
+        <div class="stat-item">
+          <span class="stat-value">{{ genres|length }}</span>
+          <span class="stat-label">{% trans "Genres" %}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ genres.count }}</span>
+          <span class="stat-label">{% trans "Catégories triées" %}</span>
+        </div>
+      </section>
+
+      <section aria-label="{% trans 'Liste des genres' %}">
+        {% if genres %}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for genre in genres %}
+              <article class="card">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <span class="avatar-tile w-12 h-12 text-lg" aria-hidden="true"><i class="ph ph-tags"></i></span>
+                    <div>
+                      <h3 class="text-lg" style="font-family:var(--font-display);color:var(--color-ink)">
+                        <a href="{% url 'genre_detail' genre.slug %}" class="hover:underline">{{ genre.name }}</a>
+                      </h3>
+                      <p class="text-sm text-slate">{{ genre.slug }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-4">
+                  <span class="badge-brass"><i class="ph ph-books" aria-hidden="true"></i>{{ genre.nb_books }} {% trans "livres" %}</span>
+                </div>
+                {% if genre.description %}
+                  <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{{ genre.description|slice:":100" }}{% if genre.description|length > 100 %}…{% endif %}</p>
+                {% else %}
+                  <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{% trans "Aucune description fournie." %}</p>
+                {% endif %}
+                <div class="flex items-center gap-2 mt-6 pt-4 border-t">
+                  <a href="{% url 'genre_detail' genre.slug %}" class="btn btn-ghost btn btn-sm" aria-label="{% trans "Voir le genre" %}"><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <i class="ph ph-tags" aria-hidden="true"></i>
+            <h3>{% trans "Aucun genre enregistré" %}</h3>
+            <p>{% trans "Commencez par ajouter un genre pour classer ensuite les livres du catalogue." %}</p>
+            <a href="{% url 'create_genre' %}" class="btn btn-primary"><i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un genre" %}</a>
+          </div>
+        {% endif %}
+      </section>
+{% endblock content %}

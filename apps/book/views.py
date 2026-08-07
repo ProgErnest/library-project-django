@@ -1,12 +1,11 @@
-
+    
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.db.models import Q,F, Avg, Count
 from django.urls import reverse_lazy
-from django.utils.text import slugify
 from .models import Book, Genre
-from .forms import CreateBookForm
+from .forms import CreateBookForm, GenreForm
 
 
 class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -32,8 +31,9 @@ class BookListView(ListView):
         queryset = Book.objects.select_related(
             "author", "genre_id"
         ).annotate(
-            note_moyenne = Avg("reviews__note"),
-            nb_emprunts = Count("loans")
+            note_moyenne=Avg("reviews__rating"),
+            nb_emprunts=Count("loans"),
+            available_copies=F("total_copies") - F("unavailable_copies"),
         )
         query = self.request.GET.get("q")
         genre = self.request.GET.get("genre_id")
@@ -68,19 +68,18 @@ class BookListView(ListView):
 
 class BookDetailView(DetailView):
     model = Book
-
+    template_name = "book/book_detail.html"
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.select_related("author", "genre_id").prefetch_related("reviews","loans__borrower")
+        return queryset.select_related("author", "genre_id").prefetch_related("reviews","loans__borrower_id")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
         context["available_copies"] = book.total_copies - book.unavailable_copies
         context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
-        context["reviews"] = book.reviews.all()
-        # context["reviews"] = self.object.reviews.select_related("reviewer").all()
-        context["average_rating"] = book.reviews.aggregate(Avg("note"))["note__avg"]
+        context["reviews"] = book.reviews.select_related("reviewer").all()
+        context["average_rating"] = book.reviews.aggregate(Avg("rating"))["rating__avg"]
         context["total_loans"] = book.loans.count()
         context["can_borrow"] = (
             self.request.user.is_authenticated and self.object.total_copies - self.object.unavailable_copies > 0
@@ -129,23 +128,17 @@ class GenreDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         genre = self.get_object()
         context["books"] = genre.books.select_related("author").annotate(
-            note_moyenne = Avg("reviews__note"),
+            note_moyenne = Avg("reviews__rating"),
             nb_emprunts = Count("loans")
         )
         return context
 
-class GenreCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class GenreCreateView(LoginRequiredMixin, CreateView):
     model = Genre
-    fields = ["name", "description"]
+    form_class = GenreForm
     template_name = "book/genre_form.html"
     success_url = reverse_lazy("get_all_genres")
     raise_exception = True
-
-    # def form_valid(self, form):
-    #     genre = form.save(commit=False)
-    #     genre.slug = slugify(genre.name)
-    #     genre.save()
-    #     return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

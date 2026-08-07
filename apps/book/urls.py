@@ -10,6 +10,7 @@ urlpatterns = [
 
     # Genres 
     path('genres/', views.GenreListView.as_view(), name="get_all_genres"),
+    path('genres/create/', views.GenreCreateView.as_view(), name="create_genre"),
     path('genres/<slug:slug>/', views.GenreDetailView.as_view(), name="genre_detail"),
-    path('genres/create/', views.GenreCreateView.as_view(), name="create_genre")
+
 ]

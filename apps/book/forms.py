@@ -14,12 +14,13 @@ class CreateBookForm(forms.ModelForm):
         fields = [
             "title",
             "subtitle",
-            "language",
-            "genre",
-            "isbn",
             "author",
+            "genre_id",
+            "language",
+            "isbn",
             "num_pages",
             "publication_date",
+            "cover",
             "total_copies",
             "summary",
         ]
@@ -27,12 +28,13 @@ class CreateBookForm(forms.ModelForm):
         labels = {
             "title": _("Title"),
             "subtitle": _("Subtitle"),
-            "language": _("Language"),
-            "genre": _("Genre"),
-            "isbn": _("ISBN"),
             "author": _("Author"),
+            "language": _("Language"),
+            "genre_id": _("Genre"),
+            "isbn": _("ISBN"),
             "num_pages": _("Number of pages"),
             "publication_date": _("Publication date"),
+            "cover": _("Cover"),
             "total_copies": _("Total copies"),
             "summary": _("Summary"),
         }
@@ -40,14 +42,17 @@ class CreateBookForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"placeholder": _("Example: Le Petit Prince")}),
             "subtitle": forms.TextInput(attrs={"placeholder": _("Example: The royal book")}),
             "language": forms.TextInput(attrs={"placeholder": _("Example: French")}),
-            "genre": forms.Select(attrs={}),
+            "genre_id": forms.Select(attrs={}),
             "isbn": forms.TextInput(attrs={"placeholder": _("Example: 978-3-16-148410-0")}),
             "num_pages": forms.NumberInput(attrs={"min": "1", "placeholder": _("Example: 1488")}),
             "total_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 5")}),
             "author": forms.Select(attrs={}),
-            "available": forms.CheckboxInput(attrs={"checked": False}),
+            "cover": forms.ClearableFileInput(attrs={"accept": "image/*"}),
             "publication_date": forms.DateInput(attrs={"type": "date"}),
         }
+
+
+
 
     def clean_title(self):
         title = self.cleaned_data.get("title", "").strip()
@@ -73,13 +78,11 @@ class CreateBookForm(forms.ModelForm):
             raise ValidationError(_("The language is too short."))
         return language.title()
 
-    def clean_genre(self):
-        genre = self.cleaned_data.get("genre", "").strip()
-        if not genre:
+    def clean_genre_id(self):
+        genre_id = self.cleaned_data.get("genre_id")
+        if not genre_id:
             raise ValidationError(_("The genre is required."))
-        if len(genre) < 2:
-            raise ValidationError(_("The genre is too short."))
-        return genre.title()
+        return genre_id
 
     def clean_isbn(self):
         isbn = self.cleaned_data.get("isbn", "").strip()
@@ -134,6 +137,16 @@ class CreateBookForm(forms.ModelForm):
         # available_copies = cleaned_data.get("available_copies")
         return cleaned_data
 
+    def save(self, commit=True):
+        book = super().save(commit=False)
+        # Synchronise le champ texte `genre` avec la catégorie sélectionnée (genre_id)
+        if book.genre_id:
+            book.genre = book.genre_id.name
+        if commit:
+            book.save()
+            self.save_m2m()
+        return book
+
 class GenreForm(forms.ModelForm):
     class Meta:
         model = Genre
@@ -142,7 +155,10 @@ class GenreForm(forms.ModelForm):
             "name": _("Name"),
             "description": _("Description"),
         }
-
+        widgets = {
+            "name": forms.TextInput(attrs={}),
+            "description": forms.Textarea(attrs={},)
+        }
     def save(self, commit=True):
         genre = super().save(commit=False)
         genre.slug = slugify(genre.name)
