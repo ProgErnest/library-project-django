@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.db.models import Q,F, Avg, Count
 from django.urls import reverse_lazy
-
+from django.utils.text import slugify
 from .models import Book, Genre
 from .forms import CreateBookForm
 
@@ -106,3 +106,47 @@ class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     permission_required = "book.delete_book"
     success_url = reverse_lazy("get_all_books")
     raise_exception = True
+
+#__________________________Genre Views__________________________
+
+class GenreListView(ListView):
+    model = Genre
+    template_name = "book/genre_list.html"
+    context_object_name = "genres"
+    def get_queryset(self):
+        return super().get_queryset().annotate(nb_books=Count("books")).order_by("name")
+
+class GenreDetailView(DetailView):
+    model = Genre
+    template_name = "book/genre_detail.html"
+    context_object_name = "genre"
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("books")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        genre = self.get_object()
+        context["books"] = genre.books.select_related("author").annotate(
+            note_moyenne = Avg("reviews__note"),
+            nb_emprunts = Count("loans")
+        )
+        return context
+
+class GenreCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Genre
+    fields = ["name", "description"]
+    template_name = "book/genre_form.html"
+    success_url = reverse_lazy("get_all_genres")
+    raise_exception = True
+
+    # def form_valid(self, form):
+    #     genre = form.save(commit=False)
+    #     genre.slug = slugify(genre.name)
+    #     genre.save()
+    #     return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = _("Add a genre")
+        return context
