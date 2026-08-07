@@ -3,8 +3,9 @@ from datetime import date
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 
-from .models import Book
+from .models import Book, Genre
 
 
 class CreateBookForm(forms.ModelForm):
@@ -18,7 +19,6 @@ class CreateBookForm(forms.ModelForm):
             "isbn",
             "author",
             "num_pages",
-            "available",
             "publication_date",
             "total_copies",
             "summary",
@@ -34,14 +34,13 @@ class CreateBookForm(forms.ModelForm):
             "num_pages": _("Number of pages"),
             "publication_date": _("Publication date"),
             "total_copies": _("Total copies"),
-            "available_copies": _("Available copies"),
             "summary": _("Summary"),
         }
         widgets = {
             "title": forms.TextInput(attrs={"placeholder": _("Example: Le Petit Prince")}),
             "subtitle": forms.TextInput(attrs={"placeholder": _("Example: The royal book")}),
             "language": forms.TextInput(attrs={"placeholder": _("Example: French")}),
-            "genre": forms.TextInput(attrs={"placeholder": _("Example: Novel")}),
+            "genre": forms.Select(attrs={}),
             "isbn": forms.TextInput(attrs={"placeholder": _("Example: 978-3-16-148410-0")}),
             "num_pages": forms.NumberInput(attrs={"min": "1", "placeholder": _("Example: 1488")}),
             "total_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 5")}),
@@ -134,3 +133,19 @@ class CreateBookForm(forms.ModelForm):
         total_copies = cleaned_data.get("total_copies")
         # available_copies = cleaned_data.get("available_copies")
         return cleaned_data
+
+class GenreForm(forms.ModelForm):
+    class Meta:
+        model = Genre
+        fields = ["name", "description"]
+        labels = {
+            "name": _("Name"),
+            "description": _("Description"),
+        }
+
+    def save(self, commit=True):
+        genre = super().save(commit=False)
+        genre.slug = slugify(genre.name)
+        if commit:
+            genre.save()
+        return genre
