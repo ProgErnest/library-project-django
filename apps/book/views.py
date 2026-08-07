@@ -1,17 +1,20 @@
+
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from django.db.models import Q,F
+from django.db.models import Q,F, Avg, Count
 from django.urls import reverse_lazy
 
-from .models import Book
+from .models import Book, Genre
 from .forms import CreateBookForm
 
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Book
     form_class = CreateBookForm
     template_name = "book/create_form.html"
     success_url = reverse_lazy("get_all_books")
+    raise_exception = True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,9 +26,15 @@ class BookListView(ListView):
     model = Book
     template_name = "book/book_list.html"
     context_object_name = "books"
+    paginate_by = 10
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Book.objects.select_related(
+            "author", "genre"
+        ).annotate(
+            note_moyenne = Avg("reviews__note"),
+            nb_emprunts = Count("loans")
+        )
         query = self.request.GET.get("q")
         genre = self.request.GET.get("genre")
         availability = self.request.GET.get("available")
@@ -43,7 +52,7 @@ class BookListView(ListView):
             else:
                 queryset = queryset.filter(Q(unavailable_copies__lt=total_copies))
 
-        return queryset.select_related("author").annotate(available_copies=F("total_copies") - F("unavailable_copies"))
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,7 +62,7 @@ class BookListView(ListView):
         context["available_books"] = books.filter(unavailable_copies__lt=total).count()
         context["unavailable_books"] = books.filter(unavailable_copies__gte=total).count()
         context["availability_rate"] = round((context["available_books"] / context["total_books"]) * 100, 1) if context["total_books"] else 0
-        context["genres"] = books.values_list("genre", flat=True).distinct()
+        context["genres"] = Genre.objects.all()
         return context
 
 
@@ -62,21 +71,29 @@ class BookDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.select_related("author")
+        return queryset.select_related("author", "genre").prefetch_related("reviews","loans__borrower")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
         context["available_copies"] = book.total_copies - book.unavailable_copies
         context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
+        context["reviews"] = book.reviews.all()
+        # context["reviews"] = self.object.reviews.select_related("reviewer").all()
+        context["average_rating"] = book.reviews.aggregate(Avg("note"))["note__avg"]
+        context["total_loans"] = book.loans.count()
+        context["can_borrow"] = (
+            self.request.user.is_authenticated and self.object.total_copies - self.object.unavailable_copies > 0
+        )
         return context
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Book
     form_class = CreateBookForm
     template_name = "book/create_form.html"
     success_url = reverse_lazy("get_all_books")
+    raise_exception = True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,6 +101,8 @@ class BookUpdateView(UpdateView):
         return context
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Book
+    permission_required = "book.delete_book"
     success_url = reverse_lazy("get_all_books")
+    raise_exception = True
