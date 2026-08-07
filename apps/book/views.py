@@ -30,13 +30,13 @@ class BookListView(ListView):
 
     def get_queryset(self):
         queryset = Book.objects.select_related(
-            "author", "genre"
+            "author", "genre_id"
         ).annotate(
             note_moyenne = Avg("reviews__note"),
             nb_emprunts = Count("loans")
         )
         query = self.request.GET.get("q")
-        genre = self.request.GET.get("genre")
+        genre = self.request.GET.get("genre_id")
         availability = self.request.GET.get("available")
         if query:
             queryset = queryset.filter(
@@ -44,13 +44,13 @@ class BookListView(ListView):
             )
 
         if genre:
-            queryset = queryset.filter(Q(genre=genre))
+            queryset = queryset.filter(Q(genre_id=genre))
 
         if availability:
             if availability == "0":
-                queryset = queryset.filter(Q(unavailable_copies__gte=total_copies))
+                queryset = queryset.filter(Q(unavailable_copies__gte=F("total_copies")))
             else:
-                queryset = queryset.filter(Q(unavailable_copies__lt=total_copies))
+                queryset = queryset.filter(Q(unavailable_copies__lt=F("total_copies")))
 
         return queryset
 
@@ -59,8 +59,8 @@ class BookListView(ListView):
         books = Book.objects.all()
         total = books.values_list("total_copies", flat=True)
         context["total_books"] = books.count()
-        context["available_books"] = books.filter(unavailable_copies__lt=total).count()
-        context["unavailable_books"] = books.filter(unavailable_copies__gte=total).count()
+        context["available_books"] = books.filter(unavailable_copies__lt=F("total_copies")).count()
+        context["unavailable_books"] = books.filter(unavailable_copies__gte=F("total_copies"), total_copies__gt=F("unavailable_copies")).count()
         context["availability_rate"] = round((context["available_books"] / context["total_books"]) * 100, 1) if context["total_books"] else 0
         context["genres"] = Genre.objects.all()
         return context
@@ -71,7 +71,7 @@ class BookDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.select_related("author", "genre").prefetch_related("reviews","loans__borrower")
+        return queryset.select_related("author", "genre_id").prefetch_related("reviews","loans__borrower")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
