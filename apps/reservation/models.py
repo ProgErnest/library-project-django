@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+# from book.models import Book
 
 # Create your models here.
 
@@ -10,20 +11,20 @@ class Reservation(models.Model):
         "book.Book",
         on_delete=models.CASCADE,
         related_name="reservations",
-        verbose_name=_("livre")
+        verbose_name=_("book")
     )
     reader = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="reservations",
-        verbose_name=_("lecteur")
+        verbose_name=_("reader")
     )
     reservation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True, verbose_name=_("active"))
 
     class Meta:
-        verbose_name = _("réservation")
-        verbose_name_plural = _("réservations")
+        verbose_name = _("reservation")
+        verbose_name_plural = _("reservations")
         ordering = ["-reservation_date"]
         constraints = [
             models.UniqueConstraint(
