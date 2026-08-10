@@ -18,7 +18,7 @@ class Review(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="reviews",
-        verbose_name=_("reviewer")
+        verbose_name=_("auteur de l'avis")
     )
     rating = models.PositiveSmallIntegerField(
         choices=[(i, str(i)) for i in range(1, 6)],
