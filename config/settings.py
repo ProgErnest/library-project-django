@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.author',
     'apps.book',
     'apps.loan',
+    'apps.reservation',
     'templates',
     'django_apscheduler'
 ]

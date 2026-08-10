@@ -1,0 +1,96 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Réservations" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block breadcrumb %}
+  <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <span class="current">{% trans "Réservations" %}</span>
+{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <h1>{% trans "Réservations" %}</h1>
+      <p>{% trans "Vos réservations en cours et leur statut." %}</p>
+    </div>
+    <a href="{% url 'reservation_create' %}" class="btn btn-primary">
+      <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Nouvelle réservation" %}
+    </a>
+  </section>
+
+  <section class="stat-bar" aria-label="{% trans 'Statistiques des réservations' %}">
+    <div class="stat-item">
+      <span class="stat-value">{{ reservations|length }}</span>
+      <span class="stat-label">{% trans "Réservations" %}</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">{{ active_reservations_count }}</span>
+      <span class="stat-label">{% trans "Actives" %}</span>
+    </div>
+  </section>
+
+  <section aria-label="{% trans 'Liste des réservations' %}">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">{% trans "Livre" %}</th>
+            <th scope="col">{% trans "Auteur" %}</th>
+            <th scope="col">{% trans "Date de réservation" %}</th>
+            <th scope="col">{% trans "Statut" %}</th>
+            <th scope="col"><span class="sr-only">{% trans "Actions" %}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reservation in reservations %}
+            <tr>
+              <td>
+                <p class="font-black" style="max-width:14rem" title="{{ reservation.book.title }}">
+                  <a href="{% url 'book_detail' reservation.book.pk %}" class="hover:underline" style="color:var(--color-ink)">{{ reservation.book.title }}</a>
+                </p>
+              </td>
+              <td class="cell-secondary">
+                <a href="{% url 'detail_author' reservation.book.author.pk %}" class="hover:underline text-sm font-bold" style="color:var(--color-ink)">
+                  {{ reservation.book.author.surname }} {{ reservation.book.author.name }}
+                </a>
+              </td>
+              <td class="cell-mono text-sm">{{ reservation.reservation_date|date:"d/m/Y H:i" }}</td>
+              <td>
+                {% if reservation.is_active %}
+                  <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Active" %}</span>
+                {% else %}
+                  <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Expirée" %}</span>
+                {% endif %}
+              </td>
+              <td>
+                <details class="row-menu">
+                  <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cette réservation' %}">
+                    <i class="ph ph-dots-three-vertical" aria-hidden="true"></i>
+                  </summary>
+                  <div class="row-menu-list">
+                    <a href="{% url 'reservation_delete' reservation.pk %}"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
+                  </div>
+                </details>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <i class="ph ph-book-bookmark" aria-hidden="true"></i>
+                  <h3>{% trans "Aucune réservation" %}</h3>
+                  <p>{% trans "Vous n'avez pas encore de réservation en cours." %}</p>
+                  <a href="{% url 'reservation_create' %}" class="btn btn-primary">
+                    <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Nouvelle réservation" %}
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endblock content %}
