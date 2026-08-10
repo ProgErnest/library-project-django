@@ -1,0 +1,68 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Supprimer la réservation" %} — {% trans "Réservations" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block breadcrumb %}
+  <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <a href="{% url 'reservation_list' %}">{% trans "Réservations" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <span class="current">{% trans "Supprimer" %}</span>
+{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <h1>{% trans "Supprimer la réservation" %}</h1>
+      <p>{% trans "Cette action est irréversible. Vérifiez les informations avant de confirmer." %}</p>
+    </div>
+  </section>
+
+  <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
+    <div class="flex items-center gap-2">
+      <i class="ph ph-warning-circle text-lg" aria-hidden="true"></i>
+      <span>{% trans "Êtes-vous sûr de vouloir supprimer cette réservation ?" %}</span>
+    </div>
+  </div>
+
+  <form class="form-panel" method="post" novalidate>
+    {% csrf_token %}
+
+    <fieldset class="form-fieldset">
+      <legend class="form-legend">
+        <i class="ph ph-book-bookmark" aria-hidden="true"></i>
+        {% trans "Détails de la réservation" %}
+      </legend>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">{% trans "Livre" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">{{ object.book.title }}</p>
+        </div>
+        <div class="form-field">
+          <label class="form-label">{% trans "Date de réservation" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">{{ object.reservation_date|date:"d/m/Y H:i" }}</p>
+        </div>
+        <div class="form-field">
+          <label class="form-label">{% trans "Statut" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">
+            {% if object.is_active %}
+              <span class="badge-success"><i class="ph ph-check-circle" aria-hidden="true"></i>{% trans "Active" %}</span>
+            {% else %}
+              <span class="badge-danger"><i class="ph ph-x-circle" aria-hidden="true"></i>{% trans "Expirée" %}</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+      <a href="{% url 'reservation_list' %}" class="btn btn-ghost">
+        <i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}
+      </a>
+      <button type="submit" class="btn btn-danger">
+        <i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}
+      </button>
+    </div>
+  </form>
+{% endblock content %}

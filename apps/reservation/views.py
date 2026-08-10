@@ -22,6 +22,12 @@ class ReservationListView(LoginRequiredMixin, ListView):
             reader=self.request.user
         ).select_related("book", "book__author")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        reservations = self.get_queryset()
+        context["active_reservations_count"] = reservations.filter(is_active=True).count()
+        return context
+
 
 class ReservationCreateView(LoginRequiredMixin, CreateView):
     model = Reservation
@@ -29,8 +35,20 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
     template_name = "reservation/reservation_form.html"
     success_url = reverse_lazy("reservation_list")
 
+    # def get_initial(self):
+    #     initial = super().get_initial()
+    #     book_pk = self.kwargs.get("book_pk")
+    #     if book_pk:
+    #         initial["book"] = book_pk
+    #     return initial
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Nouvelle réservation"
+        return context
+
     def form_valid(self, form):
-        form.instance.reader = self.request.user  # auto-assigné, jamais choisi par l'utilisateur
+        form.instance.reader = self.request.user
         return super().form_valid(form)
 
 
