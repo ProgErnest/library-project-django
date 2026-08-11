@@ -31,6 +31,9 @@
         <a href="{% url 'loan_list' %}" class="sidebar-link {% if active_section == 'loans' %}active{% endif %}">
         <i class="ph ph-arrows-left-right"></i><span>{% trans "Emprunts" %}</span>
         </a>
+        <a href="{% url 'reservation_list' %}" class="sidebar-link {% if active_section == 'reservations' %}active{% endif %}">
+        <i class="ph ph-book-bookmark"></i><span>{% trans "Réservations" %}</span>
+        </a>
         <p class="sidebar-section-title">{% trans "Système" %}</p>
         <a href="#" class="sidebar-link"><i class="ph ph-gear-six"></i><span>{% trans "Administration" %}</span></a>
     </nav>

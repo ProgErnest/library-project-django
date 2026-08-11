@@ -62,18 +62,3 @@ class Book(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse("book_detail", kwargs={"pk": self.pk})
-
-class Review(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews", verbose_name=_("Book"))
-    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name=_("Reviewer"), max_length=50)
-    rating = models.PositiveIntegerField(_("Rating"), default=0)
-    comment = models.TextField(_("Comment"), null=True, blank=True)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-
-    class Meta:
-        verbose_name = _("Review")
-        verbose_name_plural = _("Reviews")
-        ordering = ["-created_at"]
-
-    def __str__(self):
-        return f"{self.book.title} - {self.reviewer} - {self.rating}"

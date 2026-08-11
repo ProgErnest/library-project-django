@@ -1,0 +1,76 @@
+{% extends "base_app.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block title %}{{ page_title }} — {% trans "Avis" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block breadcrumb %}
+  <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <span class="current">{{ page_title }}</span>
+{% endblock %}
+
+{% block content %}
+  {% if form.non_field_errors %}
+    <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
+      <div class="flex items-center gap-2">
+        <i class="ph ph-warning-circle text-lg" aria-hidden="true"></i>
+        <span>{{ form.non_field_errors }}</span>
+      </div>
+    </div>
+  {% endif %}
+
+  <section class="page-header">
+    <div>
+      <h1>{{ page_title }}</h1>
+      <p>{% trans "Partagez votre note et votre impression sur cet ouvrage." %}</p>
+    </div>
+    <a href="{% url 'book_detail' book.pk %}" class="btn btn-ghost">
+      <i class="ph ph-arrow-left" aria-hidden="true"></i>{% trans "Retour au livre" %}
+    </a>
+  </section>
+
+  <form class="form-panel" method="post" novalidate>
+    {% csrf_token %}
+
+    <fieldset class="form-fieldset">
+      <legend class="form-legend">
+        <i class="ph ph-star" aria-hidden="true"></i>
+        {% trans "Votre avis" %}
+      </legend>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="{{ form.rating.id_for_label }}" class="form-label">{{ form.rating.label }}</label>
+          {% if form.rating.errors %}
+            {% render_field form.rating class="form-select border-red-400 bg-red-50" %}
+            <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.rating.errors|join:", " }}</p>
+          {% else %}
+            {% render_field form.rating class="form-select" %}
+          {% endif %}
+        </div>
+        <div class="form-field md:col-span-2">
+          {% trans 'Partagez votre impression sur ce livre…' as share_impressions %}
+
+          <label for="{{ form.comment.id_for_label }}" class="form-label">{{ form.comment.label }}</label>
+          {% if form.comment.errors %}
+            {% render_field form.comment class="form-textarea border-red-400 bg-red-50" rows="4" placeholder=share_impressions %}
+            <p class="mt-2 flex items-center gap-2 text-sm text-red-600"><i class="ph ph-warning-circle" aria-hidden="true"></i>{{ form.comment.errors|join:", " }}</p>
+          {% else %}
+            {% render_field form.comment class="form-textarea" rows="4" placeholder=share_impressions %}
+          {% endif %}
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+      <a href="{% url 'book_detail' book.pk %}" class="btn btn-ghost">
+        <i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="ph ph-floppy-disk" aria-hidden="true"></i>{% trans "Enregistrer l'avis" %}
+      </button>
+    </div>
+  </form>
+{% endblock content %}

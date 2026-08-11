@@ -1,0 +1,68 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Supprimer l'avis" %} — {% trans "Avis" %} — {% trans "Bibliothèque" %}{% endblock title %}
+
+{% block breadcrumb %}
+  <a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <a href="{% url 'book_detail' object.book.pk %}">{{ object.book.title }}</a>
+  <i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+  <span class="current">{% trans "Supprimer" %}</span>
+{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <h1>{% trans "Supprimer l'avis" %}</h1>
+      <p>{% trans "Cette action est irréversible. Vérifiez les informations avant de confirmer." %}</p>
+    </div>
+  </section>
+
+  <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 mb-6">
+    <div class="flex items-center gap-2">
+      <i class="ph ph-warning-circle text-lg" aria-hidden="true"></i>
+      <span>{% trans "Êtes-vous sûr de vouloir supprimer cet avis ?" %}</span>
+    </div>
+  </div>
+
+  <form class="form-panel" method="post" novalidate>
+    {% csrf_token %}
+
+    <fieldset class="form-fieldset">
+      <legend class="form-legend">
+        <i class="ph ph-chat-text" aria-hidden="true"></i>
+        {% trans "Détails de l'avis" %}
+      </legend>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">{% trans "Livre" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">{{ object.book.title }}</p>
+        </div>
+        <div class="form-field">
+          <label class="form-label">{% trans "Note" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">
+            <span class="flex items-center gap-1">
+              {% for i in "12345" %}
+                <i class="ph {% if object.rating >= i %}ph-star-fill{% else %}ph-star{% endif %}" style="color:{% if object.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}" aria-hidden="true"></i>
+              {% endfor %}
+            </span>
+          </p>
+        </div>
+        <div class="form-field md:col-span-2">
+          <label class="form-label">{% trans "Commentaire" %}</label>
+          <p class="form-input bg-paper" style="color:var(--color-ink)">{{ object.comment|default:"—" }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="flex flex-wrap gap-3 justify-end pt-6 border-t mt-6">
+      <a href="{% url 'book_detail' object.book.pk %}" class="btn btn-ghost">
+        <i class="ph ph-x" aria-hidden="true"></i>{% trans "Annuler" %}
+      </a>
+      <button type="submit" class="btn btn-danger">
+        <i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer l'avis" %}
+      </button>
+    </div>
+  </form>
+{% endblock content %}

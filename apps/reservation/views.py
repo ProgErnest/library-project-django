@@ -26,6 +26,7 @@ class ReservationListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         reservations = self.get_queryset()
         context["active_reservations_count"] = reservations.filter(is_active=True).count()
+        context["active_section"] = "reservations"
         return context
 
 
@@ -45,6 +46,7 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Nouvelle réservation"
+        context["active_section"] = "reservations"
         return context
 
     def form_valid(self, form):
@@ -58,5 +60,9 @@ class ReservationDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("reservation_list")
 
     def get_queryset(self):
-        # Protection IDOR : impossible de supprimer la réservation d'un autre
         return Reservation.objects.filter(reader=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_section"] = "reservations"
+        return context

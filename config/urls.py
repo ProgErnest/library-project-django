@@ -28,6 +28,7 @@ urlpatterns = [
     path('books/', include('apps.book.urls')),
     path('loans/', include('apps.loan.urls')),
     path('reservations/', include('apps.reservation.urls')),
+    path('reviews/', include('apps.review.urls')),
 ]
 handler404 = "apps.author.views.page_non_trouvee"
 handler500 = "apps.author.views.erreur_serveur"

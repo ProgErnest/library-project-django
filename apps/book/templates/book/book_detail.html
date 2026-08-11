@@ -69,41 +69,79 @@
           </article>
 
           <article class="form-panel">
-            <h2 class="text-xl mb-4">{% trans "Avis" %}</h2>
-            <div class="flex flex-wrap items-center gap-4 mb-5">
-              <span class="text-4xl font-display" style="color:var(--color-ink)">{{ average_rating|default:"–"|floatformat:1 }}</span>
-              <div>
-                <div class="flex items-center gap-1" aria-label="{% trans 'Note moyenne' %}">
-                  {% for i in "12345" %}
-                    <i class="ph {% if average_rating and average_rating >= i %}ph-star-fill{% else %}ph-star{% endif %}" style="color:{% if average_rating and average_rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}" aria-hidden="true"></i>
+            <h2 class="text-xl mb-4">{% trans "Commentaires" %}</h2>
+            <div class="flex flex-wrap items-start gap-6">
+              <div class="text-center">
+                <span class="text-5xl font-display block" style="color:var(--color-ink);line-height:1">{{ average_rating|default:"–"|floatformat:1 }}</span>
+                <div class="flex items-center justify-center gap-1 mt-2" aria-label="{% trans 'Note moyenne' %}">
+                  {% for i in rating_range %}
+                    {% if average_rating >= i %}
+                      <i
+                          class="ph-fill ph-star text-sm"
+                          style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
+                          aria-hidden="true">
+                      </i>
+                    {% else %}
+                      <i
+                          class="ph ph-star text-sm"
+                          style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
+                          aria-hidden="true">
+                      </i>                     
+                    {% endif %}
+                 
                   {% endfor %}
                 </div>
-                <p class="text-sm text-slate">{{ reviews|length }} {% trans "avis" %}</p>
+                <p class="text-sm text-slate mt-1">{{ total_reviews }} {% trans "avis" %}</p>
+              </div>
+              <div class="flex-1 min-w-[14rem] space-y-1">
+                {% for star, data in rating_distribution.items %}
+                  <div class="flex items-center gap-2 text-sm">
+                    <span class="w-3 text-right">{{ star }}</span>
+                    <i class="ph-fill ph-star text-xs" style="color:var(--color-brass)" aria-hidden="true"></i>
+                    <div class="flex-1 h-2 rounded-full bg-paper overflow-hidden">
+                      <div class="h-full rounded-full" style="width:{{ data.percent|stringformat:".1f" }}%;background-color:var(--color-brass)"></div>
+                    </div>
+                    <span class="w-8 text-right text-slate">{{ data.count }}</span>
+                  </div>
+                {% endfor %}
               </div>
             </div>
-
-            {% if reviews %}
-              <ul class="space-y-4" style="list-style:none">
-                {% for review in reviews %}
-                  <li class="border-b pb-4">
-                    <div class="flex items-center justify-between">
-                      <p class="font-medium" style="color:var(--color-ink)">{{ review.reviewer.get_full_name|default:review.reviewer.username }}</p>
-                      <p class="text-xs text-slate">{{ review.created_at|date }}</p>
-                    </div>
-                    <div class="flex items-center gap-1 mt-1">
-                      {% for i in "12345" %}
-                        <i class="ph {% if review.rating >= i %}ph-star-fill{% else %}ph-star{% endif %} text-sm" style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}" aria-hidden="true"></i>
-                      {% endfor %}
-                    </div>
-                    {% if review.comment %}
-                      <p class="text-sm text-slate mt-2">{{ review.comment }}</p>
-                    {% endif %}
-                  </li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p class="text-sm text-slate">{% trans "Aucun avis pour le moment. Soyez le premier à noter ce livre." %}</p>
+            {% if user.is_authenticated %}
+              <a href={% url "review:create_review" book.pk %} class="btn btn-primary mt-5"><i class="ph ph-star" aria-hidden="true"></i>{% trans "Ajouter un avis" %}</a>
             {% endif %}
+
+            <div class="mt-8 space-y-5">
+              <h3 class="text-lg font-semibold" style="color:var(--color-ink)">{% trans "Avis des lecteurs" %}</h3>
+              {% if reviews %}
+                <ul class="space-y-5" style="list-style:none">
+                  {% for review in reviews %}
+                    <li class="border-b border-line pb-5 last:border-0 last:pb-0">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                          <span class="avatar-tile w-9 h-9 text-xs" aria-hidden="true">{{ review.reviewer.get_full_name|default:review.reviewer.username|slice:":1"|upper }}</span>
+                          <p class="font-medium text-sm" style="color:var(--color-ink)">{{ review.reviewer.get_full_name|default:review.reviewer.username }}</p>
+                        </div>
+                        <p class="text-xs text-slate">{{ review.created_at|date }}</p>
+                      </div>
+                      <div class="flex items-center gap-1 mt-2">
+                        {% for i in rating_range %}
+                          <i
+                              class="{% if review.rating >= i %}ph-fill ph-star {% else %} ph ph-star {% endif %}text-sm"
+                              style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
+                              aria-hidden="true">
+                          </i>                        
+                        {% endfor %}
+                      </div>
+                      {% if review.comment %}
+                        <p class="text-sm text-slate mt-2 leading-relaxed">{{ review.comment }}</p>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-sm text-slate">{% trans "Aucun avis pour le moment. Soyez le premier à noter ce livre." %}</p>
+              {% endif %}
+            </div>
           </article>
 
           <article class="form-panel">
