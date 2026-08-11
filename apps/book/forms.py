@@ -24,7 +24,7 @@ class CreateBookForm(forms.ModelForm):
             "total_copies",
             "summary",
         ]
-        localized_fields = ["publication_date"]
+        localized_fields = []
         labels = {
             "title": _("Title"),
             "subtitle": _("Subtitle"),
@@ -48,7 +48,7 @@ class CreateBookForm(forms.ModelForm):
             "total_copies": forms.NumberInput(attrs={"min": "0", "placeholder": _("Example: 5")}),
             "author": forms.Select(attrs={}),
             "cover": forms.ClearableFileInput(attrs={"accept": "image/*"}),
-            "publication_date": forms.DateInput(attrs={"type": "date"}),
+            "publication_date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
         }
 
 
