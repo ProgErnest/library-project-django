@@ -1,0 +1,240 @@
+{% extends "base_app.html" %}
+{% load i18n %}
+{% block title %}{% trans "Bibliothèque" %} - {% trans "Tableau de bord" %}{% endblock %}
+
+{% block breadcrumb %}
+<a href="{% url 'get_all_books' %}">{% trans "Bibliothèque" %}</a>
+<i class="ph ph-caret-right" aria-hidden="true" style="font-size:.65rem"></i>
+<span class="current">{% trans "Tableau de bord" %}</span>
+{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <h1>{% trans "Tableau de bord" %}</h1>
+      <p>{% trans "Aperçu de l’état des emprunts, des réservations et du catalogue en temps réel." %}</p>
+    </div>
+    <div class="flex items-center gap-2 text-sm text-slate">
+      <i class="ph ph-clock" aria-hidden="true"></i>
+      <span>{% trans "Mis à jour" %} : {% now "j F Y à H:i" %}</span>
+    </div>
+  </section>
+
+  <section aria-label="{% trans 'Statistiques clés' %}">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+      <div class="card">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-3xl font-bold text-ink tabular-nums">
+              {{ total_books|default:0 }}
+            </span>
+            <span class="text-xs uppercase tracking-wider text-slate">
+              {% trans "Livres au catalogue" %}
+            </span>
+          </div>
+          <i class="ph-fill ph-books text-2xl text-ink" aria-hidden="true"></i>
+        </div>
+        <a href="{% url 'get_all_books' %}" class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink hover:underline">
+          <span>{% trans "Voir le catalogue" %}</span>
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-3xl font-bold text-ink tabular-nums">
+              {{ total_active_loans|default:0 }}
+            </span>
+            <span class="text-xs uppercase tracking-wider text-slate">
+              {% trans "Emprunts actifs" %}
+            </span>
+          </div>
+          <i class="ph-fill ph-arrows-left-right text-2xl text-brass" aria-hidden="true"></i>
+        </div>
+        <a href="{% url 'loan_list' %}" class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink hover:underline">
+          <span>{% trans "Voir les emprunts" %}</span>
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-3xl font-bold text-ink tabular-nums">
+              {{ total_overdue|default:0 }}
+            </span>
+            <span class="text-xs uppercase tracking-wider text-slate">
+              {% trans "Emprunts en retard" %}
+            </span>
+          </div>
+          <i class="ph-fill ph-warning-circle text-2xl text-rust" aria-hidden="true"></i>
+        </div>
+        <a href="{% url 'loan_list' %}" class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink hover:underline">
+          <span>{% trans "Suivre les retards" %}</span>
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-3xl font-bold text-ink tabular-nums">
+              {{ total_active_reservations|default:0 }}
+            </span>
+            <span class="text-xs uppercase tracking-wider text-slate">
+              {% trans "Réservations actives" %}
+            </span>
+          </div>
+          <i class="ph-fill ph-book-bookmark text-2xl text-forest" aria-hidden="true"></i>
+        </div>
+        <a href="{% url 'reservation_list' %}" class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink hover:underline">
+          <span>{% trans "Voir les réservations" %}</span>
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section aria-label="{% trans 'Actions rapides' %}">
+    <div class="flex flex-wrap gap-3">
+      <a href="{% url 'create_loan' %}" class="btn btn-primary">
+        <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Nouvel emprunt" %}
+      </a>
+      <a href="{% url 'create_book' %}" class="btn btn-secondary">
+        <i class="ph ph-book" aria-hidden="true"></i>{% trans "Ajouter un livre" %}
+      </a>
+      <a href="{% url 'loan_list' %}" class="btn btn-ghost">
+        <i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Gérer les emprunts" %}
+      </a>
+      <a href="{% url 'reservation_list' %}" class="btn btn-ghost">
+        <i class="ph ph-book-bookmark" aria-hidden="true"></i>{% trans "Gérer les réservations" %}
+      </a>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+    <section aria-label="{% trans 'Livres populaires' %}">
+      <div class="card">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-ink">{% trans "Livres populaires" %}</h2>
+          <a href="{% url 'get_all_books' %}" class="text-sm font-medium text-brass hover:underline">{% trans "Tout voir" %}</a>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Livre" %}</th>
+                <th scope="col">{% trans "Auteur" %}</th>
+                <th scope="col" class="text-center">{% trans "Emprunts" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for book in popular_books %}
+              <tr>
+                <td>
+                  <a href="{% url 'book_detail' book.pk %}" class="font-medium text-ink hover:underline">{{ book.title }}</a>
+                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="{{ book.subtitle }}">{{ book.subtitle }}</p>
+                </td>
+                <td class="cell-secondary text-sm">
+                  {% if book.author %}
+                    {{ book.author.surname }} {{ book.author.name }}
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+                <td class="cell-mono text-center">
+                  <span class="inline-flex items-center justify-center gap-1">
+                    <i class="ph-fill ph-trend-up text-brass"></i>
+                    {{ book.nb_loans|default:0 }}
+                  </span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3">
+                  <div class="empty-state">
+                    <i class="ph ph-books" aria-hidden="true"></i>
+                    <h3>{% trans "Aucun emprunt enregistré" %}</h3>
+                    <p>{% trans "Il n'y a pas encore d'emprunts dans la plateforme." %}</p>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="{% trans 'Livres mieux notés' %}">
+      <div class="card">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-ink">{% trans "Livres mieux notés" %}</h2>
+          <a href="{% url 'get_all_books' %}" class="text-sm font-medium text-brass hover:underline">{% trans "Tout voir" %}</a>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Livre" %}</th>
+                <th scope="col">{% trans "Auteur" %}</th>
+                <th scope="col" class="text-center">{% trans "Note" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for book in top_rated_books %}
+              <tr>
+                <td>
+                  <a href="{% url 'book_detail' book.pk %}" class="font-medium text-ink hover:underline">{{ book.title }}</a>
+                  <p class="text-sm font-light cell-secondary truncate" style="max-width:14rem" title="{{ book.subtitle }}">{{ book.subtitle }}</p>
+                </td>
+                <td class="cell-secondary text-sm">
+                  {% if book.author %}
+                    {{ book.author.surname }} {{ book.author.name }}
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center gap-1">
+                    {% with rating_int=book.avg_rating|floatformat:"0" %}
+                      {% for i in "12345" %}
+                        {% if forloop.counter <= rating_int|add:"0" %}
+                          <i class="ph-fill ph-star text-amber-500" aria-hidden="true"></i>
+                        {% else %}
+                          <i class="ph ph-star text-amber-500" aria-hidden="true"></i>
+                        {% endif %}
+                      {% endfor %}
+                    {% endwith %}
+                    <span class="ml-1 text-xs text-slate">({{ book.avg_rating|floatformat:"1" }})</span>
+                  </span>
+                  <div class="mt-1 text-xs text-slate">
+                    {{ book.nb_reviews }} {% trans "avis" %}
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3">
+                  <div class="empty-state">
+                    <i class="ph ph-star" aria-hidden="true"></i>
+                    <h3>{% trans "Aucune note enregistrée" %}</h3>
+                    <p>{% trans "Aucun livre n'a encore été noté." %}</p>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+{% endblock %}

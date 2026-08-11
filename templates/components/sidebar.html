@@ -35,7 +35,7 @@
         <i class="ph ph-book-bookmark"></i><span>{% trans "Réservations" %}</span>
         </a>
         <p class="sidebar-section-title">{% trans "Système" %}</p>
-        <a href="#" class="sidebar-link"><i class="ph ph-gear-six"></i><span>{% trans "Administration" %}</span></a>
+        <a href={% url "dashboard:index" %} class="sidebar-link"><i class="ph ph-gear-six"></i><span>{% trans "Administration" %}</span></a>
     </nav>
 
     <div class="sidebar-footer">
