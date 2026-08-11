@@ -62,5 +62,3 @@ class Book(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse("book_detail", kwargs={"pk": self.pk})
-
-# 
