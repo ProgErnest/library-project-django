@@ -79,11 +79,27 @@ class BookDetailView(DetailView):
         context["available_copies"] = book.total_copies - book.unavailable_copies
         context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
         context["reviews"] = book.reviews.select_related("reviewer").all()
-        context["average_rating"] = book.reviews.aggregate(Avg("rating"))["rating__avg"]
+        context["average_rating"] = book.reviews.aggregate(Avg("rating")).get("rating__avg")
         context["total_loans"] = book.loans.count()
+        context["rating_range"] = range(1, 6)
         context["can_borrow"] = (
             self.request.user.is_authenticated and self.object.total_copies - self.object.unavailable_copies > 0
         )
+
+        reviews_qs = book.reviews.all()
+        total_reviews = reviews_qs.count()
+        context["total_reviews"] = total_reviews
+        context["rating_distribution"] = {}
+        if total_reviews:
+            for star in range(5, 0, -1):
+                count = reviews_qs.filter(rating=star).count()
+                context["rating_distribution"][star] = {
+                    "count": count,
+                    "percent": round((count / total_reviews) * 100, 1),
+                }
+        else:
+            for star in range(5, 0, -1):
+                context["rating_distribution"][star] = {"count": 0, "percent": 0}
         return context
 
 
