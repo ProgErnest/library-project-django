@@ -6,7 +6,7 @@ from django.db.models import Q,F, Avg, Count
 from django.urls import reverse_lazy
 from .models import Book, Genre
 from .forms import CreateBookForm, GenreForm
-
+from django.shortcuts import get_object_or_404
 
 class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Book
@@ -75,10 +75,10 @@ class BookDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = self.get_object()
+        book = get_object_or_404(Book, id=self.kwargs["pk"])
         context["available_copies"] = book.total_copies - book.unavailable_copies
         context["percent"] = ((book.total_copies - book.unavailable_copies) / book.total_copies) * 100 if book.total_copies else 0
-        context["reviews"] = book.reviews.select_related("reviewer").all()
+        context["reviews"] = book.reviews.select_related("reviewer").order_by("-date")
         context["average_rating"] = book.reviews.aggregate(Avg("rating")).get("rating__avg")
         context["total_loans"] = book.loans.count()
         context["rating_range"] = range(1, 6)

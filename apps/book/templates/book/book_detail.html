@@ -75,11 +75,20 @@
                 <span class="text-5xl font-display block" style="color:var(--color-ink);line-height:1">{{ average_rating|default:"–"|floatformat:1 }}</span>
                 <div class="flex items-center justify-center gap-1 mt-2" aria-label="{% trans 'Note moyenne' %}">
                   {% for i in rating_range %}
-                    <i
-                        class="ph {% if review.rating >= i %}ph-star-fill{% else %}ph-star{% endif %} text-sm"
-                        style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
-                        aria-hidden="true">
-                    </i>                  
+                    {% if average_rating >= i %}
+                      <i
+                          class="ph-fill ph-star text-sm"
+                          style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
+                          aria-hidden="true">
+                      </i>
+                    {% else %}
+                      <i
+                          class="ph ph-star text-sm"
+                          style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
+                          aria-hidden="true">
+                      </i>                     
+                    {% endif %}
+                 
                   {% endfor %}
                 </div>
                 <p class="text-sm text-slate mt-1">{{ total_reviews }} {% trans "avis" %}</p>
@@ -88,9 +97,9 @@
                 {% for star, data in rating_distribution.items %}
                   <div class="flex items-center gap-2 text-sm">
                     <span class="w-3 text-right">{{ star }}</span>
-                    <i class="ph ph-star-fill text-xs" style="color:var(--color-brass)" aria-hidden="true"></i>
+                    <i class="ph-fill ph-star text-xs" style="color:var(--color-brass)" aria-hidden="true"></i>
                     <div class="flex-1 h-2 rounded-full bg-paper overflow-hidden">
-                      <div class="h-full rounded-full" style="width:{{ data.percent }}%;background-color:var(--color-brass)"></div>
+                      <div class="h-full rounded-full" style="width:{{ data.percent|stringformat:".1f" }}%;background-color:var(--color-brass)"></div>
                     </div>
                     <span class="w-8 text-right text-slate">{{ data.count }}</span>
                   </div>
@@ -115,9 +124,9 @@
                         <p class="text-xs text-slate">{{ review.created_at|date }}</p>
                       </div>
                       <div class="flex items-center gap-1 mt-2">
-                        {% for i in range_ratings %}
+                        {% for i in rating_range %}
                           <i
-                              class="ph {% if review.rating >= i %}ph-star-fill{% else %}ph-star{% endif %} text-sm"
+                              class="{% if review.rating >= i %}ph-fill ph-star {% else %} ph ph-star {% endif %}text-sm"
                               style="color:{% if review.rating >= i %}var(--color-brass){% else %}var(--color-muted){% endif %}"
                               aria-hidden="true">
                           </i>                        
