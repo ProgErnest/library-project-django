@@ -25,6 +25,7 @@ urlpatterns = [
     path("i18n/", include("django.conf.urls.i18n")),
     path('accounts/', include('apps.accounts.urls')),
     path('authors/', include('apps.author.urls')),
+    path('dashboard/', include('apps.dashboard.urls')),
     path('books/', include('apps.book.urls')),
     path('loans/', include('apps.loan.urls')),
     path('reservations/', include('apps.reservation.urls')),
