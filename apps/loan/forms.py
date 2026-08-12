@@ -32,7 +32,7 @@ class LoanForm(forms.ModelForm):
 
     return_date = forms.DateField(
         label=_("Return date"),
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
     )
 
     class Meta:

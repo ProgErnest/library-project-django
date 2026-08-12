@@ -109,7 +109,7 @@ class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = "book/create_form.html"
     success_url = reverse_lazy("get_all_books")
     raise_exception = True
-
+    permission_required = "book.change_book"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = _("Edit a book")

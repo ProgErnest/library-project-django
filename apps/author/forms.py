@@ -8,7 +8,7 @@ from .models import Author
 class AuthorForm(forms.ModelForm):
     birthday = forms.DateField(
         label=_("Birthday"),
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
     )
 
     class Meta:
