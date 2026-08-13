@@ -8,7 +8,7 @@ from apps.reservation.models import Reservation
 
 class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     template_name = "dashboard/dashboard.html"
-    permission_required = "loan.view_all_loans"   # réutilise la permission créée au Jour précédent
+    permission_required = "loan.view_all_loans"
     raise_exception = True
 
     def get_context_data(self, **kwargs):

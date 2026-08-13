@@ -3,17 +3,18 @@ from django.utils.translation import gettext as _
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.db.models import Q
-
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from .models import Author
 from .forms import AuthorForm
 
 
-class AuthorCreateView(CreateView):
+class AuthorCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Author
     form_class = AuthorForm
     template_name = "author/author_form.html"
     success_url = reverse_lazy("authors_list")
-    
+    permission_required = "author.add_author"
+    raise_exception =  True
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = _("Add an author")
@@ -62,11 +63,12 @@ class AuthorDetailView(DetailView):
         return queryset.prefetch_related("books").all()
 
 
-class AuthorUpdateView(UpdateView):
+class AuthorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Author
     form_class = AuthorForm
     template_name = "author/author_form.html"
     success_url = reverse_lazy("authors_list")
+    permission_required = "author.change_author"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -74,7 +76,7 @@ class AuthorUpdateView(UpdateView):
         return context
 
 
-class AuthorDeleteView(DeleteView):
+class AuthorDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Author
     success_url = reverse_lazy("authors_list")
 

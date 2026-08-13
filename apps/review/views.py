@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
@@ -8,10 +8,11 @@ from apps.book.models import Book
 from .models import Review
 from .forms import ReviewForm
 
-class ReviewCreateView(LoginRequiredMixin, CreateView):
+class ReviewCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
     template_name = "review/review_form.html"
+    permission_required = "review.add_review"
 
     def dispatch(self, request, *args, **kwargs):
         self.book = get_object_or_404(Book, pk=kwargs["book_pk"])
@@ -32,10 +33,11 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = "review/review_form.html"
+    permission_required = "review.change_review"
 
     def get_queryset(self):
         return Review.objects.filter(reviewer=self.request.user)
@@ -50,10 +52,10 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Review
     template_name = "review/review_confirm_delete.html"
-
+    permission_required = "review.delete_review"
     def get_queryset(self):
         return Review.objects.filter(reviewer=self.request.user)
 
