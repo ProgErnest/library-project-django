@@ -2,16 +2,17 @@ from django.shortcuts import render
 
 # Create your views here.
 # apps/reservation/views.py
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DeleteView, CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Reservation
 
-class ReservationListView(LoginRequiredMixin, ListView):
+class ReservationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Reservation
     template_name = "reservation/reservation_list.html"
     context_object_name = "reservations"
+    permission_required = "reservation.view_reservation"
 
     def get_queryset(self):
         # Chaque lecteur ne voit QUE ses propres réservations —
@@ -30,11 +31,12 @@ class ReservationListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ReservationCreateView(LoginRequiredMixin, CreateView):
+class ReservationCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Reservation
     fields = ["book"]
     template_name = "reservation/reservation_form.html"
     success_url = reverse_lazy("reservation_list")
+    permission_required = "reservation.add_reservation"
 
     # def get_initial(self):
     #     initial = super().get_initial()
@@ -54,10 +56,11 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ReservationDeleteView(LoginRequiredMixin, DeleteView):
+class ReservationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Reservation
     template_name = "reservation/reservation_confirm_delete.html"
     success_url = reverse_lazy("reservation_list")
+    permission_required = "reservation.delete_reservation"
 
     def get_queryset(self):
         return Reservation.objects.filter(reader=self.request.user)

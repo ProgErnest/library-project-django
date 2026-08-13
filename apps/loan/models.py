@@ -30,9 +30,9 @@ class Loan(models.Model):
         verbose_name = _("loan")
         verbose_name_plural = _("loans")
         ordering = ["-loan_date"]
-        permissions = [
-            ("view_all_loans", _("Can view all loans")),
-        ]
+        # permissions = [
+        #     ("view_all_loans", _("Can view all loans")),
+        # ]
 
     @property
     def status(self):

@@ -14,6 +14,7 @@ class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = "book/create_form.html"
     success_url = reverse_lazy("get_all_books")
     raise_exception = True
+    permission_required = "book.add_book"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -155,7 +156,7 @@ class GenreCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = "book/genre_form.html"
     success_url = reverse_lazy("get_all_genres")
     raise_exception = True
-
+    permission_required = "book.add_genre"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = _("Add a genre")

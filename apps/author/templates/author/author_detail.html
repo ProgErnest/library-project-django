@@ -31,7 +31,7 @@
             <h2 class="text-xl mb-4">{% trans "Livres associés" %}</h2>
             <ul class="space-y-3" style="list-style:none">
               {% for book in author.books.all %}
-                <li class="flex items-center justify-between border-b pb-3">
+                <li class="flex items-center justify-between border-b border-blue-300 pb-3">
                   <div>
                     <a href={% url "book_detail" book.pk %} class="font-medium hover:underline" style="color:var(--color-ink)">{{ book.title }}</a>
                     <p class="text-sm text-slate">{{ book.genre }} · {{ book.publication_date }}</p>
@@ -65,7 +65,7 @@
               <span class="meta-value">6</span>
             </div>
           </div>
-
+          {% if perms.authot.change %}
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
@@ -75,6 +75,7 @@
             </div>
           </div>
         </aside>
+        {% endif %}
       </div>
     </main>
 {% endblock content %}

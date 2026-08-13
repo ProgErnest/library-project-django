@@ -207,7 +207,6 @@
               </span>
             </a>
           </div>
-
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
@@ -216,8 +215,11 @@
               {% else %}
                 <a href={% url "create_loan" %} class="btn btn-primary" style="width:100%;justify-content:center;opacity:.5;pointer-events:none" aria-disabled="true"><i class="ph ph-arrows-left-right" aria-hidden="true"></i>{% trans "Emprunter ce livre" %}</a>
               {% endif %}
-              <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier la fiche" %}</a>
-              <a href={% url "delete_book" book.pk %} class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</a>
+              {% if perms.book.change_book %}
+                <a href={% url "update_book" book.pk %} class="btn btn-secondary" style="width:100%;justify-content:center"><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier la fiche" %}</a>
+                <a href={% url "delete_book" book.pk %} class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer le livre" %}</a>
+              {% endif %}
+
             </div>
           </div>
         </aside>

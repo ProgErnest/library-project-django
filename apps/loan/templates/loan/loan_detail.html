@@ -67,7 +67,7 @@
             <p class="badge-danger" style="width:100%;justify-content:center;padding:.75rem"><i class="ph ph-warning-circle" aria-hidden="true"></i>{% trans "En retard depuis 6 jours" %}</p>
             <p class="text-xs text-slate mt-3">{% trans "Statut calculé à partir de la date de retour prévue et de l'absence de retour effectif." %}</p>
           </div>
-
+          {% if perms.loan.change_loan %}
           <div class="form-panel">
             <h2 class="text-lg mb-3">{% trans "Actions rapides" %}</h2>
             <div class="space-y-3">
@@ -75,6 +75,7 @@
               <button type="button" class="btn btn-ghost" style="width:100%;justify-content:center"><i class="ph ph-check" aria-hidden="true"></i>{% trans "Enregistrer le retour" %}</button>
               <button type="button" class="btn btn-danger" style="width:100%;justify-content:center"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer l'emprunt" %}</button>
             </div>
+            {% endif %}
           </div>
         </aside>
       </div>

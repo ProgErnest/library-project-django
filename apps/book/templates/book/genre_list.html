@@ -8,9 +8,11 @@
           <h1 id="page-title">{% trans "Genres" %}</h1>
           <p>{% trans "Les catégories et genres référencés dans le catalogue de la bibliothèque." %}</p>
         </div>
+        {% if perms.genre.add_genre %}
         <a href="{% url 'create_genre' %}" class="btn btn-primary">
           <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un genre" %}
         </a>
+        {% endif %}
       </section>
 
       <section class="stat-bar" aria-label="{% trans 'Statistiques des genres' %}">
