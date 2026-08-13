@@ -8,9 +8,11 @@
           <h1>{% trans "Livres" %}</h1>
           <p>{% trans "L'ensemble des ouvrages référencés dans le catalogue." %}</p>
         </div>
+        {% if perms.book.add_book %}
         <a href="{% url 'create_book' %}" class="btn btn-primary">
           <i class="ph ph-plus" aria-hidden="true"></i>{% trans "Ajouter un livre" %}
         </a>
+        {% endif %}
       </section>
 
       <section class="stat-bar" aria-label="{% trans 'Statistiques des livres' %}">
