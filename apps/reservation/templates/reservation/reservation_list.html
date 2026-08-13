@@ -69,9 +69,12 @@
                   <summary class="row-menu-btn" aria-label="{% trans 'Actions sur cette réservation' %}">
                     <i class="ph ph-dots-three-vertical" aria-hidden="true"></i>
                   </summary>
-                  <div class="row-menu-list">
+                {% if perms.reservation.delete_reservation %}
+                   <div class="row-menu-list">
                     <a href="{% url 'reservation_delete' reservation.pk %}"><i class="ph ph-trash" aria-hidden="true"></i>{% trans "Supprimer" %}</a>
-                  </div>
+                  </div>               
+                {% endif %}
+
                 </details>
               </td>
             </tr>

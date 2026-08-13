@@ -66,10 +66,14 @@
               <span class="badge-brass"><i class="ph ph-book" aria-hidden="true"></i>{{ author.books.count }} {% trans "livres" %}</span>
             </div>
             <p class="text-sm mt-4 leading-relaxed" style="color:var(--color-slate)">{{ author.biography|slice:":100"}}...</p>
-            <div class="flex items-center gap-2 mt-6 pt-4 border-t">
+            <div class="flex items-center gap-2 mt-6 pt-4 border-t border-t-blue-400">
               <a href={% url "detail_author" author.pk %} class="btn btn-ghost btn btn-sm" aria-label={% trans "Voir la fiche de l'auteur" %}><i class="ph ph-eye" aria-hidden="true"></i>{% trans "Voir" %}</a>
-              <a href={% url "update_author" author.pk %} class="btn btn-ghost btn btn-sm" aria-label={% trans "Modifier l'auteur" %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
+              {% if perms.author.change_author %}
+                  <a href={% url "update_author" author.pk %} class="btn btn-ghost btn btn-sm" aria-label={% trans "Modifier l'auteur" %}><i class="ph ph-pencil-simple" aria-hidden="true"></i>{% trans "Modifier" %}</a>
+              {% endif %}  
+              {% if perms.author.delete_author %}
               <button type="button" class="btn btn-ghost btn btn-sm" style="color:var(--color-rust);border-color:var(--color-rust);margin-left:auto" aria-label={% trans "Supprimer l'auteur" %}><i class="ph ph-trash" aria-hidden="true"></i></button>
+              {% endif %}
             </div>
           </article>
 {% empty %}
