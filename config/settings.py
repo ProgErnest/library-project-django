@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'apps.review',
     'apps.dashboard',
     'templates',
-    'django_apscheduler'
+    'django_apscheduler',
+    'guardian',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
+
 
 TAILWIND_APP_NAME = 'theme'
 
