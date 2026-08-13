@@ -36,4 +36,6 @@ handler403 = "apps.author.views.page_non_trouvee"
 handler500 = "apps.author.views.erreur_serveur"
 
 if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

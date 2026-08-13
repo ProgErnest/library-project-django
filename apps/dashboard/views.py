@@ -11,6 +11,10 @@ class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     permission_required = "loan.view_all_loans"
     raise_exception = True
 
+    def get_queryset(self):
+        queryset = Book.objects.all()
+        return queryset.select_related("author", "genre").prefetch_related("loans", "reservations")
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = timezone.localdate()
