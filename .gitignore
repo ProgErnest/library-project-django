@@ -10,3 +10,4 @@ staticfiles/
 TODO.md
 media/
 .refact/
+.qodo/

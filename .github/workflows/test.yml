@@ -19,6 +19,8 @@ jobs:
         run: python -c "import django; print(django.get_version())"
       - name: Effectuer les migration
         run: python manage.py makemigrations
+      - name: Commandes Django permissions et groupes
+        run: python manage.py permissions_groups
       - name: Migrer la BD
         run: python manage.py migrate
       - name: check the code  ans conflicts
