@@ -35,6 +35,19 @@ class BookListView(ListView):
             note_moyenne=Avg("reviews__rating"),
             nb_emprunts=Count("loans"),
             available_copies=F("total_copies") - F("unavailable_copies"),
+        ).only(
+            "id",
+            "isbn",
+            "num_pages",
+            "publication_date",
+            "title",
+            "subtitle",
+            "author__name",
+            "author__surname",
+            "language",
+            "genre_id",
+            "total_copies",
+            "unavailable_copies",
         )
         query = self.request.GET.get("q")
         genre = self.request.GET.get("genre_id")
@@ -89,18 +102,21 @@ class BookDetailView(DetailView):
 
         reviews_qs = book.reviews.all()
         total_reviews = reviews_qs.count()
+        distribution_brute = (
+            book.reviews.values("rating")
+            .annotate(count=Count("id"))
+            .order_by("rating")
+        )
+        comptes = {item["rating"]: item["count"] for item in distribution_brute}
+
         context["total_reviews"] = total_reviews
-        context["rating_distribution"] = {}
-        if total_reviews:
-            for star in range(5, 0, -1):
-                count = reviews_qs.filter(rating=star).count()
-                context["rating_distribution"][star] = {
-                    "count": count,
-                    "percent": round((count / total_reviews) * 100, 1),
-                }
-        else:
-            for star in range(5, 0, -1):
-                context["rating_distribution"][star] = {"count": 0, "percent": 0}
+        context["rating_distribution"] = {
+            star: {
+                "count": comptes.get(star, 0),
+                "percent": round((comptes.get(star, 0) / total_reviews) * 100, 1) if total_reviews else 0,
+            }
+            for star in range(5, 0, -1)
+        }
         return context
 
 
@@ -131,7 +147,7 @@ class GenreListView(ListView):
     template_name = "book/genre_list.html"
     context_object_name = "genres"
     def get_queryset(self):
-        return super().get_queryset().annotate(nb_books=Count("books")).order_by("name")
+        return super().get_queryset().prefetch_related("books").annotate(nb_books=Count("books")).order_by("name")
 
 class GenreDetailView(DetailView):
     model = Genre
@@ -139,11 +155,11 @@ class GenreDetailView(DetailView):
     context_object_name = "genre"
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related("books")
+        return super().get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        genre = self.get_object()
+        genre = context["genre"]
         context["books"] = genre.books.select_related("author").annotate(
             note_moyenne = Avg("reviews__rating"),
             nb_emprunts = Count("loans")

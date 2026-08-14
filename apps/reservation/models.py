@@ -26,6 +26,11 @@ class Reservation(models.Model):
         verbose_name = _("reservation")
         verbose_name_plural = _("reservations")
         ordering = ["-reservation_date"]
+        indexes = [
+            models.Index(fields=["-reservation_date", "book"]),
+            models.Index(fields=["-reservation_date", "reader"]),
+            models.Index(fields=["-reservation_date", "is_active"]),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["book", "reader"],

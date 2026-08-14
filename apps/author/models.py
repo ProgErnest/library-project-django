@@ -12,6 +12,11 @@ class Author(models.Model):
     class Meta:
         verbose_name = _("author")
         verbose_name_plural = _("authors")
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["surname"]),
+            models.Index(fields=["nationality"]),
+        ]
 
     def __str__(self):
         return f"{self.name} {self.surname}".strip()

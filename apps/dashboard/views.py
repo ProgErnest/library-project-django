@@ -10,7 +10,7 @@ class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     template_name = "dashboard/dashboard.html"
     permission_required = "loan.view_all_loans"
     raise_exception = True
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = timezone.localdate()
@@ -29,10 +29,10 @@ class DashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             ).count(),
             "popular_books": Book.objects.annotate(
                 nb_loans=Count("loans")
-            ).order_by("-nb_loans")[:5],
+            ).select_related("author").prefetch_related("loans").order_by("-nb_loans")[:5],
             "top_rated_books": Book.objects.annotate(
                 avg_rating=Avg("reviews__rating"),
                 nb_reviews=Count("reviews")
-            ).filter(nb_reviews__gte=1).order_by("-avg_rating")[:5],
+            ).select_related("author").prefetch_related("loans").filter(nb_reviews__gte=1).order_by("-avg_rating")[:5],
         })
         return context

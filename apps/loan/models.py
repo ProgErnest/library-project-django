@@ -30,10 +30,13 @@ class Loan(models.Model):
         verbose_name = _("loan")
         verbose_name_plural = _("loans")
         ordering = ["-loan_date"]
-        # permissions = [
-        #     ("view_all_loans", _("Can view all loans")),
-        # ]
-
+        permissions = [
+            ("view_all_loans", _("Can view all loans")),
+        ]
+        indexes = [
+            models.Index(fields=["-loan_date", "book"]),
+            models.Index(fields=["-loan_date", "borrower_id"]),
+        ]
     @property
     def status(self):
         if self.effective_return_date:
