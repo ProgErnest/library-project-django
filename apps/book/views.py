@@ -147,7 +147,7 @@ class GenreListView(ListView):
     template_name = "book/genre_list.html"
     context_object_name = "genres"
     def get_queryset(self):
-        return super().get_queryset().annotate(nb_books=Count("books")).order_by("name")
+        return super().get_queryset().prefetch_related("books").annotate(nb_books=Count("books")).order_by("name")
 
 class GenreDetailView(DetailView):
     model = Genre
@@ -155,11 +155,11 @@ class GenreDetailView(DetailView):
     context_object_name = "genre"
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related("books")
+        return super().get_queryset()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        genre = self.get_object()
+        genre = context["genre"]
         context["books"] = genre.books.select_related("author").annotate(
             note_moyenne = Avg("reviews__rating"),
             nb_emprunts = Count("loans")

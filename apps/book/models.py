@@ -17,6 +17,11 @@ class Genre(models.Model):
         verbose_name = _("Genre")
         verbose_name_plural = _("Genres")
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["slug"]),
+
+        ]
 
     def __str__(self):    
         return self.name
@@ -53,6 +58,11 @@ class Book(models.Model):
         verbose_name = _("Book")
         verbose_name_plural = _("Books")
         ordering = ["-publication_date"]
+        indexes = [
+            models.Index(fields=["-publication_date", "title"]),
+            models.Index(fields=["-publication_date", "author"]),
+            models.Index(fields=["-publication_date", "genre_id"]),
+        ]
 
 
 

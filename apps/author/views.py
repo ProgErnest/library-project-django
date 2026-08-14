@@ -42,7 +42,7 @@ class AuthorListView(ListView):
         if nationality:
             queryset = queryset.filter(nationality__icontains=nationality)
 
-        return queryset
+        return queryset.prefetch_related('books').all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
