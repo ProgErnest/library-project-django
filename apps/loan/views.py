@@ -55,12 +55,13 @@ class LoanListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
                 queryset = queryset.filter(effective_return_date__isnull=False)
         if self.request.user.is_authenticated and self.request.user.has_perm("loan.view_all_loans"):
             return queryset
-        return queryset.filter(borrower=self.request.user)
+        return queryset.filter(borrower_id=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         loans = context["loans"]
-        context["total_loans"] = loans.count()
+        loan_t = Loan.objects.all().count() if self.request.user.has_perm("loan.view_all_loans") else Loan.objects.filter(borrower=self.request.user).count()
+        context["total_loans"] = loan_t
         context["results_count"] = loans.count()
         return context
 
