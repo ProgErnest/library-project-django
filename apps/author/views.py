@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from .models import Author
 from .forms import AuthorForm
 
@@ -46,12 +47,20 @@ class AuthorListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        authors = context["authors"]
-        author_list = Author.objects.all()
-        context["total_authors"] = author_list.count()
-        context["nationality_count"] = author_list.values_list("nationality", flat=True).distinct().count()
-        context["nationalities"] = author_list.values_list("nationality", flat=True).distinct()
-        context["results_count"] = authors.count()
+        author_list = cache.get("list_authors")
+        if author_list == None:
+            author_list = Author.objects.all()
+            cache.set("list_authors", author_list, 60)
+        context_authors = cache.get("authors_template")
+        if not context_authors :
+            context_authors = {
+                "results_count": context["authors"].count(),
+                "nationalities": author_list.values_list("nationality", flat=True).distinct(),
+                "nationality_count": author_list.values_list("nationality", flat=True).distinct().count(),
+                "total_authors": author_list.count()
+            }
+            cache.set("authors_template", context_authors, 20)
+        context.update(context_authors)
         return context
 
 
