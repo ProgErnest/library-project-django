@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.db.models import Q,F, Avg, Count
 from django.urls import reverse_lazy
+from django.core.cache import  cache
 from .models import Book, Genre
 from .forms import CreateBookForm, GenreForm
 from django.shortcuts import get_object_or_404
@@ -147,7 +148,12 @@ class GenreListView(ListView):
     template_name = "book/genre_list.html"
     context_object_name = "genres"
     def get_queryset(self):
-        return super().get_queryset().prefetch_related("books").annotate(nb_books=Count("books")).order_by("name")
+        queryset = cache.get("list_genres")
+        if not queryset:
+            queryset = super().get_queryset().prefetch_related("books").annotate(nb_books=Count("books")).order_by("name")
+            cache.set("list_genres", queryset, 60)
+        return queryset
+
 
 class GenreDetailView(DetailView):
     model = Genre
