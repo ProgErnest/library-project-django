@@ -2,7 +2,7 @@
 *.pyc
 in.md
 db.sqlite3
-venv
+
 .gitignore
 node_modules/
 staticfiles/
